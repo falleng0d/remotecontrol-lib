@@ -1,0 +1,105 @@
+# Defines a keyboard layout using composable elements divided into layout and
+# actionable types.
+# Some layout types are:
+#  - Grid: a grid of elements
+#  - HorizontalSpacer: a horizontal spacer
+#  - VerticalSpacer: a vertical spacer
+#  - Flex: a flexible element
+# Some actionable types are:
+#  - KeyboardKey: press a keyboard key
+#  - MouseButton: press a mouse button
+#  - Touchpad: interactive touchpad
+#  - Sequence: a sequence of actions
+---
+keyboardLayout:
+    type: flex
+    direction: column
+    children:
+    - type: touchpad
+      sensitivity: 0.5
+      scrollbar: true
+      mouseButtons: true
+      tapToClick: true
+      doubleTapAndHold: true
+      geometry:
+        maxWidth:
+        maxHeight:
+        expand: true # expand to fill the available space
+        padding: [0, 1, 1, 0] # left top bottom right
+    - type: verticalSpacer
+    - type: flex
+      description: "Example layout" # optional description
+      direction: row
+      maxHeight: 100
+      columnGap: 10
+      rowGap: 10
+      children:
+      - type: button
+        label: "ALT"
+        keyRepeat: # press the key every x seconds
+        keyRepeatDelay: # wait x second before starting key repeat
+        toggle: true # this key can be toggled on and off
+        # by the default the button will be as small as the text
+        geometry: # geometry of the button
+          maxWidth:
+          maxHeight: 10 # will not expand beyond 10 points of screen height
+          expand: true # expand to fill the available space
+          padding: [1, 1, 1, 1]
+        action:
+          type: keyboardKey
+          key: "ALT"
+          toggle: true # this key can be toggled on and off
+      - type: button
+        label: "ALT + TAB"
+        action:
+          type: sequence
+          actions:
+          - type: keyboardKey
+            key: "ALT"
+            state: DOWN
+          - type: keyboardKey
+            key: "TAB"
+          - type: keyboardKey
+            key: "ALT"
+            state: UP
+      - type: button
+        label: "A"
+        keyRepeat: 0.5 # press the key every x seconds
+        keyRepeatDelay: 1 # wait x second before starting key repeat
+        geometry:
+          maxWidth:
+          maxHeight:
+          expand: false # expand to fill the available space
+          padding: [1, 1, 1, 1]
+        action:
+          type: keyboardKey
+          key: "A"
+        holdAction:
+          type: showMenu
+          hideOnRelease: true # hide the menu when the button is released
+          pressOnRelease: true # press the selected menu item if any when the button is released (defaults to having to release the parent button and having to tap on the menu item)
+          children:
+          - type: button
+            label: "Á"
+            action:
+              type: keyboardKey
+              key: "Á"
+          - type: button
+            label: "À"
+            action:
+              type: keyboardKey
+              key: "À"
+          - type: button
+            label: "Â"
+            action:
+              type: keyboardKey
+              key: "Â"
+        doubleTapAction:
+          type: typeText
+          text: "Hello world"
+          tapSpeed: 0.1 # minimum time between each tap to activate the double tap action
+      - type: button
+        label: "B"
+        action:
+          type: keyboardKey
+          key: "B"
