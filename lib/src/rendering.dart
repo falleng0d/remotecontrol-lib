@@ -1,0 +1,368 @@
+import 'dart:html';
+
+import 'package:flutter/cupertino.dart';
+
+/*
+  start architecture.puml
+  'The aim of this model is make it possible build a serializable keyboard layout
+  'The keyboad layout is a tree of keys and layout elements
+  'Some key types are:
+  ' - KeyboardKey: a key that sends a keyboard key key code
+  ' - MouseKey: a key that sends a mouse key key code
+  ' - MouseMoveKey: a key that sends a mouse move key code and move delta
+  ' - KeySequence: a key composed of other keys
+  'Some layout elements are:
+  ' - HorizontalSpacer
+  ' - VerticalSpacer
+  ' -
+  'Serializable hierarchical
+
+  package rendering {
+    abstract class Geometry {
+      maxWidth: float?
+      maxHeight: float?
+      expand: bool?
+      padding: Padding?
+    }
+    'element is a displayable control that can be added to a container
+    'it should be possible to build a element into a renderable widget
+    abstract class Element {
+      +geometry Geometry
+      +label string
+
+      +build()
+    }
+    abstract class Layout {
+      geometry Geometry
+      children: Element[]
+
+      +build()
+    }
+
+    class FlexibleGeometry {
+
+    }
+
+    class FlexLayout {
+      +geometry: FlexibleGeometry
+      +description: string
+      +direction: "row" | "column"
+      +columnGap: float
+      +rowGap: float
+    }
+
+    class HorizontalSpacer {
+      +build()
+    }
+    class VerticalSpacer {
+      +build()
+    }
+
+    'Relationships
+    Element <|-- Layout
+    Layout <|-- FlexLayout
+    Layout *- Geometry : "1..*"
+    Geometry <|-- FlexibleGeometry
+    FlexLayout *- FlexibleGeometry : "1..*"
+    Element <|-- HorizontalSpacer
+    Element <|-- VerticalSpacer
+  }
+
+  package actions {
+    'action is the base class for all actions
+    abstract class Command {}
+
+    abstract class Action {
+      +doAction(ctx: ActionContext): bool
+    }
+    note right of Action::getCommands
+      Each action can have multiple commands
+      associated with it.
+    end note
+
+    class SequenceAction {
+      actions Action[]
+    }
+
+    enum KeyState {
+      Up
+      Down
+    }
+
+    abstract class KeyAction {
+      state KeyState
+    }
+
+    class KeyboardKeyAction {
+      keyCode KbdKeyCode
+    }
+
+    class MouseButtonAction {
+      keyCode MbKeyCode
+    }
+
+    class MouseMoveAction {
+      deltaX float
+      deltaY float
+    }
+
+    class TypeTextAction {
+      text string
+    }
+
+    class ShowMenuAction {
+      hideOnRelease: bool
+      pressOnRelease: bool
+      actions: Action[]
+    }
+
+    Action <|-- TypeTextAction
+    Action <|-- SequenceAction
+    Action <|-- ShowMenuAction
+    Command -* Action
+    Action --* SequenceAction
+    Action <|-- KeyAction
+    KeyAction <|-- KeyboardKeyAction
+    KeyAction <|-- MouseButtonAction
+    KeyState *-- KeyAction
+    Action <|-- MouseMoveAction
+  }
+
+  package interactive {
+    class Button {
+      +geometry: FlexibleGeometry
+      +label: string
+      +keyRep eat: float
+      +keyRepeatDelay: float
+      +toggle: bool
+      -action Action
+      +holdTimeThreshold: float
+      -holdAction Action?
+      +doubleTapThershold: float
+      -doubleTapAction Action?
+
+      +build()
+    }
+    class Touchpad {
+      +sensitivity int?
+      +scrollbar bool
+      +mouseButtons bool
+      +tapToClick bool
+      +doubleTapAndHold bool
+
+      +build()
+    }
+
+
+    'Relationships
+    Action --* Button::action
+    Element <|-- Button
+    Element <|-- Touchpad
+  }
+
+  package fltter_widgets {
+    class ButtonWidget {
+      button Button
+
+      -onClick()
+      +build()
+    }
+
+    Button <|-- ButtonWidget
+  }
+
+  package scheduler {
+    struct ActionContext {
+      controller InputServerController
+    }
+
+    class KbdController {
+      keyboardRootNode Element
+      controller InputServerController
+      queue ActionQueue
+
+      +doAction(widget, action)
+    }
+
+    class ActionQueue {
+      controller InputServerController
+
+      +scheduleAction(ctx, action, timeout)
+    }
+
+    KbdController *-- ActionQueue
+    KbdController::doAction <-- ButtonWidget::onClick
+    KbdController::doAction --> ActionQueue::scheduleAction
+  }
+  end architecture.puml
+*/
+
+/* region rendering package */
+class Geometry {
+  double? maxWidth;
+  double? maxHeight;
+  /// Example: Padding(padding: EdgeInsets.all(0))
+  bool? expand;
+  Padding? padding;
+}
+
+class FlexibleGeometry extends Geometry {}
+
+abstract class Element {
+  Geometry get geometry;
+  String label;
+
+  Element(this.label);
+
+  Widget build();
+}
+
+abstract class Layout extends Element {
+  List<Element> get children;
+
+  Layout(Geometry geometry, String label) : super(label);
+}
+
+enum Direction {
+  Row,
+  Column
+}
+
+class FlexLayout implements Layout {
+  @override FlexibleGeometry geometry;
+
+  Direction direction = Direction.Row;
+  String description = '';
+  double columnGap = 0;
+  double rowGap = 0;
+
+  FlexLayout(this.geometry, this.direction, this.description, this.columnGap, this.rowGap,
+      {String? label});
+
+  @override
+  List<Element> children = [];
+
+  @override
+  String label = '';
+
+  @override
+  Widget build() {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
+
+class HorizontalSpacer implements Element {
+  @override
+  Geometry geometry = Geometry();
+
+  @override
+  String label = '';
+
+  @override
+  Widget build() {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+  HorizontalSpacer({String? label});
+}
+
+class VerticalSpacer implements Element {
+  @override
+  Geometry geometry = Geometry();
+
+  @override
+  String label = '';
+
+  @override
+  Widget build() {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+
+  VerticalSpacer({String? label});
+}
+/* endregion rendering package */
+
+/* region actions package */
+abstract class Command {}
+
+abstract class ActionContext {}
+
+abstract class Action {
+  bool doAction(ActionContext ctx);
+}
+
+enum KeyState {
+  Up,
+  Down
+}
+
+abstract class KeyAction implements Action {
+  KeyState get state;
+}
+
+class KeyboardKeyAction implements KeyAction {
+  @override KeyState state;
+  int keyCode;
+
+  KeyboardKeyAction(this.state, this.keyCode);
+
+  @override
+  bool doAction(ActionContext ctx) {
+    // TODO: implement doAction
+    throw UnimplementedError();
+  }
+}
+
+class MouseButtonAction implements KeyAction {
+  @override KeyState state;
+  int keyCode;
+
+  MouseButtonAction(this.state, this.keyCode);
+
+  @override
+  bool doAction(ActionContext ctx) {
+    // TODO: implement doAction
+    throw UnimplementedError();
+  }
+}
+
+class MouseMoveAction implements Action {
+  double deltaX;
+  double deltaY;
+
+  MouseMoveAction(this.deltaX, this.deltaY);
+
+  @override
+  bool doAction(ActionContext ctx) {
+    // TODO: implement doAction
+    throw UnimplementedError();
+  }
+}
+/* endregion actions package */
+
+/* region interactive package */
+class Button implements Element {
+  @override FlexibleGeometry geometry;
+  @override String label;
+  double keyRep = 0;
+  double keyRepeatDelay = 0;
+  bool toggle = false;
+
+  Action action;
+  double holdTimeThreshold = 0;
+  Action? holdAction;
+  double doubleTapThershold = 0;
+  Action? doubleTapAction;
+
+  Button(this.geometry, this.label, this.action);
+
+  @override
+  Widget build() {
+    // TODO: implement build
+    throw UnimplementedError();
+  }
+}
+/* endregion interactive package */
