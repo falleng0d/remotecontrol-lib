@@ -30,7 +30,8 @@ keyboardLayout:
     - type: flex
       description: "Example layout" # optional description
       direction: row
-      maxHeight: 100
+      geometry:
+        maxHeight: 100
       columnGap: 10
       rowGap: 10
       children:
