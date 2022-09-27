@@ -1,6 +1,6 @@
-import 'dart:html';
+import 'dart:collection';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 
 /*
   start architecture.puml
@@ -201,58 +201,72 @@ import 'package:flutter/cupertino.dart';
 class Geometry {
   double? maxWidth;
   double? maxHeight;
-  /// Example: Padding(padding: EdgeInsets.all(0))
+
+  /// Example: EdgeInsets.all(0)
   bool? expand;
-  Padding? padding;
+  EdgeInsets? padding;
 }
 
 class FlexibleGeometry extends Geometry {}
 
-abstract class Element {
+abstract class RCElement {
   Geometry get geometry;
+
   String label;
 
-  Element(this.label);
+  RCElement(this.label);
 
   Widget build();
 }
 
-abstract class Layout extends Element {
-  List<Element> get children;
+abstract class Layout extends RCElement {
+  List<RCElement> get children;
 
   Layout(Geometry geometry, String label) : super(label);
 }
 
-enum Direction {
-  Row,
-  Column
-}
+enum Direction { Row, Column }
 
 class FlexLayout implements Layout {
-  @override FlexibleGeometry geometry;
+  @override
+  FlexibleGeometry geometry;
 
   Direction direction = Direction.Row;
   String description = '';
   double columnGap = 0;
   double rowGap = 0;
 
-  FlexLayout(this.geometry, this.direction, this.description, this.columnGap, this.rowGap,
+  FlexLayout(this.geometry, this.direction, this.description, this.columnGap,
+      this.rowGap,
       {String? label});
 
   @override
-  List<Element> children = [];
+  List<RCElement> children = [];
 
   @override
   String label = '';
 
   @override
   Widget build() {
-    // TODO: implement build
-    throw UnimplementedError();
+    if (direction == Direction.Row) {
+      return Padding(
+        padding: geometry.padding ?? EdgeInsets.all(0),
+        child: Row(
+          children: children.map((e) => e.build()).toList(),
+        ),
+      );
+    } else {
+      return Padding(
+        padding: geometry.padding ?? EdgeInsets.all(0),
+        child: Column(
+          children: children.map((e) => e.build()).toList(),
+        ),
+      );
+    }
   }
 }
 
-class HorizontalSpacer implements Element {
+class HorizontalSpacer implements RCElement {
   @override
   Geometry geometry = Geometry();
 
@@ -268,7 +282,7 @@ class HorizontalSpacer implements Element {
   HorizontalSpacer({String? label});
 }
 
-class VerticalSpacer implements Element {
+class VerticalSpacer implements RCElement {
   @override
   Geometry geometry = Geometry();
 
@@ -286,25 +300,33 @@ class VerticalSpacer implements Element {
 /* endregion rendering package */
 
 /* region actions package */
-abstract class Command {}
+/// [ActionContext] is the context in which an action is executed.
+class ActionContext {
+  BaseInputClientController controller;
 
-abstract class ActionContext {}
+  ActionContext(this.controller);
+}
 
-abstract class Action {
+/// [RCAction] is the base class for all actions
+/// An action is a command that can be executed by the system.
+/// It receives a [ActionContext] and returns a boolean indicating if the action
+/// was executed successfully.
+///
+/// An action should not be executed directly, but rather scheduled through
+/// a [ActionQueue].
+abstract class RCAction {
   bool doAction(ActionContext ctx);
 }
 
-enum KeyState {
-  Up,
-  Down
-}
+enum KeyState { Up, Down }
 
-abstract class KeyAction implements Action {
+abstract class KeyAction implements RCAction {
   KeyState get state;
 }
 
 class KeyboardKeyAction implements KeyAction {
-  @override KeyState state;
+  @override
+  KeyState state;
   int keyCode;
 
   KeyboardKeyAction(this.state, this.keyCode);
@@ -317,7 +339,8 @@ class KeyboardKeyAction implements KeyAction {
 }
 
 class MouseButtonAction implements KeyAction {
-  @override KeyState state;
+  @override
+  KeyState state;
   int keyCode;
 
   MouseButtonAction(this.state, this.keyCode);
@@ -329,7 +352,7 @@ class MouseButtonAction implements KeyAction {
   }
 }
 
-class MouseMoveAction implements Action {
+class MouseMoveAction implements RCAction {
   double deltaX;
   double deltaY;
 
@@ -343,26 +366,63 @@ class MouseMoveAction implements Action {
 }
 /* endregion actions package */
 
-/* region interactive package */
-class Button implements Element {
-  @override FlexibleGeometry geometry;
-  @override String label;
-  double keyRep = 0;
-  double keyRepeatDelay = 0;
-  bool toggle = false;
+/* region scheduler package */
+/// [BaseInputClientController] is the main controller for the input server.
+/// It implements all available gRPC methods.
+abstract class BaseInputClientController {}
 
-  Action action;
-  double holdTimeThreshold = 0;
-  Action? holdAction;
-  double doubleTapThershold = 0;
-  Action? doubleTapAction;
+class KeyboardWidget {
+  RCElement keyboardRootNode;
+  BaseInputClientController controller;
+  ActionQueue actionQueue;
 
-  Button(this.geometry, this.label, this.action);
+  KeyboardWidget(this.keyboardRootNode, this.controller, this.actionQueue);
 
-  @override
-  Widget build() {
-    // TODO: implement build
-    throw UnimplementedError();
+  void doAction(RCElement element, RCAction action) {
+    actionQueue.scheduleAction(ActionContext(controller), action, 1000);
+  }
+
+  void build() {
+
   }
 }
-/* endregion interactive package */
+
+/// [ActionTask] is a task that is scheduled by the [ActionQueue].
+/// It contains the [ActionContext] in which the action is executed,
+/// the [RCAction] to execute and a [timeout]
+class ActionTask {
+  ActionContext ctx;
+  RCAction action;
+  DateTime createdAt = DateTime.now();
+  int timeout;
+
+  ActionTask(this.ctx, this.action, this.timeout);
+
+  bool doAction() {
+    return action.doAction(ctx);
+  }
+}
+
+class ActionQueue {
+  BaseInputClientController controller;
+  Queue<ActionTask> queue = Queue();
+
+  void scheduleAction(ActionContext ctx, RCAction action, int timeout) {
+    queue.add(ActionTask(ctx, action, timeout));
+  }
+
+  void processQueue() {
+    while (queue.isNotEmpty) {
+      var task = queue.removeFirst();
+      if (task.createdAt.millisecondsSinceEpoch + task.timeout <
+          DateTime.now().millisecondsSinceEpoch) {
+        task.doAction();
+      } else {
+        queue.add(task);
+      }
+    }
+  }
+
+  ActionQueue(this.controller);
+}
+/* endregion scheduler package */
