@@ -19,3 +19,5 @@ dependencies:
   flutter:
     sdk: flutter
   fluent_ui: ^4.0.0
+  grpc:
+  protobuf:
