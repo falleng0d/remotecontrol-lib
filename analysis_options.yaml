@@ -6,10 +6,11 @@ include: package:pedantic/analysis_options.yaml
 
 # For lint rules and documentation, see http://dart-lang.github.io/linter/lints.
 
-# Uncomment to specify additional rules.
-# linter:
-#   rules:
-#     - camel_case_types
+linter:
+  rules:
+    constant_identifier_names: false
+    library_private_types_in_public_api: false
+    avoid_print: false
 
 # analyzer:
 #   exclude:
