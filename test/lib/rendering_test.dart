@@ -1,16 +1,12 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:intl/intl.dart';
-import 'package:remotecontrol_lib/logger.dart';
 import 'package:remotecontrol_lib/src/rendering.dart';
 
 class MockWidget {
   RCAction action;
-  KeyboardWidget controller;
+  KeyboardController controller;
 
   MockWidget(this.action, this.controller);
 
-  void ontap() {
-    var ctx = ActionContext(controller.controller);
+  void ontap(ActionContext ctx) {
     action.doAction(ctx);
   }
 }
