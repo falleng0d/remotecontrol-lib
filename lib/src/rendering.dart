@@ -253,7 +253,6 @@ class FlexLayout implements Layout {
 
   @override
   Widget build(BuildContext context) {
-    Logger.instance().trace('Build FlexLayout');
     if (direction == Direction.Row) {
       return Padding(
         padding: geometry.padding ?? EdgeInsets.all(0),
@@ -400,7 +399,6 @@ class KeyboardController {
   }
 
   Widget build(BuildContext context) {
-    Logger.instance().trace('Build controller');
     return rootElement.build(context);
   }
 }
