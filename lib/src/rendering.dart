@@ -212,7 +212,8 @@ class Geometry {
 }
 
 class FlexibleGeometry extends Geometry {
-  const FlexibleGeometry({super.maxWidth, super.maxHeight, super.expand, super.padding});
+  const FlexibleGeometry(
+      {super.maxWidth, super.maxHeight, super.expand, super.padding});
 }
 
 abstract class RCElement {
@@ -237,13 +238,19 @@ class FlexLayout implements Layout {
   @override
   FlexibleGeometry geometry;
 
-  Direction direction = Direction.Row;
-  String description = '';
+  Direction direction;
+  String description;
   double columnGap = 0;
   double rowGap = 0;
 
-  FlexLayout({required this.geometry, required this.direction, required this.description, required this.columnGap,
-      required this.rowGap, String? label, required this.children});
+  FlexLayout(
+      {this.geometry = const FlexibleGeometry(),
+      this.direction = Direction.Row,
+      this.description = '',
+      this.columnGap = 0,
+      this.rowGap = 0,
+      String? label,
+      required this.children});
 
   @override
   List<RCElement> children;
@@ -284,7 +291,7 @@ class HorizontalSpacer implements RCElement {
     throw UnimplementedError();
   }
 
-  HorizontalSpacer({String? label});
+  HorizontalSpacer({String? label, this.geometry = const Geometry()});
 }
 
 class VerticalSpacer implements RCElement {
@@ -300,7 +307,7 @@ class VerticalSpacer implements RCElement {
     throw UnimplementedError();
   }
 
-  VerticalSpacer({String? label});
+  VerticalSpacer({String? label, this.geometry = const Geometry()});
 }
 /* endregion rendering package */
 
@@ -343,6 +350,7 @@ enum KeyState { Up, Down }
 abstract class KeyAction implements RCAction {
   KeyState get state;
 }
+
 class KeyboardKeyAction implements KeyAction {
   @override
   KeyState state;
@@ -356,6 +364,7 @@ class KeyboardKeyAction implements KeyAction {
     throw UnimplementedError();
   }
 }
+
 class MouseButtonAction implements KeyAction {
   @override
   KeyState state;
@@ -369,6 +378,7 @@ class MouseButtonAction implements KeyAction {
     throw UnimplementedError();
   }
 }
+
 class MouseMoveAction implements RCAction {
   double deltaX;
   double deltaY;
@@ -434,7 +444,8 @@ class ActionQueue {
       var now = DateTime.now().millisecondsSinceEpoch;
       var expiresAt = createdAt + task.timeout;
       if (now > expiresAt) {
-        Logger.instance().trace('[ActionQueue] Skipping expired task, expires at $expiresAt, now is $now (expired by ${now - expiresAt}ms)');
+        Logger.instance().trace(
+            '[ActionQueue] Skipping expired task, expires at $expiresAt, now is $now (expired by ${now - expiresAt}ms)');
         continue;
       } else {
         task.doAction();
