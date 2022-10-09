@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/widgets.dart';
+import 'package:remotecontrol_lib/src/CrossExpanded.dart';
 
 import '../logger.dart';
 
@@ -240,8 +241,9 @@ class FlexLayout implements Layout {
 
   Direction direction;
   String description;
-  double columnGap = 0;
-  double rowGap = 0;
+  double columnGap;
+  double rowGap;
+  bool expandChildren;
 
   FlexLayout(
       {this.geometry = const FlexibleGeometry(),
@@ -249,6 +251,7 @@ class FlexLayout implements Layout {
       this.description = '',
       this.columnGap = 0,
       this.rowGap = 0,
+      this.expandChildren = false,
       String? label,
       required this.children});
 
@@ -260,21 +263,80 @@ class FlexLayout implements Layout {
 
   @override
   Widget build(BuildContext context) {
-    if (direction == Direction.Row) {
-      return Padding(
-        padding: geometry.padding ?? EdgeInsets.all(0),
-        child: Row(
-          children: children.map((e) => e.build(context)).toList(),
-        ),
-      );
-    } else {
-      return Padding(
-        padding: geometry.padding ?? EdgeInsets.all(0),
-        child: Column(
-          children: children.map((e) => e.build(context)).toList(),
-        ),
-      );
-    }
+    // Container assemble
+    var addContainer = (List<Widget> children) {
+      if (direction == Direction.Row) {
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: children,
+        );
+      } else {
+        return Column(
+          mainAxisSize: MainAxisSize.max,
+          children: children,
+        );
+      }
+    };
+    var addExpand = (Widget widget) {
+      if (geometry.expand == true) {
+        return CrossExpanded(child: widget);
+      } else {
+        return widget;
+      }
+    };
+
+    // Children assemble
+    var addPadding = (Widget widget) {
+      if (geometry.padding != null) {
+        return Padding(
+          padding: geometry.padding!,
+          child: widget,
+        );
+      } else {
+        return widget;
+      }
+    };
+    var addSize = (Widget widget) {
+      if (geometry.maxWidth != null || geometry.maxHeight != null) {
+        return SizedBox(
+          width: geometry.maxWidth,
+          height: geometry.maxHeight,
+          child: widget,
+        );
+      } else {
+        return widget;
+      }
+    };
+    var addExpandToChildren = (Widget widget) {
+      if (expandChildren == true) {
+        return CrossExpanded(child: widget);
+      } else {
+        return widget;
+      }
+    };
+
+    var transformChildren = (Widget widget) {
+      widget = addSize(widget);
+      widget = addPadding(widget);
+      widget = addExpandToChildren(widget);
+      return widget;
+    };
+
+    var assemble = (List<Widget> children) {
+      Widget widget;
+      if (children.length > 1) {
+        widget = addContainer(children);
+      } else {
+        widget = children[0];
+      }
+      widget = addExpand(widget);
+      return widget;
+    };
+
+    var _children =
+        children.map((e) => transformChildren(e.build(context))).toList();
+    return assemble(_children);
   }
 }
 
@@ -312,6 +374,7 @@ class VerticalSpacer implements RCElement {
 /* endregion rendering package */
 
 /* region actions package */
+
 /// [ActionContext] is the context in which an action is executed.
 /// It contains the controller that can be used to execute other actions.
 /// If the action needs additional information, it can be added to this class.
