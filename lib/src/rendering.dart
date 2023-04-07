@@ -5,201 +5,6 @@ import 'package:remotecontrol_lib/src/CrossExpanded.dart';
 
 import '../logger.dart';
 
-/*
-  start architecture.puml
-  'The aim of this model is make it possible build a serializable keyboard layout
-  'The keyboad layout is a tree of keys and layout elements
-  'Some key types are:
-  ' - KeyboardKey: a key that sends a keyboard key key code
-  ' - MouseKey: a key that sends a mouse key key code
-  ' - MouseMoveKey: a key that sends a mouse move key code and move delta
-  ' - KeySequence: a key composed of other keys
-  'Some layout elements are:
-  ' - HorizontalSpacer
-  ' - VerticalSpacer
-  ' -
-  'Serializable hierarchical
-
-  package rendering {
-    abstract class Geometry {
-      maxWidth: float?
-      maxHeight: float?
-      expand: bool?
-      padding: Padding?
-    }
-    'element is a displayable control that can be added to a container
-    'it should be possible to build a element into a renderable widget
-    abstract class Element {
-      +geometry Geometry
-      +label string
-
-      +build()
-    }
-    abstract class Layout {
-      geometry Geometry
-      children: Element[]
-
-      +build()
-    }
-
-    class FlexibleGeometry {
-
-    }
-
-    class FlexLayout {
-      +geometry: FlexibleGeometry
-      +description: string
-      +direction: "row" | "column"
-      +columnGap: float
-      +rowGap: float
-    }
-
-    class HorizontalSpacer {
-      +build()
-    }
-    class VerticalSpacer {
-      +build()
-    }
-
-    'Relationships
-    Element <|-- Layout
-    Layout <|-- FlexLayout
-    Layout *- Geometry : "1..*"
-    Geometry <|-- FlexibleGeometry
-    FlexLayout *- FlexibleGeometry : "1..*"
-    Element <|-- HorizontalSpacer
-    Element <|-- VerticalSpacer
-  }
-
-  package actions {
-    'action is the base class for all actions
-    abstract class Command {}
-
-    abstract class Action {
-      +doAction(ctx: ActionContext): bool
-    }
-    note right of Action::getCommands
-      Each action can have multiple commands
-      associated with it.
-    end note
-
-    class SequenceAction {
-      actions Action[]
-    }
-
-    enum KeyState {
-      Up
-      Down
-    }
-
-    abstract class KeyAction {
-      state KeyState
-    }
-
-    class KeyboardKeyAction {
-      keyCode KbdKeyCode
-    }
-
-    class MouseButtonAction {
-      keyCode MbKeyCode
-    }
-
-    class MouseMoveAction {
-      deltaX float
-      deltaY float
-    }
-
-    class TypeTextAction {
-      text string
-    }
-
-    class ShowMenuAction {
-      hideOnRelease: bool
-      pressOnRelease: bool
-      actions: Action[]
-    }
-
-    Action <|-- TypeTextAction
-    Action <|-- SequenceAction
-    Action <|-- ShowMenuAction
-    Command -* Action
-    Action --* SequenceAction
-    Action <|-- KeyAction
-    KeyAction <|-- KeyboardKeyAction
-    KeyAction <|-- MouseButtonAction
-    KeyState *-- KeyAction
-    Action <|-- MouseMoveAction
-  }
-
-  package interactive {
-    class Button {
-      +geometry: FlexibleGeometry
-      +label: string
-      +keyRep eat: float
-      +keyRepeatDelay: float
-      +toggle: bool
-      -action Action
-      +holdTimeThreshold: float
-      -holdAction Action?
-      +doubleTapThershold: float
-      -doubleTapAction Action?
-
-      +build()
-    }
-    class Touchpad {
-      +sensitivity int?
-      +scrollbar bool
-      +mouseButtons bool
-      +tapToClick bool
-      +doubleTapAndHold bool
-
-      +build()
-    }
-
-
-    'Relationships
-    Action --* Button::action
-    Element <|-- Button
-    Element <|-- Touchpad
-  }
-
-  package fltter_widgets {
-    class ButtonWidget {
-      button Button
-
-      -onClick()
-      +build()
-    }
-
-    Button <|-- ButtonWidget
-  }
-
-  package scheduler {
-    struct ActionContext {
-      controller InputServerController
-    }
-
-    class KbdController {
-      keyboardRootNode Element
-      controller InputServerController
-      queue ActionQueue
-
-      +doAction(widget, action)
-    }
-
-    class ActionQueue {
-      controller InputServerController
-
-      +scheduleAction(ctx, action, timeout)
-    }
-
-    KbdController *-- ActionQueue
-    KbdController::doAction <-- ButtonWidget::onClick
-    KbdController::doAction --> ActionQueue::scheduleAction
-  }
-  end architecture.puml
-*/
-
 /* region rendering package */
 class Geometry {
   final double? maxWidth;
@@ -217,6 +22,7 @@ class FlexibleGeometry extends Geometry {
       {super.maxWidth, super.maxHeight, super.expand, super.padding});
 }
 
+/// A [RCElement] is a displayable control that can be added to a [Layout]
 abstract class RCElement {
   Geometry get geometry;
 
@@ -382,8 +188,9 @@ class VerticalSpacer implements RCElement {
 class ActionContext {
   final KeyboardController controller;
   final RCElement target;
+  final Logger? logger;
 
-  const ActionContext(this.controller, this.target);
+  const ActionContext(this.controller, this.target, this.logger);
 }
 
 /// [RCAction] is the base class for all actions
@@ -460,15 +267,16 @@ class MouseMoveAction implements RCAction {
 class KeyboardController {
   final RCElement rootElement;
   final ActionQueue _actionQueue = ActionQueue();
+  final Logger? logger;
 
-  KeyboardController({required this.rootElement});
+  KeyboardController({required this.rootElement, this.logger});
 
   void doAction(RCElement element, RCAction action) {
     _actionQueue.scheduleAction(createContext(element), action, 1000);
   }
 
   ActionContext createContext(RCElement element) {
-    return ActionContext(this, element);
+    return ActionContext(this, element, logger);
   }
 
   Widget build(BuildContext context) {
