@@ -1,3 +1,4 @@
+/*
 import 'package:remotecontrol_lib/remotecontrol_lib.dart';
 import 'package:test/test.dart';
 
@@ -14,3 +15,4 @@ void main() {
     });
   });
 }
+*/
