@@ -4,6 +4,7 @@ enum ServerStatus { online, offline }
 enum ClientStatus { connected, disconnected }
 enum MouseKeys { left, right, middle }
 
+/// Base class for protobuf input clients
 abstract class BasePbInputClientController {
   ClientStatus get status;
 
