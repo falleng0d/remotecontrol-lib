@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 enum Level {
@@ -75,6 +76,9 @@ class Logger {
     return formattedMessage;
   }
 
+  @visibleForTesting
+  String format(String message, Level level) => _format(message, level);
+
   void log(String message, {Level? level}) {
     var messageLogLevel = level ?? defaultLevel;
     final formattedMessage = _format(message, messageLogLevel);
@@ -92,6 +96,6 @@ class Logger {
   dynamic trace(String message) => log(message, level: Level.trace);
 }
 
-/// Sintleton instance of the logger.
+/// Singleton instance of the logger.
 final Logger logger = Logger.instance();
 
