@@ -21,3 +21,6 @@ dependencies:
   fluent_ui: ^4.0.0
   grpc:
   protobuf:
+
+flutter:
+  uses-material-design: true
