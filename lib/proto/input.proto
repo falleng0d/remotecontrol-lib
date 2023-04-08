@@ -5,6 +5,7 @@ service InputMethods {
     rpc PressKey(Key) returns (Response);
     rpc PressMouseKey(MouseKey) returns (Response);
     rpc MoveMouse(MouseMove) returns (Response);
+    rpc Ping(Empty) returns (Response);
 }
 
 // The key message containing a key code and a state

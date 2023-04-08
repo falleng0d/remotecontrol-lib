@@ -3,7 +3,7 @@
 //  source: input.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
+// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
 import 'dart:async' as $async;
 
@@ -26,6 +26,10 @@ class InputMethodsClient extends $grpc.Client {
       '/InputMethods/MoveMouse',
       ($0.MouseMove value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Response.fromBuffer(value));
+  static final _$ping = $grpc.ClientMethod<$0.Empty, $0.Response>(
+      '/InputMethods/Ping',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Response.fromBuffer(value));
 
   InputMethodsClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -45,6 +49,11 @@ class InputMethodsClient extends $grpc.Client {
   $grpc.ResponseFuture<$0.Response> moveMouse($0.MouseMove request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$moveMouse, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Response> ping($0.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$ping, request, options: options);
   }
 }
 
@@ -73,6 +82,13 @@ abstract class InputMethodsServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.MouseMove.fromBuffer(value),
         ($0.Response value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Response>(
+        'Ping',
+        ping_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Response value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.Response> pressKey_Pre(
@@ -90,9 +106,15 @@ abstract class InputMethodsServiceBase extends $grpc.Service {
     return moveMouse(call, await request);
   }
 
+  $async.Future<$0.Response> ping_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return ping(call, await request);
+  }
+
   $async.Future<$0.Response> pressKey($grpc.ServiceCall call, $0.Key request);
   $async.Future<$0.Response> pressMouseKey(
       $grpc.ServiceCall call, $0.MouseKey request);
   $async.Future<$0.Response> moveMouse(
       $grpc.ServiceCall call, $0.MouseMove request);
+  $async.Future<$0.Response> ping($grpc.ServiceCall call, $0.Empty request);
 }
