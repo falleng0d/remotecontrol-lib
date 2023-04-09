@@ -2,7 +2,7 @@ import 'package:remotecontrol_lib/src/rendering.dart';
 
 class MockWidget {
   RCAction action;
-  KeyboardController controller;
+  Keyboard controller;
 
   MockWidget(this.action, this.controller);
 
@@ -12,7 +12,8 @@ class MockWidget {
 }
 
 class MockAction implements RCAction {
-  @override bool doAction(ActionContext ctx) {
+  @override
+  bool doAction(ActionContext ctx) {
     print('MockAction');
     return true;
   }
