@@ -2,7 +2,7 @@ import 'package:remotecontrol_lib/src/rendering.dart';
 
 class MockWidget {
   RCAction action;
-  Keyboard controller;
+  VirtualKeyboard controller;
 
   MockWidget(this.action, this.controller);
 

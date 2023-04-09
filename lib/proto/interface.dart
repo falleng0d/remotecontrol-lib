@@ -7,7 +7,7 @@ enum ClientStatus { connected, disconnected, connecting }
 enum MouseKeys { left, right, middle }
 
 /// Base class for protobuf input clients
-abstract class BasePbInputClientController {
+abstract class BasePbInputClient {
   ClientStatus get status;
 
   Future<pb.Response> pressKey(pb.Key key);

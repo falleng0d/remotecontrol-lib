@@ -186,7 +186,7 @@ class VerticalSpacer implements RCElement {
 /// If the action needs additional information, it can be added to this class.
 /// by extending it.
 class ActionContext {
-  final Keyboard controller;
+  final VirtualKeyboard controller;
   final RCElement target;
   final Logger? logger;
 
@@ -264,12 +264,12 @@ class MouseMoveAction implements RCAction {
 /* endregion actions package */
 
 /* region scheduler package */
-class Keyboard {
-  final RCElement rootElement;
+class VirtualKeyboard {
+  final RCElement child;
   final ActionQueue _actionQueue = ActionQueue();
   final Logger? logger;
 
-  Keyboard({required this.rootElement, this.logger});
+  VirtualKeyboard({required this.child, this.logger});
 
   void doAction(RCElement element, RCAction action) {
     _actionQueue.scheduleAction(createContext(element), action, 1000);
@@ -280,7 +280,7 @@ class Keyboard {
   }
 
   Widget build(BuildContext context) {
-    return rootElement.build(context);
+    return child.build(context);
   }
 }
 
