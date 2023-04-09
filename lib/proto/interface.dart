@@ -2,7 +2,7 @@ import '../proto/input.pbgrpc.dart' as pb;
 
 enum ServerStatus { online, offline }
 
-enum ClientStatus { connected, disconnected }
+enum ClientStatus { connected, disconnected, connecting }
 
 enum MouseKeys { left, right, middle }
 
