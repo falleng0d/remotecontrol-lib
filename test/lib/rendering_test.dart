@@ -13,9 +13,8 @@ class MockWidget {
 
 class MockAction implements RCAction {
   @override
-  bool doAction(ActionContext ctx) {
+  Future<void> doAction(ActionContext ctx) async {
     print('MockAction');
-    return true;
   }
 }
 
