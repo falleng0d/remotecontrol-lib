@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/widgets.dart';
 import 'package:remotecontrol_lib/src/CrossExpanded.dart';
 
@@ -22,19 +20,19 @@ class FlexibleGeometry extends Geometry {
       {super.maxWidth, super.maxHeight, super.expand, super.padding});
 }
 
-/// A [RCElement] is a displayable control that can be added to a [Layout]
-abstract class RCElement {
+/// A [KBBaseElement] is a displayable control that can be added to a [Layout]
+abstract class KBBaseElement {
   Geometry get geometry;
 
   String label;
 
-  RCElement(this.label);
+  KBBaseElement(this.label);
 
   Widget build(BuildContext context);
 }
 
-abstract class Layout extends RCElement {
-  List<RCElement> get children;
+abstract class Layout extends KBBaseElement {
+  List<KBBaseElement> get children;
 
   Layout(Geometry geometry, String label) : super(label);
 }
@@ -62,7 +60,7 @@ class FlexLayout implements Layout {
       required this.children});
 
   @override
-  List<RCElement> children;
+  List<KBBaseElement> children;
 
   @override
   String label = '';
@@ -146,7 +144,7 @@ class FlexLayout implements Layout {
   }
 }
 
-class HorizontalSpacer implements RCElement {
+class HorizontalSpacer implements KBBaseElement {
   @override
   Geometry geometry = Geometry();
 
@@ -162,7 +160,7 @@ class HorizontalSpacer implements RCElement {
   HorizontalSpacer({String? label, this.geometry = const Geometry()});
 }
 
-class VerticalSpacer implements RCElement {
+class VerticalSpacer implements KBBaseElement {
   @override
   Geometry geometry = Geometry();
 
@@ -186,14 +184,14 @@ class VerticalSpacer implements RCElement {
 /// If the action needs additional information, it can be added to this class.
 /// by extending it.
 class ActionContext {
-  final VirtualKeyboard controller;
-  final RCElement target;
-  final Logger? logger;
+  final KBBaseElement target;
+  final String? description;
 
-  const ActionContext(this.controller, this.target, this.logger);
+  const ActionContext(this.target, {this.description});
 }
 
 /// [RCAction] is the base class for all actions
+///
 /// An action is a command that can be executed by the system.
 /// It receives a [ActionContext] and returns a boolean indicating if the action
 /// was executed successfully.
@@ -201,17 +199,25 @@ class ActionContext {
 /// An action should not be executed directly, but rather scheduled through
 /// a [ActionQueue].
 abstract class RCAction {
-  bool doAction(ActionContext ctx);
+  Future<void> doAction(ActionContext ctx);
 }
 
+/// [RCCallbackAction] is a simple action that executes a callback.
+///
+/// An action is a command that can be executed by the system.
+/// It receives a [ActionContext] and returns a boolean indicating if the action
+/// was executed successfully.
+///
+/// An action should not be executed directly, but rather scheduled through
+/// a [ActionQueue].
 class RCCallbackAction implements RCAction {
-  final bool Function(ActionContext) callback;
+  final Future<void> Function(ActionContext) callback;
 
   RCCallbackAction(this.callback);
 
   @override
-  bool doAction(ActionContext ctx) {
-    return callback(ctx);
+  Future<void> doAction(ActionContext ctx) async {
+    return await callback(ctx);
   }
 }
 
@@ -229,7 +235,7 @@ class KeyboardKeyAction implements KeyAction {
   KeyboardKeyAction(this.state, this.keyCode);
 
   @override
-  bool doAction(ActionContext ctx) {
+  Future<void> doAction(ActionContext ctx) {
     // TODO: implement doAction
     throw UnimplementedError();
   }
@@ -243,7 +249,7 @@ class MouseButtonAction implements KeyAction {
   MouseButtonAction(this.state, this.keyCode);
 
   @override
-  bool doAction(ActionContext ctx) {
+  Future<void> doAction(ActionContext ctx) {
     // TODO: implement doAction
     throw UnimplementedError();
   }
@@ -256,7 +262,7 @@ class MouseMoveAction implements RCAction {
   MouseMoveAction(this.deltaX, this.deltaY);
 
   @override
-  bool doAction(ActionContext ctx) {
+  Future<void> doAction(ActionContext ctx) {
     // TODO: implement doAction
     throw UnimplementedError();
   }
@@ -265,19 +271,10 @@ class MouseMoveAction implements RCAction {
 
 /* region scheduler package */
 class VirtualKeyboard {
-  final RCElement child;
-  final ActionQueue _actionQueue = ActionQueue();
+  final KBBaseElement child;
   final Logger? logger;
 
   VirtualKeyboard({required this.child, this.logger});
-
-  void doAction(RCElement element, RCAction action) {
-    _actionQueue.scheduleAction(createContext(element), action, 1000);
-  }
-
-  ActionContext createContext(RCElement element) {
-    return ActionContext(this, element, logger);
-  }
 
   Widget build(BuildContext context) {
     return child.build(context);
@@ -291,39 +288,20 @@ class ActionTask {
   final ActionContext ctx;
   final RCAction action;
   final DateTime createdAt = DateTime.now();
-  final int timeout;
+  final int? timeout;
 
   ActionTask(this.ctx, this.action, this.timeout);
 
-  bool doAction() {
+  /// Executes the action and returns a [Future] that completes when the action
+  /// is finished or the timeout is reached.
+  /// If the timeout is reached, a [TimeoutException] is thrown.
+  Future<void> doAction() {
+    // abort if timeout is reached
+    if (timeout != null) {
+      return action.doAction(ctx).timeout(Duration(milliseconds: timeout!));
+    }
+
     return action.doAction(ctx);
   }
-}
-
-class ActionQueue {
-  final Queue<ActionTask> queue = Queue();
-
-  void scheduleAction(ActionContext ctx, RCAction action, int timeout) {
-    queue.add(ActionTask(ctx, action, timeout));
-    processQueue();
-  }
-
-  void processQueue() {
-    while (queue.isNotEmpty) {
-      var task = queue.removeFirst();
-      var createdAt = task.createdAt.millisecondsSinceEpoch;
-      var now = DateTime.now().millisecondsSinceEpoch;
-      var expiresAt = createdAt + task.timeout;
-      if (now > expiresAt) {
-        Logger.instance().trace(
-            '[ActionQueue] Skipping expired task, expires at $expiresAt, now is $now (expired by ${now - expiresAt}ms)');
-        continue;
-      } else {
-        task.doAction();
-      }
-    }
-  }
-
-  ActionQueue();
 }
 /* endregion scheduler package */
