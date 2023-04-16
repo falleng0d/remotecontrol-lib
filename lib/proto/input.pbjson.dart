@@ -74,6 +74,21 @@ const Response$json = const {
 
 /// Descriptor for `Response`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List responseDescriptor = $convert.base64Decode('CghSZXNwb25zZRIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdl');
+@$core.Deprecated('Use configDescriptor instead')
+const Config$json = const {
+  '1': 'Config',
+  '2': const [
+    const {'1': 'cursor_speed', '3': 1, '4': 1, '5': 2, '9': 0, '10': 'cursorSpeed', '17': true},
+    const {'1': 'cursor_acceleration', '3': 2, '4': 1, '5': 2, '9': 1, '10': 'cursorAcceleration', '17': true},
+  ],
+  '8': const [
+    const {'1': '_cursor_speed'},
+    const {'1': '_cursor_acceleration'},
+  ],
+};
+
+/// Descriptor for `Config`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List configDescriptor = $convert.base64Decode('CgZDb25maWcSJgoMY3Vyc29yX3NwZWVkGAEgASgCSABSC2N1cnNvclNwZWVkiAEBEjQKE2N1cnNvcl9hY2NlbGVyYXRpb24YAiABKAJIAVISY3Vyc29yQWNjZWxlcmF0aW9uiAEBQg8KDV9jdXJzb3Jfc3BlZWRCFgoUX2N1cnNvcl9hY2NlbGVyYXRpb24=');
 @$core.Deprecated('Use emptyDescriptor instead')
 const Empty$json = const {
   '1': 'Empty',

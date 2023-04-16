@@ -13,5 +13,7 @@ abstract class BasePbInputClient {
   Future<pb.Response> pressKey(pb.Key key);
   Future<pb.Response> moveMouse(pb.MouseMove mouseMove);
   Future<pb.Response> pressMouseKey(pb.MouseKey mouseKey);
+  Future<pb.Config> getConfig();
+  Future<pb.Config> setConfig(pb.Config config);
   Future<pb.Response> ping();
 }

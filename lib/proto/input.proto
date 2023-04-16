@@ -6,6 +6,10 @@ service InputMethods {
     rpc PressMouseKey(MouseKey) returns (Response);
     rpc MoveMouse(MouseMove) returns (Response);
     rpc Ping(Empty) returns (Response);
+
+    // Configuration
+    rpc SetConfig(Config) returns (Config);
+    rpc GetConfig(Empty) returns (Config);
 }
 
 // The key message containing a key code and a state
@@ -38,6 +42,11 @@ message MouseMove {
 
 message Response {
     string message = 1;
+}
+
+message Config {
+    optional float cursor_speed = 1;
+    optional float cursor_acceleration = 2;
 }
 
 message Empty {}

@@ -1,3 +1,5 @@
+import 'package:win32/win32.dart';
+
 const VK_0 = 48;
 const VK_1 = 49;
 const VK_2 = 50;
@@ -34,3 +36,67 @@ const VK_W = 87;
 const VK_X = 88;
 const VK_Y = 89;
 const VK_Z = 90;
+
+class SystemKey {
+  final int keyDown;
+  final int keyUp;
+
+  const SystemKey(this.keyDown, this.keyUp);
+
+  // construct from MouseButton
+  static SystemKey fromMouseButton(MouseButton button) {
+    switch (button) {
+      case MouseButton.LEFT:
+        return MouseKeys.left;
+      case MouseButton.RIGHT:
+        return MouseKeys.right;
+      case MouseButton.MIDDLE:
+        return MouseKeys.middle;
+    }
+  }
+}
+
+const SK_MOUSE_LEFT = SystemKey(MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP);
+const SK_MOUSE_RIGHT = SystemKey(MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP);
+const SK_MOUSE_MIDDLE = SystemKey(MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP);
+
+enum MouseButton { LEFT, RIGHT, MIDDLE }
+
+class MouseKeys {
+  static const left = SK_MOUSE_LEFT;
+  static const right = SK_MOUSE_RIGHT;
+  static const middle = SK_MOUSE_MIDDLE;
+
+  // construct from MouseButton
+  static SystemKey fromMouseButton(MouseButton button) {
+    switch (button) {
+      case MouseButton.LEFT:
+        return left;
+      case MouseButton.RIGHT:
+        return right;
+      case MouseButton.MIDDLE:
+        return middle;
+    }
+  }
+}
+
+enum ActionType { UP, DOWN, PRESS }
+
+enum MouseActionType { UP, DOWN, MOVE, PRESS }
+
+enum KeyState { UP, DOWN }
+
+class KBAction {
+  final ActionType type;
+  final int value;
+
+  const KBAction(this.type, {this.value = 1});
+}
+
+class MBAction {
+  final ActionType type;
+  final double x;
+  final double y;
+
+  const MBAction(this.type, {this.x = 0, this.y = 0});
+}

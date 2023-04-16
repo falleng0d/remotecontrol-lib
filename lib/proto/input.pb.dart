@@ -257,6 +257,67 @@ class Response extends $pb.GeneratedMessage {
   void clearMessage() => clearField(1);
 }
 
+class Config extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Config', createEmptyInstance: create)
+    ..a<$core.double>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cursorSpeed', $pb.PbFieldType.OF)
+    ..a<$core.double>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cursorAcceleration', $pb.PbFieldType.OF)
+    ..hasRequiredFields = false
+  ;
+
+  Config._() : super();
+  factory Config({
+    $core.double? cursorSpeed,
+    $core.double? cursorAcceleration,
+  }) {
+    final _result = create();
+    if (cursorSpeed != null) {
+      _result.cursorSpeed = cursorSpeed;
+    }
+    if (cursorAcceleration != null) {
+      _result.cursorAcceleration = cursorAcceleration;
+    }
+    return _result;
+  }
+  factory Config.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Config.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Config clone() => Config()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Config copyWith(void Function(Config) updates) => super.copyWith((message) => updates(message as Config)) as Config; // ignore: deprecated_member_use
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static Config create() => Config._();
+  Config createEmptyInstance() => create();
+  static $pb.PbList<Config> createRepeated() => $pb.PbList<Config>();
+  @$core.pragma('dart2js:noInline')
+  static Config getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Config>(create);
+  static Config? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.double get cursorSpeed => $_getN(0);
+  @$pb.TagNumber(1)
+  set cursorSpeed($core.double v) { $_setFloat(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasCursorSpeed() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearCursorSpeed() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.double get cursorAcceleration => $_getN(1);
+  @$pb.TagNumber(2)
+  set cursorAcceleration($core.double v) { $_setFloat(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasCursorAcceleration() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCursorAcceleration() => clearField(2);
+}
+
 class Empty extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Empty', createEmptyInstance: create)
     ..hasRequiredFields = false

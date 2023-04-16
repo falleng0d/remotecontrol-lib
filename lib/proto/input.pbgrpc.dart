@@ -30,6 +30,14 @@ class InputMethodsClient extends $grpc.Client {
       '/InputMethods/Ping',
       ($0.Empty value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Response.fromBuffer(value));
+  static final _$setConfig = $grpc.ClientMethod<$0.Config, $0.Config>(
+      '/InputMethods/SetConfig',
+      ($0.Config value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Config.fromBuffer(value));
+  static final _$getConfig = $grpc.ClientMethod<$0.Empty, $0.Config>(
+      '/InputMethods/GetConfig',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Config.fromBuffer(value));
 
   InputMethodsClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -54,6 +62,16 @@ class InputMethodsClient extends $grpc.Client {
   $grpc.ResponseFuture<$0.Response> ping($0.Empty request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$ping, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Config> setConfig($0.Config request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$setConfig, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Config> getConfig($0.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getConfig, request, options: options);
   }
 }
 
@@ -89,6 +107,20 @@ abstract class InputMethodsServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
         ($0.Response value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Config, $0.Config>(
+        'SetConfig',
+        setConfig_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Config.fromBuffer(value),
+        ($0.Config value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.Config>(
+        'GetConfig',
+        getConfig_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.Config value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.Response> pressKey_Pre(
@@ -111,10 +143,22 @@ abstract class InputMethodsServiceBase extends $grpc.Service {
     return ping(call, await request);
   }
 
+  $async.Future<$0.Config> setConfig_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Config> request) async {
+    return setConfig(call, await request);
+  }
+
+  $async.Future<$0.Config> getConfig_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return getConfig(call, await request);
+  }
+
   $async.Future<$0.Response> pressKey($grpc.ServiceCall call, $0.Key request);
   $async.Future<$0.Response> pressMouseKey(
       $grpc.ServiceCall call, $0.MouseKey request);
   $async.Future<$0.Response> moveMouse(
       $grpc.ServiceCall call, $0.MouseMove request);
   $async.Future<$0.Response> ping($grpc.ServiceCall call, $0.Empty request);
+  $async.Future<$0.Config> setConfig($grpc.ServiceCall call, $0.Config request);
+  $async.Future<$0.Config> getConfig($grpc.ServiceCall call, $0.Empty request);
 }
