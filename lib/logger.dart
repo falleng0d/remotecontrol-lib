@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
+import 'mixin/subscribable.dart';
+
 enum Level {
   trace,
   debug,
@@ -21,7 +23,7 @@ class LoggerSettings {
       {required this.defaultLevel, required this.dateFormat, required this.logFormat});
 }
 
-class Logger {
+class Logger with Subscribable<Level, String> {
   LoggerSettings settings = LoggerSettings(
     defaultLevel: Level.debug,
     dateFormat: DateFormat(DateFormat.HOUR24_MINUTE_SECOND),
@@ -35,14 +37,6 @@ class Logger {
     return _globalInstance;
   }
 
-  final Map<Level, List<void Function(Level, String)>> _listeners = {
-    Level.error: [],
-    Level.info: [],
-    Level.warning: [],
-    Level.debug: [],
-    Level.trace: [],
-  };
-
   Logger({LoggerSettings? settings}) {
     if (settings != null) {
       this.settings = settings;
@@ -50,22 +44,6 @@ class Logger {
   }
 
   Level get defaultLevel => settings.defaultLevel;
-
-  void subscribe(Level level, void Function(Level, String) callback) {
-    _listeners[level]?.add(callback);
-  }
-
-  void unsubscribe(Level level, void Function(Level, String) callback) {
-    _listeners[level]?.remove(callback);
-  }
-
-  void _dispatch(Level messageLevel, String message) {
-    for (final level in _listeners.keys) {
-      if (messageLevel.index >= level.index) {
-        _listeners[level]?.forEach((callback) => callback(messageLevel, message));
-      }
-    }
-  }
 
   String _format(String message, Level level) {
     final date = settings.dateFormat.format(DateTime.now());
@@ -82,7 +60,7 @@ class Logger {
   void log(String message, {Level? level}) {
     var messageLogLevel = level ?? defaultLevel;
     final formattedMessage = _format(message, messageLogLevel);
-    _dispatch(messageLogLevel, formattedMessage);
+    dispatch(messageLogLevel, formattedMessage);
   }
 
   dynamic debug(String message) => log(message, level: Level.debug);
@@ -98,4 +76,3 @@ class Logger {
 
 /// Singleton instance of the logger.
 final Logger logger = Logger.instance();
-
