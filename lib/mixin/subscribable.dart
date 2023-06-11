@@ -11,6 +11,13 @@ mixin Subscribable<Type extends Enum, Payload> {
     }
   }
 
+  void subscribeAll(void Function(Type, Payload) callback) {
+    dynamic dynamicEnum = Type;
+    for (final level in dynamicEnum.values.toList()) {
+      subscribe(level, callback);
+    }
+  }
+
   void unsubscribe(Type level, void Function(Type, Payload) callback) {
     _listeners[level]?.remove(callback);
   }
