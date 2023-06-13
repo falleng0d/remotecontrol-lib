@@ -3,9 +3,7 @@
 /// More dartdocs go here.
 library remotecontrol_lib;
 
-export 'logger.dart';
-export 'src/rendering.dart';
-
+export 'logger/logger.dart';
 export 'proto/input.pb.dart';
 export 'proto/input.pbenum.dart';
 export 'proto/input.pbgrpc.dart';

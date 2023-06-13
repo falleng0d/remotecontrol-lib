@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:remotecontrol_lib/logger.dart';
 import 'package:intl/intl.dart';
+import 'package:remotecontrol_lib/logger/logger.dart';
 
 void main() {
   group('Logger Tests', () {

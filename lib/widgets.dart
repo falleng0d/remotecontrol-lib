@@ -1,4 +1,4 @@
 library widgets;
 
-export './src/GroupContainer.dart';
-export './src/CrossExpanded.dart';
+export 'components/CrossExpanded.dart';
+export 'components/GroupContainer.dart';
