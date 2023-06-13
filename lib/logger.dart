@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
-import 'mixin/subscribable.dart';
-
 enum Level {
   trace,
   debug,
@@ -23,7 +21,9 @@ class LoggerSettings {
       {required this.defaultLevel, required this.dateFormat, required this.logFormat});
 }
 
-class Logger with Subscribable<Level, String> {
+class Logger {
+  final Map<Level, List<void Function(Level, String)>> _listeners = {};
+
   LoggerSettings settings = LoggerSettings(
     defaultLevel: Level.debug,
     dateFormat: DateFormat(DateFormat.HOUR24_MINUTE_SECOND),
@@ -45,6 +45,22 @@ class Logger with Subscribable<Level, String> {
 
   Level get defaultLevel => settings.defaultLevel;
 
+  void subscribe(Level level, void Function(Level, String) callback) {
+    _listeners.putIfAbsent(level, () => []).add(callback);
+  }
+
+  void unsubscribe(Level level, void Function(Level, String) callback) {
+    _listeners[level]?.remove(callback);
+  }
+
+  void _dispatch(Level messageLevel, String message) {
+    for (final level in Level.values.toList()) {
+      if (messageLevel.index >= level.index) {
+        _listeners[level]?.forEach((callback) => callback(messageLevel, message));
+      }
+    }
+  }
+
   String _format(String message, Level level) {
     final date = settings.dateFormat.format(DateTime.now());
     final formattedMessage = settings.logFormat
@@ -57,21 +73,21 @@ class Logger with Subscribable<Level, String> {
   @visibleForTesting
   String format(String message, Level level) => _format(message, level);
 
-  void log(String message, {Level? level}) {
+  void _log(String message, {Level? level}) {
     var messageLogLevel = level ?? defaultLevel;
     final formattedMessage = _format(message, messageLogLevel);
-    dispatch(messageLogLevel, formattedMessage);
+    _dispatch(messageLogLevel, formattedMessage);
   }
 
-  dynamic debug(String message) => log(message, level: Level.debug);
+  dynamic debug(String message) => _log(message, level: Level.debug);
 
-  dynamic info(String message) => log(message, level: Level.info);
+  dynamic info(String message) => _log(message, level: Level.info);
 
-  dynamic warning(String message) => log(message, level: Level.warning);
+  dynamic warning(String message) => _log(message, level: Level.warning);
 
-  dynamic error(String message) => log(message, level: Level.error);
+  dynamic error(String message) => _log(message, level: Level.error);
 
-  dynamic trace(String message) => log(message, level: Level.trace);
+  dynamic trace(String message) => _log(message, level: Level.trace);
 }
 
 /// Singleton instance of the logger.
