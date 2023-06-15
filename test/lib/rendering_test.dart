@@ -21,7 +21,7 @@ class MockAction implements RCAction {
 void main() {
   /*test('Assert that all scheduled actions are executed', () {
     var rootLayout =
-    FlexLayout(FlexibleGeometry(), Direction.Row, 'root', 0, 0);
+    FlexLayout(Geometry(), Direction.Row, 'root', 0, 0);
     var controller = BaseInputClientController();
     var kbdController = KeyboardWidget(rootLayout, controller,
         ActionQueue(controller));

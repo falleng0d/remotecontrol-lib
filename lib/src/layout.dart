@@ -11,10 +11,6 @@ class Geometry {
   const Geometry({this.maxWidth, this.maxHeight, this.expand, this.padding});
 }
 
-class FlexibleGeometry extends Geometry {
-  const FlexibleGeometry({super.maxWidth, super.maxHeight, super.expand, super.padding});
-}
-
 mixin Sizeable {
   Geometry get geometry;
 }
@@ -50,7 +46,7 @@ enum Direction { Row, Column }
 /// children, applying padding, and setting custom dimensions for child elements.
 /// It also allows the user to set custom gaps between rows and columns.
 ///
-/// The layout can be configured with an optional [FlexibleGeometry] object which
+/// The layout can be configured with an optional [Geometry] object which
 /// contains properties like maxWidth, maxHeight, expand, and padding that influence
 /// the appearance of the layout.
 class FlexLayout implements Layout {
