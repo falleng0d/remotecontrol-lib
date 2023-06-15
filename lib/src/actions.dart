@@ -6,7 +6,7 @@ import 'layout.dart';
 /// If the action needs additional information, it can be added to this class.
 /// by extending it.
 class ActionContext {
-  final KBBaseElement target;
+  final BaseElement target;
   final String? description;
 
   const ActionContext(this.target, {this.description});

@@ -19,9 +19,11 @@ dependencies:
   intl: ^0.17.0
   flutter:
     sdk: flutter
+  # fluent_ui 4.5.1 (was 4.4.2) (4.6.2 available)
   fluent_ui: ^4.4.2
   grpc:
   protobuf:
+  xml: ^6.1.0
 
 flutter:
   uses-material-design: true

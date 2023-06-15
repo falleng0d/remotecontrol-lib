@@ -4,7 +4,7 @@ import '../keyboard.dart';
 import '../logger/logger.dart';
 
 class VirtualKeyboard {
-  final KBBaseElement child;
+  final BaseElement child;
   final Logger? logger;
 
   VirtualKeyboard({required this.child, this.logger});

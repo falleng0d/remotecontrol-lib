@@ -15,26 +15,28 @@ class FlexibleGeometry extends Geometry {
   const FlexibleGeometry({super.maxWidth, super.maxHeight, super.expand, super.padding});
 }
 
-/// A [KBBaseElement] is a displayable control that can be added to a [Layout]
-abstract class KBBaseElement {
+mixin Sizeable {
   Geometry get geometry;
+}
 
+/// A [BaseElement] is a displayable control that can be added to a [Layout]
+abstract class BaseElement with Sizeable {
   String label;
 
-  KBBaseElement(this.label);
+  BaseElement(this.label);
 
   Widget build(BuildContext context);
 }
 
 /// An abstract base class representing a layout element in the application.
-/// Layout elements are displayable controls that can contain other [KBBaseElement] objects,
+/// Layout elements are displayable controls that can contain other [BaseElement] objects,
 /// which are defined in the [children] property. The [geometry] property defines the
 /// layout's characteristics such as width, height, expansion behavior, and padding.
 ///
-/// Extend this class to create custom layouts using their own [KBBaseElement] children
+/// Extend this class to create custom layouts using their own [BaseElement] children
 /// and desired layout characteristics.
-abstract class Layout extends KBBaseElement {
-  List<KBBaseElement> get children;
+abstract class Layout extends BaseElement {
+  List<BaseElement> get children;
 
   Layout(Geometry geometry, String label) : super(label);
 }
@@ -53,7 +55,7 @@ enum Direction { Row, Column }
 /// the appearance of the layout.
 class FlexLayout implements Layout {
   @override
-  FlexibleGeometry geometry;
+  final Geometry geometry;
 
   Direction direction;
   String description;
@@ -62,7 +64,7 @@ class FlexLayout implements Layout {
   bool expandChildren;
 
   FlexLayout(
-      {this.geometry = const FlexibleGeometry(),
+      {this.geometry = const Geometry(),
       this.direction = Direction.Row,
       this.description = '',
       this.columnGap = 0,
@@ -72,7 +74,7 @@ class FlexLayout implements Layout {
       required this.children});
 
   @override
-  List<KBBaseElement> children;
+  List<BaseElement> children;
 
   @override
   String label = '';
@@ -155,7 +157,7 @@ class FlexLayout implements Layout {
   }
 }
 
-class HorizontalSpacer implements KBBaseElement {
+class HorizontalSpacer implements BaseElement {
   @override
   Geometry geometry = Geometry();
 
@@ -171,7 +173,7 @@ class HorizontalSpacer implements KBBaseElement {
   HorizontalSpacer({String? label, this.geometry = const Geometry()});
 }
 
-class VerticalSpacer implements KBBaseElement {
+class VerticalSpacer implements BaseElement {
   @override
   Geometry geometry = Geometry();
 
