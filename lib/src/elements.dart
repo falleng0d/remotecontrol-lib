@@ -24,11 +24,11 @@ abstract class BaseKeyElement implements BaseElement {
   double keyRepeatDelay = 0;
   bool toggle = false;
 
-  RCAction action;
+  BaseAction action;
   double holdTimeThreshold = 0;
-  RCAction? holdAction;
+  BaseAction? holdAction;
   double doubleTapThershold = 0;
-  RCAction? doubleTapAction;
+  BaseAction? doubleTapAction;
 
   BaseKeyElement(
       {this.geometry = const Geometry(), this.label = '', required this.action});

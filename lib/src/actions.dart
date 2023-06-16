@@ -14,7 +14,7 @@ class ActionContext {
   const ActionContext(this.target, {this.description});
 }
 
-/// [RCAction] is the base class for all actions
+/// [BaseAction] is the base class for all actions
 ///
 /// An action is a command that can be executed by the system.
 /// It receives a [ActionContext] and returns a boolean indicating if the action
@@ -22,7 +22,7 @@ class ActionContext {
 ///
 /// An action should not be executed directly, but rather scheduled through
 /// a [ActionQueue].
-abstract class RCAction {
+abstract class BaseAction {
   Future<void> doAction(ActionContext ctx);
 }
 
@@ -34,7 +34,7 @@ abstract class RCAction {
 ///
 /// An action should not be executed directly, but rather scheduled through
 /// a [ActionQueue].
-class RCCallbackAction implements RCAction {
+class RCCallbackAction implements BaseAction {
   final Future<void> Function(ActionContext) callback;
 
   RCCallbackAction(this.callback);
@@ -45,7 +45,7 @@ class RCCallbackAction implements RCAction {
   }
 }
 
-abstract class BaseKeyAction implements RCAction {
+abstract class BaseKeyAction implements BaseAction {
   KeyState get state;
 }
 
@@ -77,7 +77,7 @@ class MouseButtonAction implements BaseKeyAction {
   }
 }
 
-class MouseMoveAction implements RCAction {
+class MouseMoveAction implements BaseAction {
   double deltaX;
   double deltaY;
 
@@ -104,10 +104,10 @@ class TapActionContext extends ActionContext {
 }
 
 class TouchpadActions {
-  RCAction? touchpadMove;
-  RCAction? tap;
-  RCAction? doubleTapAndHold;
-  RCAction? releaseDoubleTapAndHold;
+  BaseAction? touchpadMove;
+  BaseAction? tap;
+  BaseAction? doubleTapAndHold;
+  BaseAction? releaseDoubleTapAndHold;
 
   TouchpadActions({
     this.touchpadMove,
