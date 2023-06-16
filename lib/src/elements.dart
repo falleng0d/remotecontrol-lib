@@ -61,3 +61,18 @@ abstract class BaseTouchpadElement implements BaseElement {
   @override
   Widget build(BuildContext context);
 }
+
+abstract class BaseMouseButtonElement implements BaseElement {
+  @override
+  Geometry geometry;
+  @override
+  String label;
+
+  BaseAction action;
+
+  BaseMouseButtonElement(
+      {this.geometry = const Geometry(), this.label = '', required this.action});
+
+  @override
+  Widget build(BuildContext context);
+}
