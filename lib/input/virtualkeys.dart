@@ -39,13 +39,15 @@ const VK_X = 88;
 const VK_Y = 89;
 const VK_Z = 90;
 
-enum MouseButton { LEFT, RIGHT, MIDDLE, X }
+enum MouseButtonType { LEFT, RIGHT, MIDDLE, X }
 
-enum KeyAction { KEY_UP, KEY_DOWN, KEY_PRESS }
+enum KeyActionType { KEY_UP, KEY_DOWN, KEY_PRESS }
 
-enum MouseAction { KEY_UP, KEY_DOWN, KEY_PRESS, CURSOR_MOVE }
+enum MouseActionType { KEY_UP, KEY_DOWN, KEY_PRESS, CURSOR_MOVE }
 
 enum KeyState { UP, DOWN }
+
+typedef ButtonState = KeyState;
 
 @immutable
 class MBWrapper {
@@ -55,15 +57,15 @@ class MBWrapper {
   const MBWrapper(this.keyDown, this.keyUp);
 
   // construct from MouseButton
-  static MBWrapper fromMouseButton(MouseButton button) {
+  static MBWrapper fromMouseButton(MouseButtonType button) {
     switch (button) {
-      case MouseButton.LEFT:
+      case MouseButtonType.LEFT:
         return MBWrapper(MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP);
-      case MouseButton.RIGHT:
+      case MouseButtonType.RIGHT:
         return MBWrapper(MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP);
-      case MouseButton.MIDDLE:
+      case MouseButtonType.MIDDLE:
         return MBWrapper(MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP);
-      case MouseButton.X:
+      case MouseButtonType.X:
         return MBWrapper(MOUSEEVENTF_XDOWN, MOUSEEVENTF_XUP);
     }
   }
