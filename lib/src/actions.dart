@@ -1,3 +1,5 @@
+import 'package:flutter/gestures.dart';
+
 import '../input/virtualkeys.dart';
 import 'layout.dart';
 
@@ -86,4 +88,31 @@ class MouseMoveAction implements RCAction {
     // TODO: implement doAction
     throw UnimplementedError();
   }
+}
+
+class TapActionContext extends ActionContext {
+  TapUpDetails? tapUpDetails;
+  TapDownDetails? tapDownDetails;
+  ScaleUpdateDetails? scaleUpdateDetails;
+
+  TapActionContext(BaseElement element,
+      {String? description,
+      this.tapUpDetails,
+      this.tapDownDetails,
+      this.scaleUpdateDetails})
+      : super(element, description: description);
+}
+
+class TouchpadActions {
+  RCAction? touchpadMove;
+  RCAction? tap;
+  RCAction? doubleTapAndHold;
+  RCAction? releaseDoubleTapAndHold;
+
+  TouchpadActions({
+    this.touchpadMove,
+    this.tap,
+    this.doubleTapAndHold,
+    this.releaseDoubleTapAndHold,
+  });
 }
