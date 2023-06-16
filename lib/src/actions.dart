@@ -45,16 +45,16 @@ class RCCallbackAction implements RCAction {
   }
 }
 
-abstract class KeyAction implements RCAction {
+abstract class BaseKeyAction implements RCAction {
   KeyState get state;
 }
 
-class KeyboardKeyAction implements KeyAction {
+class KeyAction implements BaseKeyAction {
   @override
   KeyState state;
   int keyCode;
 
-  KeyboardKeyAction(this.state, this.keyCode);
+  KeyAction(this.state, this.keyCode);
 
   @override
   Future<void> doAction(ActionContext ctx) {
@@ -63,7 +63,7 @@ class KeyboardKeyAction implements KeyAction {
   }
 }
 
-class MouseButtonAction implements KeyAction {
+class MouseButtonAction implements BaseKeyAction {
   @override
   KeyState state;
   int keyCode;
