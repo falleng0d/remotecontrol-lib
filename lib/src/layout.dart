@@ -17,7 +17,7 @@ mixin Sizeable {
 
 /// A [BaseElement] is a displayable control that can be added to a [Layout]
 abstract class BaseElement with Sizeable {
-  String label;
+  final String label;
 
   BaseElement(this.label);
 

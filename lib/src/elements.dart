@@ -14,7 +14,7 @@ abstract class BaseTextElement implements BaseElement {
   BaseTextElement({this.geometry = const Geometry(), this.label = ''});
 }
 
-abstract class BaseButtonElement implements BaseElement {
+abstract class BaseKeyElement implements BaseElement {
   @override
   Geometry geometry;
   @override
@@ -30,7 +30,7 @@ abstract class BaseButtonElement implements BaseElement {
   double doubleTapThershold = 0;
   RCAction? doubleTapAction;
 
-  BaseButtonElement(
+  BaseKeyElement(
       {this.geometry = const Geometry(), this.label = '', required this.action});
 
   @override

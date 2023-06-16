@@ -1,13 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:xml/xml.dart';
-
-class Key {
-  final String id;
-  final String text;
-
-  Key(this.id, this.text);
-}
 
 class Menu {
   final String id;
