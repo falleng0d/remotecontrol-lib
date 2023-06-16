@@ -2,13 +2,33 @@ import 'package:flutter/widgets.dart';
 import 'package:remotecontrol_lib/components/CrossExpanded.dart';
 
 class Geometry {
+  final double? minWidth;
   final double? maxWidth;
+  final double? minHeight;
   final double? maxHeight;
 
   final bool? expand;
   final EdgeInsets? padding;
+  final EdgeInsets? margin;
 
-  const Geometry({this.maxWidth, this.maxHeight, this.expand, this.padding});
+  bool isEmpty() {
+    return minWidth == null &&
+        maxWidth == null &&
+        minHeight == null &&
+        maxHeight == null &&
+        expand == null &&
+        padding == null &&
+        margin == null;
+  }
+
+  const Geometry(
+      {this.minWidth,
+      this.maxWidth,
+      this.minHeight,
+      this.maxHeight,
+      this.expand,
+      this.padding,
+      this.margin});
 }
 
 mixin Sizeable {
