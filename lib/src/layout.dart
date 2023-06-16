@@ -97,8 +97,8 @@ class FlexLayout implements Layout {
 
   @override
   Widget build(BuildContext context) {
-    // Build container
-    var addContainer = (List<Widget> children) {
+    // Build wrapper
+    var addWrapper = (List<Widget> children) {
       if (direction == Direction.Row) {
         return Row(
           mainAxisSize: MainAxisSize.max,
@@ -112,36 +112,39 @@ class FlexLayout implements Layout {
         );
       }
     };
+
     var addExpand = (Widget widget) {
       if (geometry.expand == true) {
-        return CrossExpanded(child: widget);
+        return Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(child: widget),
+            ],
+          ),
+        );
       } else {
         return widget;
       }
     };
 
     // Build children
-    var addPadding = (Widget widget) {
-      if (geometry.padding != null) {
-        return Padding(
-          padding: geometry.padding!,
-          child: widget,
-        );
-      } else {
-        return widget;
-      }
+    var addContainer = (Widget widget) {
+      return !geometry.isEmpty()
+          ? Container(
+              padding: geometry.padding ?? EdgeInsets.all(0),
+              margin: geometry.margin ?? EdgeInsets.all(0),
+              constraints: BoxConstraints(
+                maxWidth: geometry.maxWidth ?? double.infinity,
+                maxHeight: geometry.maxHeight ?? double.infinity,
+                minHeight: geometry.minHeight ?? 0,
+                minWidth: geometry.minWidth ?? 0,
+              ),
+              child: widget,
+            )
+          : widget;
     };
-    var addSize = (Widget widget) {
-      if (geometry.maxWidth != null || geometry.maxHeight != null) {
-        return SizedBox(
-          width: geometry.maxWidth,
-          height: geometry.maxHeight,
-          child: widget,
-        );
-      } else {
-        return widget;
-      }
-    };
+
     var addExpandToChildren = (Widget widget) {
       if (expandChildren == true) {
         return CrossExpanded(child: widget);
@@ -151,8 +154,7 @@ class FlexLayout implements Layout {
     };
 
     var transformChildren = (Widget widget) {
-      widget = addSize(widget);
-      widget = addPadding(widget);
+      widget = addContainer(widget);
       widget = addExpandToChildren(widget);
       return widget;
     };
@@ -160,7 +162,7 @@ class FlexLayout implements Layout {
     var assemble = (List<Widget> children) {
       Widget widget;
       if (children.length > 1) {
-        widget = addContainer(children);
+        widget = addWrapper(children);
       } else {
         widget = children[0];
       }
@@ -171,6 +173,44 @@ class FlexLayout implements Layout {
     var _children = children.map((e) => transformChildren(e.build(context))).toList();
     return assemble(_children);
   }
+}
+
+class RowLayout extends FlexLayout {
+  RowLayout(
+      {Geometry geometry = const Geometry(),
+      String description = '',
+      double columnGap = 0,
+      bool expandChildren = false,
+      String? label,
+      required List<BaseElement> children})
+      : super(
+            geometry: geometry,
+            direction: Direction.Row,
+            description: description,
+            columnGap: columnGap,
+            rowGap: 0,
+            expandChildren: expandChildren,
+            label: label,
+            children: children);
+}
+
+class ColumnLayout extends FlexLayout {
+  ColumnLayout(
+      {Geometry geometry = const Geometry(),
+      String description = '',
+      double rowGap = 0,
+      bool expandChildren = false,
+      String? label,
+      required List<BaseElement> children})
+      : super(
+            geometry: geometry,
+            direction: Direction.Column,
+            description: description,
+            columnGap: 0,
+            rowGap: rowGap,
+            expandChildren: expandChildren,
+            label: label,
+            children: children);
 }
 
 class HorizontalSpacer implements BaseElement {
