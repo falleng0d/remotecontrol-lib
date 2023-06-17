@@ -29,6 +29,35 @@ class Geometry {
       this.expand,
       this.padding,
       this.margin});
+
+  Geometry copyWith(
+      {double? minWidth,
+      double? maxWidth,
+      double? minHeight,
+      double? maxHeight,
+      bool? expand,
+      EdgeInsets? padding,
+      EdgeInsets? margin}) {
+    return Geometry(
+        minWidth: minWidth ?? this.minWidth,
+        maxWidth: maxWidth ?? this.maxWidth,
+        minHeight: minHeight ?? this.minHeight,
+        maxHeight: maxHeight ?? this.maxHeight,
+        expand: expand ?? this.expand,
+        padding: padding ?? this.padding,
+        margin: margin ?? this.margin);
+  }
+
+  Geometry copy() {
+    return Geometry(
+        minWidth: minWidth,
+        maxWidth: maxWidth,
+        minHeight: minHeight,
+        maxHeight: maxHeight,
+        expand: expand,
+        padding: padding,
+        margin: margin);
+  }
 }
 
 mixin Sizeable {
@@ -178,7 +207,6 @@ class FlexLayout implements Layout {
 class RowLayout extends FlexLayout {
   RowLayout(
       {Geometry geometry = const Geometry(),
-      String description = '',
       double columnGap = 0,
       bool expandChildren = false,
       String? label,
@@ -186,7 +214,6 @@ class RowLayout extends FlexLayout {
       : super(
             geometry: geometry,
             direction: Direction.Row,
-            description: description,
             columnGap: columnGap,
             rowGap: 0,
             expandChildren: expandChildren,
@@ -197,7 +224,6 @@ class RowLayout extends FlexLayout {
 class ColumnLayout extends FlexLayout {
   ColumnLayout(
       {Geometry geometry = const Geometry(),
-      String description = '',
       double rowGap = 0,
       bool expandChildren = false,
       String? label,
@@ -205,7 +231,6 @@ class ColumnLayout extends FlexLayout {
       : super(
             geometry: geometry,
             direction: Direction.Column,
-            description: description,
             columnGap: 0,
             rowGap: rowGap,
             expandChildren: expandChildren,
@@ -220,13 +245,13 @@ class HorizontalSpacer implements BaseElement {
   @override
   String label = '';
 
+  HorizontalSpacer({String? label, this.geometry = const Geometry()});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     throw UnimplementedError();
   }
-
-  HorizontalSpacer({String? label, this.geometry = const Geometry()});
 }
 
 class VerticalSpacer implements BaseElement {
@@ -236,11 +261,11 @@ class VerticalSpacer implements BaseElement {
   @override
   String label = '';
 
+  VerticalSpacer({String? label, this.geometry = const Geometry()});
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     throw UnimplementedError();
   }
-
-  VerticalSpacer({String? label, this.geometry = const Geometry()});
 }

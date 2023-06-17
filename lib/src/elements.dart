@@ -37,6 +37,22 @@ abstract class BaseKeyElement implements BaseElement {
   Widget build(BuildContext context);
 }
 
+/// TouchAction
+/// - onPanUpdate: Send mose move events to the server via a [DragUpdateDetails] object.
+class TouchpadActions {
+  BaseAction? touchpadMove;
+  BaseAction? tap;
+  BaseAction? doubleTapAndHold;
+  BaseAction? releaseDoubleTapAndHold;
+
+  TouchpadActions({
+    this.touchpadMove,
+    this.tap,
+    this.doubleTapAndHold,
+    this.releaseDoubleTapAndHold,
+  });
+}
+
 abstract class BaseTouchpadElement implements BaseElement {
   @override
   Geometry geometry;

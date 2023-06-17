@@ -24,6 +24,7 @@ dependencies:
   grpc:
   protobuf:
   xml: ^6.1.0
+  get: ^4.6.5
 
 flutter:
   uses-material-design: true

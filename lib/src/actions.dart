@@ -14,82 +14,6 @@ class ActionContext {
   const ActionContext(this.target, {this.description});
 }
 
-/// [BaseAction] is the base class for all actions
-///
-/// An action is a command that can be executed by the system.
-/// It receives a [ActionContext] and returns a boolean indicating if the action
-/// was executed successfully.
-///
-/// An action should not be executed directly, but rather scheduled through
-/// a [ActionQueue].
-abstract class BaseAction {
-  Future<void> doAction(ActionContext ctx);
-}
-
-/// [RCCallbackAction] is a simple action that executes a callback.
-///
-/// An action is a command that can be executed by the system.
-/// It receives a [ActionContext] and returns a boolean indicating if the action
-/// was executed successfully.
-///
-/// An action should not be executed directly, but rather scheduled through
-/// a [ActionQueue].
-class RCCallbackAction implements BaseAction {
-  final Future<void> Function(ActionContext) callback;
-
-  RCCallbackAction(this.callback);
-
-  @override
-  Future<void> doAction(ActionContext ctx) async {
-    return await callback(ctx);
-  }
-}
-
-abstract class BaseKeyAction implements BaseAction {
-  KeyState get state;
-}
-
-class KeyAction implements BaseKeyAction {
-  @override
-  KeyState state;
-  int keyCode;
-
-  KeyAction(this.state, this.keyCode);
-
-  @override
-  Future<void> doAction(ActionContext ctx) {
-    // TODO: implement doAction
-    throw UnimplementedError();
-  }
-}
-
-class MouseButtonAction implements BaseKeyAction {
-  @override
-  KeyState state;
-  int keyCode;
-
-  MouseButtonAction(this.state, this.keyCode);
-
-  @override
-  Future<void> doAction(ActionContext ctx) {
-    // TODO: implement doAction
-    throw UnimplementedError();
-  }
-}
-
-class MouseMoveAction implements BaseAction {
-  double deltaX;
-  double deltaY;
-
-  MouseMoveAction(this.deltaX, this.deltaY);
-
-  @override
-  Future<void> doAction(ActionContext ctx) {
-    // TODO: implement doAction
-    throw UnimplementedError();
-  }
-}
-
 class TapActionContext extends ActionContext {
   TapUpDetails? tapUpDetails;
   TapDownDetails? tapDownDetails;
@@ -103,16 +27,76 @@ class TapActionContext extends ActionContext {
       : super(element, description: description);
 }
 
-class TouchpadActions {
-  BaseAction? touchpadMove;
-  BaseAction? tap;
-  BaseAction? doubleTapAndHold;
-  BaseAction? releaseDoubleTapAndHold;
+class KeyActionContext extends ActionContext {
+  KeyState keyState;
 
-  TouchpadActions({
-    this.touchpadMove,
-    this.tap,
-    this.doubleTapAndHold,
-    this.releaseDoubleTapAndHold,
-  });
+  KeyActionContext(BaseElement element, this.keyState, {String? description})
+      : super(element, description: description);
+}
+
+class MouseMoveActionContext extends ActionContext {
+  double deltaX;
+  double deltaY;
+
+  MouseMoveActionContext(BaseElement element, this.deltaX, this.deltaY,
+      {String? description})
+      : super(element, description: description);
+}
+
+/// [BaseAction] is the base class for all actions. Action objects are meant to
+/// contain everything that is needed to execute an action for a
+/// given [ActionContext].
+///
+/// An action is a command that can be executed by the system.
+/// It receives a [ActionContext] and returns a boolean indicating if the action
+/// was executed successfully.
+///
+/// An action should not be executed directly, but rather scheduled through
+/// a [ActionQueue].
+abstract class BaseAction {
+  Future<void> doAction(ActionContext ctx);
+}
+
+/// [CallbackAction] is a simple action that executes a callback.
+///
+/// An action is a command that can be executed by the system.
+/// It receives a [ActionContext] and returns a boolean indicating if the action
+/// was executed successfully.
+///
+/// An action should not be executed directly, but rather scheduled through
+/// a [ActionQueue].
+class CallbackAction implements BaseAction {
+  final Future<void> Function(ActionContext) callback;
+
+  CallbackAction(this.callback);
+
+  @override
+  Future<void> doAction(ActionContext ctx) async {
+    return await callback(ctx);
+  }
+}
+
+abstract class BaseKeyAction implements BaseAction {
+  int get keyCode;
+
+  BaseKeyAction(KeyState state);
+
+  @override
+  Future<void> doAction(ActionContext ctx);
+}
+
+abstract class BaseMouseButtonAction implements BaseAction {
+  int get keyCode;
+
+  BaseMouseButtonAction(KeyState state, int keyCode);
+
+  @override
+  Future<void> doAction(ActionContext ctx);
+}
+
+abstract class BaseMouseMoveAction implements BaseAction {
+  BaseMouseMoveAction();
+
+  @override
+  Future<void> doAction(ActionContext ctx);
 }
