@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:fluent_ui/fluent_ui.dart' show EdgeInsets, Key;
-import 'package:remotecontrol_lib/keyboard.dart';
+import 'package:get/get.dart';
 import 'package:xml/xml.dart';
+
+import '../keyboard.dart';
 
 class Menu {
   final String id;
@@ -68,8 +70,6 @@ mixin SizeableFactory {
 
 /* region Abstract Element Factories */
 abstract class BaseElementFactory with SizeableFactory {
-  BaseElement build(String label);
-
   BaseElementFactory([Geometry? geometry]) {
     this.geometry = geometry ?? const Geometry();
   }
@@ -83,8 +83,10 @@ abstract class BaseKeyElementFactory extends BaseElementFactory {
   double get holdTimeThreshold;
   double get doubleTapThershold;
 
-  @override
-  BaseKeyElement build(String label);
+  BaseKeyElementFactory([Geometry? geometry]) : super(geometry);
+
+  BaseKeyElement build(String label, BaseAction action,
+      {BaseAction? doubleTapAction, BaseAction? holdAction});
 }
 
 abstract class BaseMouseButtonElementFactory extends BaseElementFactory {
@@ -93,12 +95,12 @@ abstract class BaseMouseButtonElementFactory extends BaseElementFactory {
   BaseMouseButtonElementFactory(BaseAction action, [Geometry? geometry])
       : super(geometry);
 
-  @override
   BaseMouseButtonElement build(String label);
 }
 
 abstract class BaseTextElementFactory extends BaseElementFactory {
-  @override
+  BaseTextElementFactory([Geometry? geometry]) : super(geometry);
+
   BaseTextElement build(String label);
 }
 
@@ -109,13 +111,16 @@ abstract class BaseTouchpadElementFactory extends BaseElementFactory {
   bool get doubleTapAndHold;
   TouchpadActions get actions;
 
-  @override
+  BaseTouchpadElementFactory([Geometry? geometry]) : super(geometry);
+
   BaseTouchpadElement build(String label);
 }
 /* endregion */
 
-/* region Abstract Layout Factories */
-abstract class BaseLayoutFactory extends BaseElementFactory {}
+/* region Abstract Layout Element Factories */
+abstract class BaseLayoutFactory extends BaseElementFactory {
+  BaseLayoutFactory([Geometry? geometry]) : super(geometry);
+}
 
 abstract class BaseFlexLayoutFactory extends BaseLayoutFactory {
   Direction get direction;
@@ -123,7 +128,8 @@ abstract class BaseFlexLayoutFactory extends BaseLayoutFactory {
   double get rowGap;
   bool get expandChildren;
 
-  @override
+  BaseFlexLayoutFactory([Geometry? geometry]) : super(geometry);
+
   FlexLayout build(String label);
 }
 
@@ -132,7 +138,8 @@ abstract class BaseRowLayoutFactory extends BaseLayoutFactory {
   double get rowGap;
   bool get expandChildren;
 
-  @override
+  BaseRowLayoutFactory([Geometry? geometry]) : super(geometry);
+
   RowLayout build(String label);
 }
 
@@ -141,20 +148,79 @@ abstract class BaseColumnLayoutFactory extends BaseLayoutFactory {
   double get rowGap;
   bool get expandChildren;
 
-  @override
+  BaseColumnLayoutFactory([Geometry? geometry]) : super(geometry);
+
   ColumnLayout build(String label);
 }
 
 abstract class BaseHorizontalSpacerFactory extends BaseLayoutFactory {
-  @override
+  BaseHorizontalSpacerFactory([Geometry? geometry]) : super(geometry);
+
   HorizontalSpacer build(String label);
 }
 
 abstract class BaseVerticalSpacerFactory extends BaseLayoutFactory {
-  @override
+  BaseVerticalSpacerFactory([Geometry? geometry]) : super(geometry);
+
   VerticalSpacer build(String label);
 }
 /* endregion */
+
+class VirtualKeyboardElementFactory {
+  BaseKeyElementFactory? _baseKeyElementFactory;
+  BaseMouseButtonElementFactory? _baseMouseButtonElementFactory;
+  BaseTextElementFactory? _baseTextElementFactory;
+  BaseTouchpadElementFactory? _baseTouchpadElementFactory;
+  BaseFlexLayoutFactory? _baseFlexLayoutFactory;
+  BaseRowLayoutFactory? _baseRowLayoutFactory;
+  BaseColumnLayoutFactory? _baseColumnLayoutFactory;
+  BaseHorizontalSpacerFactory? _baseHorizontalSpacerFactory;
+  BaseVerticalSpacerFactory? _baseVerticalSpacerFactory;
+
+  VirtualKeyboardElementFactory() {
+    resolveDependencies();
+  }
+
+  void resolveDependencies() {
+    if (Get.isRegistered<BaseKeyElementFactory>()) {
+      _baseKeyElementFactory = Get.find<BaseKeyElementFactory>();
+    }
+    if (Get.isRegistered<BaseMouseButtonElementFactory>()) {
+      _baseMouseButtonElementFactory = Get.find<BaseMouseButtonElementFactory>();
+    }
+    if (Get.isRegistered<BaseTextElementFactory>()) {
+      _baseTextElementFactory = Get.find<BaseTextElementFactory>();
+    }
+    if (Get.isRegistered<BaseTouchpadElementFactory>()) {
+      _baseTouchpadElementFactory = Get.find<BaseTouchpadElementFactory>();
+    }
+    if (Get.isRegistered<BaseFlexLayoutFactory>()) {
+      _baseFlexLayoutFactory = Get.find<BaseFlexLayoutFactory>();
+    }
+    if (Get.isRegistered<BaseRowLayoutFactory>()) {
+      _baseRowLayoutFactory = Get.find<BaseRowLayoutFactory>();
+    }
+    if (Get.isRegistered<BaseColumnLayoutFactory>()) {
+      _baseColumnLayoutFactory = Get.find<BaseColumnLayoutFactory>();
+    }
+    if (Get.isRegistered<BaseHorizontalSpacerFactory>()) {
+      _baseHorizontalSpacerFactory = Get.find<BaseHorizontalSpacerFactory>();
+    }
+    if (Get.isRegistered<BaseVerticalSpacerFactory>()) {
+      _baseVerticalSpacerFactory = Get.find<BaseVerticalSpacerFactory>();
+    }
+  }
+
+  BaseKeyElement buildKeyElement(String label, BaseAction action,
+      {BaseAction? doubleTapAction, BaseAction? holdAction}) {
+    return _baseKeyElementFactory!
+        .build(label, action, doubleTapAction: doubleTapAction, holdAction: holdAction);
+  }
+
+  BaseMouseButtonElement buildMouseButtonElement(String label, ac) {
+    return _baseMouseButtonElementFactory!.build(label);
+  }
+}
 
 class VirtualKeyboardXMLParser {
   final XmlDocument _document;
