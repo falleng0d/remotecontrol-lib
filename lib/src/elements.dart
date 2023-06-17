@@ -20,18 +20,17 @@ abstract class BaseKeyElement implements BaseElement {
   @override
   String label;
 
-  double keyRep = 0;
-  double keyRepeatDelay = 0;
-  bool toggle = false;
+  double get keyRep;
+  double get keyRepeatDelay;
+  bool get toggle;
 
-  BaseAction action;
-  double holdTimeThreshold = 0;
-  BaseAction? holdAction;
-  double doubleTapThershold = 0;
-  BaseAction? doubleTapAction;
+  BaseAction get action;
+  double get holdTimeThreshold;
+  BaseAction? get holdAction;
+  double get doubleTapThershold;
+  BaseAction? get doubleTapAction;
 
-  BaseKeyElement(
-      {this.geometry = const Geometry(), this.label = '', required this.action});
+  BaseKeyElement(BaseAction action, {this.geometry = const Geometry(), this.label = ''});
 
   @override
   Widget build(BuildContext context);
@@ -59,20 +58,21 @@ abstract class BaseTouchpadElement implements BaseElement {
   @override
   String label;
 
-  bool scrollbar;
-  bool mouseButtons;
-  bool tapToClick;
-  bool doubleTapAndHold;
-  TouchpadActions actions;
+  TouchpadActions get actions;
+  bool get scrollbar;
+  bool get mouseButtons;
+  bool get tapToClick;
+  bool get doubleTapAndHold;
 
   BaseTouchpadElement(
-      {this.geometry = const Geometry(),
-      this.label = '',
-      this.scrollbar = true,
-      this.mouseButtons = true,
-      this.tapToClick = true,
-      this.doubleTapAndHold = true,
-      required this.actions});
+    TouchpadActions actions, {
+    this.geometry = const Geometry(),
+    this.label = '',
+    bool scrollbar = true,
+    bool mouseButtons = true,
+    bool tapToClick = true,
+    bool doubleTapAndHold = true,
+  });
 
   @override
   Widget build(BuildContext context);
@@ -84,10 +84,10 @@ abstract class BaseMouseButtonElement implements BaseElement {
   @override
   String label;
 
-  BaseAction action;
+  BaseAction get action;
 
-  BaseMouseButtonElement(
-      {this.geometry = const Geometry(), this.label = '', required this.action});
+  BaseMouseButtonElement(BaseAction action,
+      {this.geometry = const Geometry(), this.label = ''});
 
   @override
   Widget build(BuildContext context);
