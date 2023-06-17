@@ -64,8 +64,13 @@ mixin Sizeable {
   Geometry get geometry;
 }
 
+mixin Labeled {
+  String get label;
+}
+
 /// A [BaseElement] is a displayable control that can be added to a [Layout]
-abstract class BaseElement with Sizeable {
+abstract class BaseElement with Sizeable, Labeled {
+  @override
   final String label;
 
   BaseElement(this.label);
