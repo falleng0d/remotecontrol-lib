@@ -1,5 +1,6 @@
 // Virtual keys
 import 'package:flutter/foundation.dart';
+import 'package:remotecontrol_lib/proto/input.pbgrpc.dart' as pb;
 import 'package:win32/win32.dart';
 
 const VK_0 = 48;
@@ -47,7 +48,80 @@ enum MouseActionType { KEY_UP, KEY_DOWN, KEY_PRESS, CURSOR_MOVE }
 
 enum KeyState { UP, DOWN }
 
-typedef ButtonState = KeyState;
+enum ButtonState { UP, DOWN, PRESS }
+
+Map<MouseButtonType, int> _mouseButtonToVK = {
+  MouseButtonType.LEFT: VK_LBUTTON,
+  MouseButtonType.RIGHT: VK_RBUTTON,
+  MouseButtonType.MIDDLE: VK_MBUTTON,
+  MouseButtonType.X1: VK_XBUTTON1,
+  MouseButtonType.X2: VK_XBUTTON2,
+};
+Map<int, MouseButtonType> _vkToMouseButton =
+    _mouseButtonToVK.map((k, v) => MapEntry(v, k));
+
+int mouseButtonToVK(MouseButtonType button) {
+  if (!_mouseButtonToVK.containsKey(button)) {
+    throw ArgumentError('Invalid mouse button type');
+  }
+
+  return _mouseButtonToVK[button]!;
+}
+
+MouseButtonType vkToMouseButton(int vk) {
+  if (!_vkToMouseButton.containsKey(vk)) {
+    throw ArgumentError('Invalid virtual key');
+  }
+
+  return _vkToMouseButton[vk]!;
+}
+
+Map<KeyState, pb.Key_KeyActionType> _keyStateToPb = {
+  KeyState.UP: pb.Key_KeyActionType.UP,
+  KeyState.DOWN: pb.Key_KeyActionType.DOWN
+};
+Map<pb.Key_KeyActionType, KeyState> _pbToKeyState =
+    _keyStateToPb.map((k, v) => MapEntry(v, k));
+
+Map<ButtonState, pb.MouseKey_KeyActionType> _buttonStateToPb = {
+  ButtonState.UP: pb.MouseKey_KeyActionType.UP,
+  ButtonState.DOWN: pb.MouseKey_KeyActionType.DOWN,
+  ButtonState.PRESS: pb.MouseKey_KeyActionType.PRESS
+};
+Map<pb.MouseKey_KeyActionType, ButtonState> _pbToButtonState =
+    _buttonStateToPb.map((k, v) => MapEntry(v, k));
+
+pb.Key_KeyActionType keyStateToPb(KeyState state) {
+  if (!_keyStateToPb.containsKey(state)) {
+    throw ArgumentError('Invalid key state');
+  }
+
+  return _keyStateToPb[state]!;
+}
+
+KeyState pbToKeyState(pb.Key_KeyActionType state) {
+  if (!_pbToKeyState.containsKey(state)) {
+    throw ArgumentError('Invalid key state');
+  }
+
+  return _pbToKeyState[state]!;
+}
+
+pb.MouseKey_KeyActionType buttonStateToPb(ButtonState state) {
+  if (!_buttonStateToPb.containsKey(state)) {
+    throw ArgumentError('Invalid button state');
+  }
+
+  return _buttonStateToPb[state]!;
+}
+
+ButtonState pbToButtonState(pb.MouseKey_KeyActionType state) {
+  if (!_pbToButtonState.containsKey(state)) {
+    throw ArgumentError('Invalid button state');
+  }
+
+  return _pbToButtonState[state]!;
+}
 
 @immutable
 class MBWrapper {

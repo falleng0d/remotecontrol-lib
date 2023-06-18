@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+
 import '../components/CrossExpanded.dart';
 import 'base.dart';
 
@@ -38,20 +39,18 @@ class FlexLayout implements BaseLayout {
   final List<BaseElement> children;
 
   final Direction direction;
-  final String description;
   final double columnGap;
   final double rowGap;
 
   final bool expandChildren;
 
   const FlexLayout(
-      {this.geometry = const Geometry(),
+      {String? label,
+      this.geometry = const Geometry(),
       this.direction = Direction.Row,
-      this.description = '',
       this.columnGap = 0,
       this.rowGap = 0,
       this.expandChildren = false,
-      String? label,
       required this.children});
 
   @override
@@ -138,13 +137,13 @@ class FlexLayout implements BaseLayout {
 }
 
 class RowLayout extends FlexLayout {
-  const RowLayout(
-      {Geometry geometry = const Geometry(),
-      double columnGap = 0,
-      bool expandChildren = false,
-      String? label,
-      required List<BaseElement> children})
-      : super(
+  const RowLayout({
+    String? label,
+    Geometry geometry = const Geometry(),
+    double columnGap = 0,
+    bool expandChildren = false,
+    required List<BaseElement> children,
+  }) : super(
             geometry: geometry,
             direction: Direction.Row,
             columnGap: columnGap,
@@ -155,13 +154,13 @@ class RowLayout extends FlexLayout {
 }
 
 class ColumnLayout extends FlexLayout {
-  const ColumnLayout(
-      {Geometry geometry = const Geometry(),
-      double rowGap = 0,
-      bool expandChildren = false,
-      String? label,
-      required List<BaseElement> children})
-      : super(
+  const ColumnLayout({
+    String? label,
+    Geometry geometry = const Geometry(),
+    double rowGap = 0,
+    bool expandChildren = false,
+    required List<BaseElement> children,
+  }) : super(
             geometry: geometry,
             direction: Direction.Column,
             columnGap: 0,
@@ -181,8 +180,10 @@ class HorizontalSpacer implements BaseElement {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return SizedBox(
+      width: geometry.maxWidth ?? double.infinity,
+      height: geometry.maxHeight ?? double.infinity,
+    );
   }
 }
 
@@ -196,7 +197,9 @@ class VerticalSpacer implements BaseElement {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return SizedBox(
+      width: geometry.maxWidth ?? double.infinity,
+      height: geometry.maxHeight ?? double.infinity,
+    );
   }
 }

@@ -19,16 +19,16 @@ class ActionContext {
 class KeyActionContext extends ActionContext {
   final KeyState keyState;
 
-  const KeyActionContext(BaseElement element, this.keyState, {String? description})
-      : super(element, description: description);
+  const KeyActionContext(BaseElement target, this.keyState, {String? description})
+      : super(target, description: description);
 }
 
 /// [ButtonActionContext] is the context in which a mouse button action is executed.
 class ButtonActionContext extends ActionContext {
   final ButtonState buttonState;
 
-  const ButtonActionContext(BaseElement element, this.buttonState, {String? description})
-      : super(element, description: description);
+  const ButtonActionContext(BaseElement target, this.buttonState, {String? description})
+      : super(target, description: description);
 }
 
 /// [MouseMoveActionContext] is the context in which a mouse move action is executed.
@@ -36,9 +36,9 @@ class MouseMoveActionContext extends ActionContext {
   final double deltaX;
   final double deltaY;
 
-  const MouseMoveActionContext(BaseElement element, this.deltaX, this.deltaY,
+  const MouseMoveActionContext(BaseElement target, this.deltaX, this.deltaY,
       {String? description})
-      : super(element, description: description);
+      : super(target, description: description);
 }
 
 /// [TapActionContext] is the context in which a touchpad tap action is executed.
@@ -47,10 +47,10 @@ class TapActionContext extends ActionContext {
   final TapDownDetails? tapDownDetails;
   final ScaleUpdateDetails? scaleUpdateDetails;
 
-  const TapActionContext(BaseElement element,
+  const TapActionContext(BaseElement target,
       {String? description,
       this.tapUpDetails,
       this.tapDownDetails,
       this.scaleUpdateDetails})
-      : super(element, description: description);
+      : super(target, description: description);
 }

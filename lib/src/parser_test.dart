@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:remotecontrol_lib/input.dart';
 import 'package:test/test.dart';
 
+import '../action_contexts.dart';
 import '../keyboard.dart';
 import 'parser.dart';
 
@@ -90,7 +91,7 @@ class TestKeyAction extends BaseKeyAction {
   @override
   final int keyCode;
 
-  const TestKeyAction(this.keyCode) : super();
+  const TestKeyAction(this.keyCode) : super(keyCode);
 
   @override
   Future<bool> doAction(ActionContext ctx) async {

@@ -128,7 +128,6 @@ abstract class BaseFlexLayoutFactory extends BaseLayoutFactory {
 
 abstract class BaseRowLayoutFactory extends BaseLayoutFactory {
   double get columnGap;
-  double get rowGap;
   bool get expandChildren;
 
   BaseRowLayoutFactory([Geometry? geometry]) : super(geometry);
@@ -136,14 +135,12 @@ abstract class BaseRowLayoutFactory extends BaseLayoutFactory {
   RowLayout build({
     String? label,
     double? columnGap,
-    double? rowGap,
     bool? expandChildren,
     List<BaseElement>? children,
   });
 }
 
 abstract class BaseColumnLayoutFactory extends BaseLayoutFactory {
-  double get columnGap;
   double get rowGap;
   bool get expandChildren;
 
@@ -151,7 +148,6 @@ abstract class BaseColumnLayoutFactory extends BaseLayoutFactory {
 
   ColumnLayout build({
     String? label,
-    double? columnGap,
     double? rowGap,
     bool? expandChildren,
     List<BaseElement>? children,
@@ -176,7 +172,7 @@ abstract class BaseKeyActionFactory {
   BaseKeyAction build(String keyCode);
 }
 
-abstract class BaseMouseButtonActionFactory {
+abstract class BaseButtonActionFactory {
   BaseMouseButtonAction build(MouseButtonType button);
 }
 /* endregion Abstract Action Factories */
@@ -195,7 +191,7 @@ class VirtualKeyboardElementFactory {
   BaseVerticalSpacerFactory? __baseVerticalSpacerFactory;
 
   BaseKeyActionFactory? __baseKeyActionFactory;
-  BaseMouseButtonActionFactory? __baseMouseButtonActionFactory;
+  BaseButtonActionFactory? __baseMouseButtonActionFactory;
   /* endregion Fields */
 
   /* region Getters */
@@ -279,7 +275,7 @@ class VirtualKeyboardElementFactory {
     return __baseKeyActionFactory!;
   }
 
-  BaseMouseButtonActionFactory get _baseMouseButtonActionFactory {
+  BaseButtonActionFactory get _baseMouseButtonActionFactory {
     if (__baseMouseButtonActionFactory == null) {
       throw Exception('BaseMouseButtonActionFactory is not registered');
     }
@@ -325,8 +321,8 @@ class VirtualKeyboardElementFactory {
     if (Get.isRegistered<BaseKeyActionFactory>()) {
       __baseKeyActionFactory = Get.find<BaseKeyActionFactory>();
     }
-    if (Get.isRegistered<BaseMouseButtonActionFactory>()) {
-      __baseMouseButtonActionFactory = Get.find<BaseMouseButtonActionFactory>();
+    if (Get.isRegistered<BaseButtonActionFactory>()) {
+      __baseMouseButtonActionFactory = Get.find<BaseButtonActionFactory>();
     }
   }
 
@@ -404,7 +400,6 @@ class VirtualKeyboardElementFactory {
       label: label,
       children: children,
       columnGap: columnGap,
-      rowGap: rowGap,
       expandChildren: expandChildren,
     );
   }
@@ -419,7 +414,6 @@ class VirtualKeyboardElementFactory {
     return _baseColumnLayoutFactory.build(
       label: label,
       children: children,
-      columnGap: columnGap,
       rowGap: rowGap,
       expandChildren: expandChildren,
     );

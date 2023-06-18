@@ -5,9 +5,9 @@ import 'base.dart';
 
 abstract class BaseTextElement implements BaseElement {
   @override
-  Geometry geometry;
+  final Geometry geometry;
   @override
-  String label;
+  final String label;
 
   @override
   Widget build(BuildContext context);
@@ -17,21 +17,23 @@ abstract class BaseTextElement implements BaseElement {
 
 abstract class BaseKeyElement implements BaseElement {
   @override
-  Geometry geometry;
+  final Geometry geometry;
   @override
-  String label;
-
-  double get keyRep;
-  double get keyRepeatDelay;
-  bool get toggle;
+  final String label;
 
   BaseAction get action;
-  double get holdTimeThreshold;
-  BaseAction? get holdAction;
-  double get doubleTapThershold;
-  BaseAction? get doubleTapAction;
+  bool get toggle;
+  double get keyRep;
+  double get keyRepeatDelay;
 
-  BaseKeyElement(BaseAction action, {this.geometry = const Geometry(), this.label = ''});
+  BaseAction? get holdAction;
+  double get holdTimeThreshold;
+
+  BaseAction? get doubleTapAction;
+  double get doubleTapThershold;
+
+  const BaseKeyElement(BaseAction action,
+      {this.geometry = const Geometry(), this.label = ''});
 
   @override
   Widget build(BuildContext context);
@@ -40,12 +42,12 @@ abstract class BaseKeyElement implements BaseElement {
 /// TouchAction
 /// - onPanUpdate: Send mose move events to the server via a [DragUpdateDetails] object.
 class TouchpadActions {
-  BaseAction? touchpadMove;
-  BaseAction? tap;
-  BaseAction? doubleTapAndHold;
-  BaseAction? releaseDoubleTapAndHold;
+  final BaseAction? touchpadMove;
+  final BaseAction? tap;
+  final BaseAction? doubleTapAndHold;
+  final BaseAction? releaseDoubleTapAndHold;
 
-  TouchpadActions({
+  const TouchpadActions({
     this.touchpadMove,
     this.tap,
     this.doubleTapAndHold,
@@ -55,9 +57,9 @@ class TouchpadActions {
 
 abstract class BaseTouchpadElement implements BaseElement {
   @override
-  Geometry geometry;
+  final Geometry geometry;
   @override
-  String label;
+  final String label;
 
   TouchpadActions get actions;
   bool get scrollbar;
@@ -65,7 +67,7 @@ abstract class BaseTouchpadElement implements BaseElement {
   bool get tapToClick;
   bool get doubleTapAndHold;
 
-  BaseTouchpadElement(
+  const BaseTouchpadElement(
     TouchpadActions actions, {
     this.geometry = const Geometry(),
     this.label = '',
@@ -81,13 +83,13 @@ abstract class BaseTouchpadElement implements BaseElement {
 
 abstract class BaseMouseButtonElement implements BaseElement {
   @override
-  Geometry geometry;
+  final Geometry geometry;
   @override
-  String label;
+  final String label;
 
   BaseAction get action;
 
-  BaseMouseButtonElement(BaseAction action,
+  const BaseMouseButtonElement(BaseAction action,
       {this.geometry = const Geometry(), this.label = ''});
 
   @override
