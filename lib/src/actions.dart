@@ -14,32 +14,43 @@ class ActionContext {
   const ActionContext(this.target, {this.description});
 }
 
-class TapActionContext extends ActionContext {
-  TapUpDetails? tapUpDetails;
-  TapDownDetails? tapDownDetails;
-  ScaleUpdateDetails? scaleUpdateDetails;
+/// [KeyActionContext] is the context in which a keyboard key action is executed.
+class KeyActionContext extends ActionContext {
+  final KeyState keyState;
 
-  TapActionContext(BaseElement element,
+  const KeyActionContext(BaseElement element, this.keyState, {String? description})
+      : super(element, description: description);
+}
+
+/// [ButtonActionContext] is the context in which a mouse button action is executed.
+class ButtonActionContext extends ActionContext {
+  final ButtonState buttonState;
+
+  const ButtonActionContext(BaseElement element, this.buttonState, {String? description})
+      : super(element, description: description);
+}
+
+/// [MouseMoveActionContext] is the context in which a mouse move action is executed.
+class MouseMoveActionContext extends ActionContext {
+  final double deltaX;
+  final double deltaY;
+
+  const MouseMoveActionContext(BaseElement element, this.deltaX, this.deltaY,
+      {String? description})
+      : super(element, description: description);
+}
+
+/// [TapActionContext] is the context in which a touchpad tap action is executed.
+class TapActionContext extends ActionContext {
+  final TapUpDetails? tapUpDetails;
+  final TapDownDetails? tapDownDetails;
+  final ScaleUpdateDetails? scaleUpdateDetails;
+
+  const TapActionContext(BaseElement element,
       {String? description,
       this.tapUpDetails,
       this.tapDownDetails,
       this.scaleUpdateDetails})
-      : super(element, description: description);
-}
-
-class KeyActionContext extends ActionContext {
-  KeyState keyState;
-
-  KeyActionContext(BaseElement element, this.keyState, {String? description})
-      : super(element, description: description);
-}
-
-class MouseMoveActionContext extends ActionContext {
-  double deltaX;
-  double deltaY;
-
-  MouseMoveActionContext(BaseElement element, this.deltaX, this.deltaY,
-      {String? description})
       : super(element, description: description);
 }
 
@@ -54,6 +65,31 @@ class MouseMoveActionContext extends ActionContext {
 /// An action should not be executed directly, but rather scheduled through
 /// a [ActionQueue].
 abstract class BaseAction {
+  Future<void> doAction(ActionContext ctx);
+}
+
+abstract class BaseKeyAction implements BaseAction {
+  int get keyCode;
+
+  BaseKeyAction(KeyState state);
+
+  @override
+  Future<void> doAction(ActionContext ctx);
+}
+
+abstract class BaseMouseButtonAction implements BaseAction {
+  int get keyCode;
+
+  BaseMouseButtonAction(int keyCode);
+
+  @override
+  Future<void> doAction(ActionContext ctx);
+}
+
+abstract class BaseMouseMoveAction implements BaseAction {
+  BaseMouseMoveAction();
+
+  @override
   Future<void> doAction(ActionContext ctx);
 }
 
@@ -74,29 +110,4 @@ class CallbackAction implements BaseAction {
   Future<void> doAction(ActionContext ctx) async {
     return await callback(ctx);
   }
-}
-
-abstract class BaseKeyAction implements BaseAction {
-  int get keyCode;
-
-  BaseKeyAction(KeyState state);
-
-  @override
-  Future<void> doAction(ActionContext ctx);
-}
-
-abstract class BaseMouseButtonAction implements BaseAction {
-  int get keyCode;
-
-  BaseMouseButtonAction(KeyState state, int keyCode);
-
-  @override
-  Future<void> doAction(ActionContext ctx);
-}
-
-abstract class BaseMouseMoveAction implements BaseAction {
-  BaseMouseMoveAction();
-
-  @override
-  Future<void> doAction(ActionContext ctx);
 }
