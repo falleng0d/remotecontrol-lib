@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-import '../keyboard.dart';
+import 'actions.dart';
+import 'base.dart';
 
 abstract class BaseTextElement implements BaseElement {
   @override
