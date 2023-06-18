@@ -39,7 +39,7 @@ const VK_X = 88;
 const VK_Y = 89;
 const VK_Z = 90;
 
-enum MouseButtonType { LEFT, RIGHT, MIDDLE, X }
+enum MouseButtonType { LEFT, RIGHT, MIDDLE, X1, X2 }
 
 enum KeyActionType { KEY_UP, KEY_DOWN, KEY_PRESS }
 
@@ -65,8 +65,10 @@ class MBWrapper {
         return MBWrapper(MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP);
       case MouseButtonType.MIDDLE:
         return MBWrapper(MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP);
-      case MouseButtonType.X:
+      case MouseButtonType.X1:
         return MBWrapper(MOUSEEVENTF_XDOWN, MOUSEEVENTF_XUP);
+      case MouseButtonType.X2:
+        throw UnimplementedError('X2 button not implemented');
     }
   }
 
