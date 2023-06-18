@@ -291,26 +291,30 @@ class KeyboardXMLNode {
 
   KeyboardXMLNode(this._element);
 
+  String? get type => _element.name.local;
+
   String? getAttribute(String name) => _element.getAttribute(name);
+  Iterable<KeyboardXMLNode> findElements(String name) =>
+      _element.findElements(name).map((e) => KeyboardXMLNode(e));
 
-  Iterable<XmlElement> get childElements => _element.childElements;
+  Iterable<KeyboardXMLNode> get childElements =>
+      _element.childElements.map((e) => KeyboardXMLNode(e));
 
-  Iterable<XmlElement> get rows => _element.findElements('row');
-  Iterable<XmlElement> get columns => _element.findElements('column');
-  Iterable<XmlElement> get flexs => _element.findElements('flex');
-  Iterable<XmlElement> get horizontalSpacers =>
-      _element.findElements('horizontal-spacer');
-  Iterable<XmlElement> get verticalSpacers => _element.findElements('vertical-spacer');
+  Iterable<KeyboardXMLNode> get rows => findElements('row');
+  Iterable<KeyboardXMLNode> get columns => findElements('column');
+  Iterable<KeyboardXMLNode> get flexs => findElements('flex');
+  Iterable<KeyboardXMLNode> get horizontalSpacers => findElements('horizontal-spacer');
+  Iterable<KeyboardXMLNode> get verticalSpacers => findElements('vertical-spacer');
 
-  Iterable<XmlElement> get keys => _element.findElements('key');
-  Iterable<XmlElement> get buttons => _element.findElements('button');
-  Iterable<XmlElement> get texts => _element.findElements('text');
-  Iterable<XmlElement> get touchpads => _element.findElements('touchpad');
+  Iterable<KeyboardXMLNode> get keys => findElements('key');
+  Iterable<KeyboardXMLNode> get buttons => findElements('button');
+  Iterable<KeyboardXMLNode> get texts => findElements('text');
+  Iterable<KeyboardXMLNode> get touchpads => findElements('touchpad');
 
-  Iterable<XmlElement> get allNodes =>
-      _element.findElements(_layoutNodes.join('|') + '|' + _keyNodes.join('|'));
-  Iterable<XmlElement> get layoutNodes => _element.findElements(_layoutNodes.join('|'));
-  Iterable<XmlElement> get keyNodes => _element.findElements(_keyNodes.join('|'));
+  Iterable<KeyboardXMLNode> get allNodes =>
+      findElements(_layoutNodes.join('|') + '|' + _keyNodes.join('|'));
+  Iterable<KeyboardXMLNode> get layoutNodes => findElements(_layoutNodes.join('|'));
+  Iterable<KeyboardXMLNode> get keyNodes => findElements(_keyNodes.join('|'));
 }
 
 /*
