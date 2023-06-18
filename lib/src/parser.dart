@@ -275,8 +275,42 @@ class VirtualKeyboardXMLParser {
 
   /* endregion Defs */
 
+  /* region Keyboard Items */
+
   /// /keyboard/root
-  XmlElement getKeyboardRoot() => _root.findElements('root').first;
+  KeyboardXMLNode getKeyboardRoot() => KeyboardXMLNode(_root.findElements('root').first);
+
+  /* endregion Keyboard Items */
+}
+
+class KeyboardXMLNode {
+  final XmlElement _element;
+
+  final _layoutNodes = ['row', 'column', 'flex', 'horizontal-spacer', 'vertical-spacer'];
+  final _keyNodes = ['key', 'button', 'text', 'touchpad'];
+
+  KeyboardXMLNode(this._element);
+
+  String? getAttribute(String name) => _element.getAttribute(name);
+
+  Iterable<XmlElement> get childElements => _element.childElements;
+
+  Iterable<XmlElement> get rows => _element.findElements('row');
+  Iterable<XmlElement> get columns => _element.findElements('column');
+  Iterable<XmlElement> get flexs => _element.findElements('flex');
+  Iterable<XmlElement> get horizontalSpacers =>
+      _element.findElements('horizontal-spacer');
+  Iterable<XmlElement> get verticalSpacers => _element.findElements('vertical-spacer');
+
+  Iterable<XmlElement> get keys => _element.findElements('key');
+  Iterable<XmlElement> get buttons => _element.findElements('button');
+  Iterable<XmlElement> get texts => _element.findElements('text');
+  Iterable<XmlElement> get touchpads => _element.findElements('touchpad');
+
+  Iterable<XmlElement> get allNodes =>
+      _element.findElements(_layoutNodes.join('|') + '|' + _keyNodes.join('|'));
+  Iterable<XmlElement> get layoutNodes => _element.findElements(_layoutNodes.join('|'));
+  Iterable<XmlElement> get keyNodes => _element.findElements(_keyNodes.join('|'));
 }
 
 /*
