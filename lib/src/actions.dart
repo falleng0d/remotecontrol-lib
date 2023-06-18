@@ -71,7 +71,7 @@ abstract class BaseAction {
 abstract class BaseKeyAction implements BaseAction {
   int get keyCode;
 
-  BaseKeyAction(KeyState state);
+  const BaseKeyAction(KeyState state);
 
   @override
   Future<void> doAction(ActionContext ctx);
@@ -87,7 +87,7 @@ abstract class BaseMouseButtonAction implements BaseAction {
 }
 
 abstract class BaseMouseMoveAction implements BaseAction {
-  BaseMouseMoveAction();
+  const BaseMouseMoveAction();
 
   @override
   Future<void> doAction(ActionContext ctx);
@@ -104,7 +104,7 @@ abstract class BaseMouseMoveAction implements BaseAction {
 class CallbackAction implements BaseAction {
   final Future<void> Function(ActionContext) callback;
 
-  CallbackAction(this.callback);
+  const CallbackAction(this.callback);
 
   @override
   Future<void> doAction(ActionContext ctx) async {
