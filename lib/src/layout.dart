@@ -73,7 +73,7 @@ abstract class BaseElement with Sizeable, Labeled {
   @override
   final String label;
 
-  BaseElement(this.label);
+  const BaseElement(this.label);
 
   Widget build(BuildContext context);
 }
@@ -88,7 +88,9 @@ abstract class BaseElement with Sizeable, Labeled {
 abstract class BaseLayout extends BaseElement {
   List<BaseElement> get children;
 
-  BaseLayout(Geometry geometry, String label) : super(label);
+  void addChild(BaseElement child);
+
+  const BaseLayout(Geometry geometry, String label) : super(label);
 }
 
 enum Direction { Row, Column }
@@ -106,14 +108,19 @@ enum Direction { Row, Column }
 class FlexLayout implements BaseLayout {
   @override
   final Geometry geometry;
+  @override
+  final String label = '';
+  @override
+  final List<BaseElement> children;
 
-  Direction direction;
-  String description;
-  double columnGap;
-  double rowGap;
-  bool expandChildren;
+  final Direction direction;
+  final String description;
+  final double columnGap;
+  final double rowGap;
 
-  FlexLayout(
+  final bool expandChildren;
+
+  const FlexLayout(
       {this.geometry = const Geometry(),
       this.direction = Direction.Row,
       this.description = '',
@@ -124,10 +131,7 @@ class FlexLayout implements BaseLayout {
       required this.children});
 
   @override
-  List<BaseElement> children;
-
-  @override
-  String label = '';
+  void addChild(BaseElement child) => children.add(child);
 
   @override
   Widget build(BuildContext context) {
@@ -210,7 +214,7 @@ class FlexLayout implements BaseLayout {
 }
 
 class RowLayout extends FlexLayout {
-  RowLayout(
+  const RowLayout(
       {Geometry geometry = const Geometry(),
       double columnGap = 0,
       bool expandChildren = false,
@@ -227,7 +231,7 @@ class RowLayout extends FlexLayout {
 }
 
 class ColumnLayout extends FlexLayout {
-  ColumnLayout(
+  const ColumnLayout(
       {Geometry geometry = const Geometry(),
       double rowGap = 0,
       bool expandChildren = false,
@@ -245,12 +249,11 @@ class ColumnLayout extends FlexLayout {
 
 class HorizontalSpacer implements BaseElement {
   @override
-  Geometry geometry = Geometry();
-
+  final Geometry geometry;
   @override
-  String label = '';
+  final String label;
 
-  HorizontalSpacer({String? label, this.geometry = const Geometry()});
+  const HorizontalSpacer({this.label = '', this.geometry = const Geometry()});
 
   @override
   Widget build(BuildContext context) {
@@ -261,12 +264,11 @@ class HorizontalSpacer implements BaseElement {
 
 class VerticalSpacer implements BaseElement {
   @override
-  Geometry geometry = Geometry();
-
+  final Geometry geometry;
   @override
-  String label = '';
+  final String label;
 
-  VerticalSpacer({String? label, this.geometry = const Geometry()});
+  const VerticalSpacer({this.label = '', this.geometry = const Geometry()});
 
   @override
   Widget build(BuildContext context) {
