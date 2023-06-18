@@ -1,95 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-
-<keyboard name="Split Keyboard">
+<keyboard name="Test keyboard for key tags">
     <defs>
         <!-- Provides default values for widgets -->
         <key maxWidth="40" maxHeight="30" ml="3" mr="3" mt="2" mb="2" />
-        <button maxWidth="40" maxHeight="30" ml="3" mr="3" mt="2" mb="2" />
-        <horizontal-spacer expand="true" />
-        <vertical-spacer expand="true" />
-        <touchpad />
     </defs>
     <menus>
         <menu id="menu1">
-            <key>á</key>
-            <key>ã</key>
-            <key>à</key>
-            <key>â</key>
-            <key>ä</key>
-            <key>å</key>
-            <key>æ</key>
+            <key>a</key>
+            <key>b</key>
         </menu>
     </menus>
     <root>
-        <column>
-            <row>
-                <touchpad scrollbar="true">
-                    <button>LButton</button>
-                    <button>RButton</button>
-                </touchpad>
-            </row>
-            <row>
-                <keymap id="0">
-                    <key toKeymap="1">.?123</key>
-                    <key>Esc</key>
-                    <key>F1</key>
-                    <key>F2</key>
-                    <key>F3</key>
-                    <key>F4</key>
-                    <key>F5</key>
-                    <key>F6</key>
-                    <key>F7</key>
-                    <key>F8</key>
-                    <key>F9</key>
-                    <key>F10</key>
-                    <key>F11</key>
-                    <key>F12</key>
-                </keymap>
-                <keymap id="1">
-                    <key toKeymap="0">FN</key>
-                    <key>1</key>
-                    <key>2</key>
-                    <key>3</key>
-                    <key>4</key>
-                    <key>5</key>
-                    <key>6</key>
-                    <key>7</key>
-                    <key>8</key>
-                    <key>9</key>
-                    <key>0</key>
-                    <key>-</key>
-                    <key>=</key>
-                </keymap>
-            </row>
-            <row>
-                <key vk="32" width="2"/>
-                <key>q</key>
-                <key>w</key>
-                <key>e</key>
-                <key>r</key>
-                <key>t</key>
-                <horizontal-spacer />
-                <key>y</key>
-                <key>u</key>
-                <key>i</key>
-                <key>o</key>
-                <key>p</key>
-                <key width="2">Backspace</key>
-            </row>
-            <row>
-                <key onhold="#menu1">a</key>
-                <key>s</key>
-                <key>d</key>
-                <key>f</key>
-                <key>g</key>
-                <horizontal-spacer />
-                <key>h</key>
-                <key>j</key>
-                <key>k</key>
-                <key>l</key>
-                <key width="2">Enter</key>
-            </row>
-        </column>
+        <key>q</key>
+        <key>w</key>
+        <key>e</key>
+        <key>r</key>
+        <key>t</key>
     </root>
 </keyboard>

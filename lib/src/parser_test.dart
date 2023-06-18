@@ -38,7 +38,7 @@ class TestKeyElement extends BaseKeyElement {
     this.keyRep = 0,
     this.keyRepeatDelay = 0,
     this.toggle = false,
-  }) : super(geometry: geometry, label: label);
+  }) : super(action, geometry: geometry, label: label);
 
   @override
   Widget build(BuildContext context) {
@@ -89,58 +89,72 @@ void main() {
   late String xmlContent;
   late VirtualKeyboardXMLParser parser;
 
-  setUp(() {
-    xmlContent = File('lib/src/keyboard.xml').readAsStringSync();
-    parser = VirtualKeyboardXMLParser(xmlContent);
-  });
+  group('VirtualKeyboardXMLParser 1', () {
+    setUp(() {
+      xmlContent = File('lib/src/keyboard.xml').readAsStringSync();
+      parser = VirtualKeyboardXMLParser(xmlContent);
+    });
 
-  group('VirtualKeyboardXMLParser', () {
     test('getKeyboardName', () {
       expect(parser.getKeyboardName(), 'Split Keyboard');
     });
 
     test('getMenus', () {
       final menus = parser.getMenus();
+
       expect(menus.length, 1);
       expect(menus.first.getAttribute('id'), 'menu1');
     });
 
-    test('getKeysForMenu', () {
-      final keys = parser.getKeysForMenu('menu1');
+    test('getMenu', () {
+      final menu = parser.getMenu('menu1');
+      final keys = menu.childElements;
+
       expect(keys.length, 7);
       expect(keys.map((key) => key.text), ['á', 'ã', 'à', 'â', 'ä', 'å', 'æ']);
     });
 
-    test('getRootColumns', () {
-      final columns = parser.getRootColumns();
-      expect(columns.length, 1);
+    test('getMenuItems', () {
+      final keys = parser.getMenuItems('menu1');
+
+      expect(keys.length, 7);
+      expect(keys.map((key) => key.text), ['á', 'ã', 'à', 'â', 'ä', 'å', 'æ']);
     });
 
-    test('getRowsForColumn', () {
-      final rows = parser.getRowsForColumn(parser.getRootColumns().first);
-      expect(rows.length, 4);
+    test('getDefs', () {
+      final defs = parser.getDefs();
+
+      expect(defs.length, 5);
+      expect(defs.first.name.local, 'key');
+      expect(defs.first.getAttribute('maxWidth'), '40');
     });
 
-    test('getKeysForRow', () {
-      final rows = parser.getRowsForColumn(parser.getRootColumns().first);
-      final keys = parser.getKeysForRow(rows.elementAt(1));
-      expect(keys.length, 13);
+    test('getDefsItems', () {
+      final def = parser.getDefItem('button');
+
+      expect(def.name.local, 'button');
+      expect(def.getAttribute('mr'), '3');
     });
 
-    test('getTouchpadsForRow', () {
-      final rows = parser.getRowsForColumn(parser.getRootColumns().first);
-      final touchpads = parser.getTouchpadsForRow(rows.first);
-      expect(touchpads.length, 1);
-    });
+    test('getDefItemAttribute', () {
+      final attr = parser.getDefItemAttribute('button', 'mr');
 
-    test('getHorizontalSpacersForRow', () {
-      final rows = parser.getRowsForColumn(parser.getRootColumns().first);
-      final spacers = parser.getHorizontalSpacersForRow(rows.elementAt(2));
-      expect(spacers.length, 1);
+      expect(attr, '3');
+    });
+  });
+
+  group('VirtualKeyboardXMLParser 2', () {
+    setUp(() {
+      xmlContent = File('lib/src/keyboard_minimal.xml').readAsStringSync();
+      parser = VirtualKeyboardXMLParser(xmlContent);
     });
   });
 
   group('VirtualKeyboardElementFactory', () {
+    setUp(() {
+      Get.reset();
+    });
+
     test('build', () {
       Get.put<BaseKeyElementFactory>(
         TestKeyElementFactory(
@@ -151,9 +165,11 @@ void main() {
           toggle: false,
         ),
       );
+
       final factory = VirtualKeyboardElementFactory();
       var action = CallbackAction((_) async => true);
       var key = factory.buildKeyElement('test', action);
+
       expect(key.doubleTapThershold, 0);
       expect(key.holdTimeThreshold, 1);
       expect(key.keyRep, 0);

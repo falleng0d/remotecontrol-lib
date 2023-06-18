@@ -225,6 +225,7 @@ class VirtualKeyboardElementFactory {
 class VirtualKeyboardXMLParser {
   final XmlDocument _document;
 
+  /// /keyboard
   XmlElement get _root => _document.rootElement;
 
   VirtualKeyboardXMLParser(String xmlContent) : _document = XmlDocument.parse(xmlContent);
@@ -234,42 +235,60 @@ class VirtualKeyboardXMLParser {
   }
 
   // Helper method to read the file content
-  static String _readFileContent(String fileName) {
-    return File(fileName).readAsStringSync();
-  }
+  static String _readFileContent(String fileName) => File(fileName).readAsStringSync();
 
-  String? getKeyboardName() {
-    return _root.getAttribute('name');
-  }
+  /// /keyboard/@name
+  String? getKeyboardName() => _root.getAttribute('name');
 
-  Iterable<XmlElement> getMenus() {
-    return _root.findElements('menus').first.findElements('menu');
-  }
+  /* region Menus */
 
-  Iterable<XmlElement> getKeysForMenu(String menuId) {
-    return _document
-        .findAllElements('menu')
-        .firstWhere((menu) => menu.getAttribute('id') == menuId)
-        .findElements('key');
-  }
+  /// /keyboard/menus
+  XmlElement getMenusRoot() => _root.findElements('menus').first;
 
-  Iterable<XmlElement> getRootColumns() {
-    return _document.findAllElements('column');
-  }
+  /// /keyboard/menus/[*]
+  Iterable<XmlElement> getMenus() => getMenusRoot().findElements('menu');
 
-  Iterable<XmlElement> getRowsForColumn(XmlElement column) {
-    return column.findElements('row');
-  }
+  /// /keyboard/menus/menu/[id]
+  XmlElement getMenu(String id) =>
+      getMenus().firstWhere((menu) => menu.getAttribute('id') == id);
 
-  Iterable<XmlElement> getKeysForRow(XmlElement row) {
-    return row.findElements('key');
-  }
+  /// /keyboard/menus/menu/[id]/[*]
+  Iterable<XmlElement> getMenuItems(String id) => getMenu(id).childElements;
 
-  Iterable<XmlElement> getTouchpadsForRow(XmlElement row) {
-    return row.findElements('touchpad');
-  }
+  /* endregion Menus */
 
-  Iterable<XmlElement> getHorizontalSpacersForRow(XmlElement row) {
-    return row.findElements('horizontal-spacer');
-  }
+  /* region Defs */
+
+  /// /keyboard/defs
+  XmlElement getDefsRoot() => _root.findElements('defs').first;
+
+  /// /keyboard/defs/[*]
+  Iterable<XmlElement> getDefs() => getDefsRoot().childElements;
+
+  /// /keyboard/defs/def/[tag]
+  XmlElement getDefItem(String nodeName) =>
+      getDefs().firstWhere((def) => def.name.local == nodeName);
+
+  /// /keyboard/defs/def/[tag]/@[attr]
+  String? getDefItemAttribute(String nodeName, String attrName) =>
+      getDefItem(nodeName).getAttribute(attrName);
+
+  /* endregion Defs */
+
+  /// /keyboard/root
+  XmlElement getKeyboardRoot() => _root.findElements('root').first;
 }
+
+/*
+class VirtualKeyboardRenderer {
+  final VirtualKeyboardXMLParser _parser;
+  final VirtualKeyboardElementFactory _elementFactory;
+
+  VirtualKeyboardRenderer(this._parser, this._elementFactory);
+
+  BaseLayout render() {
+    final root = _parser._root;
+    final menus = _parser.getMenus();
+    final rootColumns = _parser.getRootColumns();
+}
+*/

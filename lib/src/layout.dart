@@ -68,7 +68,7 @@ mixin Labeled {
   String get label;
 }
 
-/// A [BaseElement] is a displayable control that can be added to a [Layout]
+/// A [BaseElement] is a displayable control that can be added to a [BaseLayout]
 abstract class BaseElement with Sizeable, Labeled {
   @override
   final String label;
@@ -85,10 +85,10 @@ abstract class BaseElement with Sizeable, Labeled {
 ///
 /// Extend this class to create custom layouts using their own [BaseElement] children
 /// and desired layout characteristics.
-abstract class Layout extends BaseElement {
+abstract class BaseLayout extends BaseElement {
   List<BaseElement> get children;
 
-  Layout(Geometry geometry, String label) : super(label);
+  BaseLayout(Geometry geometry, String label) : super(label);
 }
 
 enum Direction { Row, Column }
@@ -103,7 +103,7 @@ enum Direction { Row, Column }
 /// The layout can be configured with an optional [Geometry] object which
 /// contains properties like maxWidth, maxHeight, expand, and padding that influence
 /// the appearance of the layout.
-class FlexLayout implements Layout {
+class FlexLayout implements BaseLayout {
   @override
   final Geometry geometry;
 
