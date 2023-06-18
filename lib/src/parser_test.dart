@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart' show BuildContext, Container, Widget;
 import 'package:get/get.dart';
+import 'package:remotecontrol_lib/input.dart';
 import 'package:test/test.dart';
 
 import '../keyboard.dart';
@@ -68,11 +69,11 @@ class TestKeyElementFactory extends BaseKeyElementFactory {
   }) : super(geometry);
 
   @override
-  BaseKeyElement build(String label, BaseAction action,
-      {BaseAction? doubleTapAction, BaseAction? holdAction}) {
+  BaseKeyElement build(BaseAction action,
+      {String? label, BaseAction? doubleTapAction, BaseAction? holdAction}) {
     return TestKeyElement(
       geometry: geometry,
-      label: label,
+      label: label ??= '',
       action: action,
       doubleTapAction: doubleTapAction,
       doubleTapThershold: doubleTapThershold,
@@ -82,6 +83,26 @@ class TestKeyElementFactory extends BaseKeyElementFactory {
       keyRepeatDelay: keyRepeatDelay,
       toggle: toggle,
     );
+  }
+}
+
+class TestKeyAction extends BaseKeyAction {
+  @override
+  final int keyCode;
+
+  const TestKeyAction(this.keyCode) : super();
+
+  @override
+  Future<bool> doAction(ActionContext ctx) async {
+    print('TestKeyAction.doAction: $keyCode');
+    return true;
+  }
+}
+
+class TestKeyActionFactory extends BaseKeyActionFactory {
+  @override
+  TestKeyAction build(String keyCode) {
+    return TestKeyAction(keyToVK(keyCode));
   }
 }
 
@@ -153,9 +174,6 @@ void main() {
   group('VirtualKeyboardElementFactory', () {
     setUp(() {
       Get.reset();
-    });
-
-    test('build', () {
       Get.put<BaseKeyElementFactory>(
         TestKeyElementFactory(
           doubleTapThershold: 0,
@@ -166,16 +184,19 @@ void main() {
         ),
       );
 
+      Get.put<BaseKeyActionFactory>(TestKeyActionFactory());
+    });
+
+    test('buildKeyElementWithKeyCode', () {
       final factory = VirtualKeyboardElementFactory();
-      var action = CallbackAction((_) async => true);
-      var key = factory.buildKeyElement('test', action);
+      var key = factory.buildKeyElementWithKeyCode('a');
 
       expect(key.doubleTapThershold, 0);
       expect(key.holdTimeThreshold, 1);
       expect(key.keyRep, 0);
       expect(key.keyRepeatDelay, 2);
       expect(key.toggle, false);
-      expect(key.action, action);
+      expect(key.action, isA<TestKeyAction>());
     });
   });
 }

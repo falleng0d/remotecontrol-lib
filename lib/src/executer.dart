@@ -14,7 +14,7 @@ class ActionTask {
   /// Executes the action and returns a [Future] that completes when the action
   /// is finished or the timeout is reached.
   /// If the timeout is reached, a [TimeoutException] is thrown.
-  Future<void> doAction() {
+  Future<bool> doAction() {
     // abort if timeout is reached
     if (timeout != null) {
       return action.doAction(ctx).timeout(Duration(milliseconds: timeout!));

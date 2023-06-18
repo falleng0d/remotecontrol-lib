@@ -4,6 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart' show EdgeInsets, Key;
 import 'package:get/get.dart';
 import 'package:xml/xml.dart';
 
+import '../input/virtualkeys.dart';
 import '../keyboard.dart';
 
 class Menu {
@@ -12,21 +13,6 @@ class Menu {
 
   Menu(this.id, this.keys);
 }
-
-/*
-* Element types:
-* - BaseTextElement
-* - BaseKeyElement
-* - BaseTouchpadElement
-* - BaseMouseButtonElement
-*
-* Layot types:
-* - ColumnLayout
-* - RowLayout
-* - VerticalSpacer
-* - HorizontalSpacer
-* - FlexLayout
-* */
 
 mixin SizeableFactory {
   late Geometry _geometry;
@@ -85,8 +71,8 @@ abstract class BaseKeyElementFactory extends BaseElementFactory {
 
   BaseKeyElementFactory([Geometry? geometry]) : super(geometry);
 
-  BaseKeyElement build(String label, BaseAction action,
-      {BaseAction? doubleTapAction, BaseAction? holdAction});
+  BaseKeyElement build(BaseAction action,
+      {String? label, BaseAction? doubleTapAction, BaseAction? holdAction});
 }
 
 abstract class BaseMouseButtonElementFactory extends BaseElementFactory {
@@ -95,7 +81,7 @@ abstract class BaseMouseButtonElementFactory extends BaseElementFactory {
   BaseMouseButtonElementFactory(BaseAction action, [Geometry? geometry])
       : super(geometry);
 
-  BaseMouseButtonElement build(String label);
+  BaseMouseButtonElement build(BaseAction action, {String? label});
 }
 
 abstract class BaseTextElementFactory extends BaseElementFactory {
@@ -113,9 +99,9 @@ abstract class BaseTouchpadElementFactory extends BaseElementFactory {
 
   BaseTouchpadElementFactory([Geometry? geometry]) : super(geometry);
 
-  BaseTouchpadElement build(String label);
+  BaseTouchpadElement build({String? label});
 }
-/* endregion */
+/* endregion Abstract Element Factories */
 
 /* region Abstract Layout Element Factories */
 abstract class BaseLayoutFactory extends BaseElementFactory {
@@ -130,7 +116,14 @@ abstract class BaseFlexLayoutFactory extends BaseLayoutFactory {
 
   BaseFlexLayoutFactory([Geometry? geometry]) : super(geometry);
 
-  FlexLayout build(String label);
+  FlexLayout build({
+    String? label,
+    Direction? direction,
+    double? columnGap,
+    double? rowGap,
+    bool? expandChildren,
+    List<BaseElement>? children,
+  });
 }
 
 abstract class BaseRowLayoutFactory extends BaseLayoutFactory {
@@ -140,7 +133,13 @@ abstract class BaseRowLayoutFactory extends BaseLayoutFactory {
 
   BaseRowLayoutFactory([Geometry? geometry]) : super(geometry);
 
-  RowLayout build(String label);
+  RowLayout build({
+    String? label,
+    double? columnGap,
+    double? rowGap,
+    bool? expandChildren,
+    List<BaseElement>? children,
+  });
 }
 
 abstract class BaseColumnLayoutFactory extends BaseLayoutFactory {
@@ -150,32 +149,144 @@ abstract class BaseColumnLayoutFactory extends BaseLayoutFactory {
 
   BaseColumnLayoutFactory([Geometry? geometry]) : super(geometry);
 
-  ColumnLayout build(String label);
+  ColumnLayout build({
+    String? label,
+    double? columnGap,
+    double? rowGap,
+    bool? expandChildren,
+    List<BaseElement>? children,
+  });
 }
 
 abstract class BaseHorizontalSpacerFactory extends BaseLayoutFactory {
   BaseHorizontalSpacerFactory([Geometry? geometry]) : super(geometry);
 
-  HorizontalSpacer build(String label);
+  HorizontalSpacer build({String? label});
 }
 
 abstract class BaseVerticalSpacerFactory extends BaseLayoutFactory {
   BaseVerticalSpacerFactory([Geometry? geometry]) : super(geometry);
 
-  VerticalSpacer build(String label);
+  VerticalSpacer build({String? label});
 }
-/* endregion */
+/* endregion Abstract Layout Element Factories */
+
+/* region Abstract Action Factories */
+abstract class BaseKeyActionFactory {
+  BaseKeyAction build(String keyCode);
+}
+
+abstract class BaseMouseButtonActionFactory {
+  BaseMouseButtonAction build(MouseButtonType button);
+}
+/* endregion Abstract Action Factories */
 
 class VirtualKeyboardElementFactory {
-  BaseKeyElementFactory? _baseKeyElementFactory;
-  BaseMouseButtonElementFactory? _baseMouseButtonElementFactory;
-  BaseTextElementFactory? _baseTextElementFactory;
-  BaseTouchpadElementFactory? _baseTouchpadElementFactory;
-  BaseFlexLayoutFactory? _baseFlexLayoutFactory;
-  BaseRowLayoutFactory? _baseRowLayoutFactory;
-  BaseColumnLayoutFactory? _baseColumnLayoutFactory;
-  BaseHorizontalSpacerFactory? _baseHorizontalSpacerFactory;
-  BaseVerticalSpacerFactory? _baseVerticalSpacerFactory;
+  /* region Fields */
+  BaseKeyElementFactory? __baseKeyElementFactory;
+  BaseMouseButtonElementFactory? __baseMouseButtonElementFactory;
+  BaseTextElementFactory? __baseTextElementFactory;
+  BaseTouchpadElementFactory? __baseTouchpadElementFactory;
+
+  BaseFlexLayoutFactory? __baseFlexLayoutFactory;
+  BaseRowLayoutFactory? __baseRowLayoutFactory;
+  BaseColumnLayoutFactory? __baseColumnLayoutFactory;
+  BaseHorizontalSpacerFactory? __baseHorizontalSpacerFactory;
+  BaseVerticalSpacerFactory? __baseVerticalSpacerFactory;
+
+  BaseKeyActionFactory? __baseKeyActionFactory;
+  BaseMouseButtonActionFactory? __baseMouseButtonActionFactory;
+  /* endregion Fields */
+
+  /* region Getters */
+  BaseKeyElementFactory get _baseKeyElementFactory {
+    if (__baseKeyElementFactory == null) {
+      throw Exception('BaseKeyElementFactory is not registered');
+    }
+
+    return __baseKeyElementFactory!;
+  }
+
+  BaseMouseButtonElementFactory get _baseMouseButtonElementFactory {
+    if (__baseMouseButtonElementFactory == null) {
+      throw Exception('BaseMouseButtonElementFactory is not registered');
+    }
+
+    return __baseMouseButtonElementFactory!;
+  }
+
+  BaseTextElementFactory get _baseTextElementFactory {
+    if (__baseTextElementFactory == null) {
+      throw Exception('BaseTextElementFactory is not registered');
+    }
+
+    return __baseTextElementFactory!;
+  }
+
+  BaseTouchpadElementFactory get _baseTouchpadElementFactory {
+    if (__baseTouchpadElementFactory == null) {
+      throw Exception('BaseTouchpadElementFactory is not registered');
+    }
+
+    return __baseTouchpadElementFactory!;
+  }
+
+  BaseFlexLayoutFactory get _baseFlexLayoutFactory {
+    if (__baseFlexLayoutFactory == null) {
+      throw Exception('BaseFlexLayoutFactory is not registered');
+    }
+
+    return __baseFlexLayoutFactory!;
+  }
+
+  BaseRowLayoutFactory get _baseRowLayoutFactory {
+    if (__baseRowLayoutFactory == null) {
+      throw Exception('BaseRowLayoutFactory is not registered');
+    }
+
+    return __baseRowLayoutFactory!;
+  }
+
+  BaseColumnLayoutFactory get _baseColumnLayoutFactory {
+    if (__baseColumnLayoutFactory == null) {
+      throw Exception('BaseColumnLayoutFactory is not registered');
+    }
+
+    return __baseColumnLayoutFactory!;
+  }
+
+  BaseHorizontalSpacerFactory get _baseHorizontalSpacerFactory {
+    if (__baseHorizontalSpacerFactory == null) {
+      throw Exception('BaseHorizontalSpacerFactory is not registered');
+    }
+
+    return __baseHorizontalSpacerFactory!;
+  }
+
+  BaseVerticalSpacerFactory get _baseVerticalSpacerFactory {
+    if (__baseVerticalSpacerFactory == null) {
+      throw Exception('BaseVerticalSpacerFactory is not registered');
+    }
+
+    return __baseVerticalSpacerFactory!;
+  }
+
+  BaseKeyActionFactory get _baseKeyActionFactory {
+    if (__baseKeyActionFactory == null) {
+      throw Exception('BaseKeyActionFactory is not registered');
+    }
+
+    return __baseKeyActionFactory!;
+  }
+
+  BaseMouseButtonActionFactory get _baseMouseButtonActionFactory {
+    if (__baseMouseButtonActionFactory == null) {
+      throw Exception('BaseMouseButtonActionFactory is not registered');
+    }
+
+    return __baseMouseButtonActionFactory!;
+  }
+  /* endregion Getters */
 
   VirtualKeyboardElementFactory() {
     resolveDependencies();
@@ -183,43 +294,146 @@ class VirtualKeyboardElementFactory {
 
   void resolveDependencies() {
     if (Get.isRegistered<BaseKeyElementFactory>()) {
-      _baseKeyElementFactory = Get.find<BaseKeyElementFactory>();
+      __baseKeyElementFactory = Get.find<BaseKeyElementFactory>();
     }
     if (Get.isRegistered<BaseMouseButtonElementFactory>()) {
-      _baseMouseButtonElementFactory = Get.find<BaseMouseButtonElementFactory>();
+      __baseMouseButtonElementFactory = Get.find<BaseMouseButtonElementFactory>();
     }
     if (Get.isRegistered<BaseTextElementFactory>()) {
-      _baseTextElementFactory = Get.find<BaseTextElementFactory>();
+      __baseTextElementFactory = Get.find<BaseTextElementFactory>();
     }
     if (Get.isRegistered<BaseTouchpadElementFactory>()) {
-      _baseTouchpadElementFactory = Get.find<BaseTouchpadElementFactory>();
+      __baseTouchpadElementFactory = Get.find<BaseTouchpadElementFactory>();
     }
+
     if (Get.isRegistered<BaseFlexLayoutFactory>()) {
-      _baseFlexLayoutFactory = Get.find<BaseFlexLayoutFactory>();
+      __baseFlexLayoutFactory = Get.find<BaseFlexLayoutFactory>();
     }
     if (Get.isRegistered<BaseRowLayoutFactory>()) {
-      _baseRowLayoutFactory = Get.find<BaseRowLayoutFactory>();
+      __baseRowLayoutFactory = Get.find<BaseRowLayoutFactory>();
     }
     if (Get.isRegistered<BaseColumnLayoutFactory>()) {
-      _baseColumnLayoutFactory = Get.find<BaseColumnLayoutFactory>();
+      __baseColumnLayoutFactory = Get.find<BaseColumnLayoutFactory>();
     }
     if (Get.isRegistered<BaseHorizontalSpacerFactory>()) {
-      _baseHorizontalSpacerFactory = Get.find<BaseHorizontalSpacerFactory>();
+      __baseHorizontalSpacerFactory = Get.find<BaseHorizontalSpacerFactory>();
     }
     if (Get.isRegistered<BaseVerticalSpacerFactory>()) {
-      _baseVerticalSpacerFactory = Get.find<BaseVerticalSpacerFactory>();
+      __baseVerticalSpacerFactory = Get.find<BaseVerticalSpacerFactory>();
+    }
+
+    if (Get.isRegistered<BaseKeyActionFactory>()) {
+      __baseKeyActionFactory = Get.find<BaseKeyActionFactory>();
+    }
+    if (Get.isRegistered<BaseMouseButtonActionFactory>()) {
+      __baseMouseButtonActionFactory = Get.find<BaseMouseButtonActionFactory>();
     }
   }
 
-  BaseKeyElement buildKeyElement(String label, BaseAction action,
-      {BaseAction? doubleTapAction, BaseAction? holdAction}) {
-    return _baseKeyElementFactory!
-        .build(label, action, doubleTapAction: doubleTapAction, holdAction: holdAction);
+  /* region Action Builders */
+  BaseKeyAction buildKeyAction(String keyCode) {
+    return _baseKeyActionFactory.build(keyCode);
   }
 
-  BaseMouseButtonElement buildMouseButtonElement(String label, ac) {
-    return _baseMouseButtonElementFactory!.build(label);
+  BaseMouseButtonAction buildMouseButtonAction(MouseButtonType button) {
+    return _baseMouseButtonActionFactory.build(button);
   }
+  /* endregion Action Builders */
+
+  /* region Element Builders */
+  BaseKeyElement buildKeyElement(BaseKeyAction action,
+      {String label = 'key', BaseAction? doubleTapAction, BaseAction? holdAction}) {
+    return _baseKeyElementFactory.build(action,
+        label: label, doubleTapAction: doubleTapAction, holdAction: holdAction);
+  }
+
+  BaseKeyElement buildKeyElementWithKeyCode(String keyCode,
+      {String label = 'key', BaseAction? doubleTapAction, BaseAction? holdAction}) {
+    final action = buildKeyAction(keyCode);
+    return buildKeyElement(action,
+        label: label, doubleTapAction: doubleTapAction, holdAction: holdAction);
+  }
+
+  BaseMouseButtonElement buildMouseButtonElement(BaseMouseButtonAction action,
+      {String label = 'mouseButton'}) {
+    return _baseMouseButtonElementFactory.build(action, label: label);
+  }
+
+  BaseMouseButtonElement buildMouseButtonElementWithButtonType(MouseButtonType button,
+      {String label = 'mouseButton'}) {
+    final action = buildMouseButtonAction(button);
+    return buildMouseButtonElement(action, label: label);
+  }
+
+  BaseTextElement buildTextElement(String label) {
+    return _baseTextElementFactory.build(label);
+  }
+
+  BaseTouchpadElement buildTouchpadElement({String label = 'touchpad'}) {
+    throw UnimplementedError('buildTouchpadElement is not implemented');
+  }
+  /* endregion Element Builders */
+
+  /* region Layout Builders */
+  FlexLayout buildFlexLayout({
+    String label = 'flexLayout',
+    List<BaseElement> children = const [],
+    Direction? direction,
+    double? columnGap,
+    double? rowGap,
+    bool? expandChildren,
+  }) {
+    return _baseFlexLayoutFactory.build(
+      label: label,
+      children: children,
+      direction: direction,
+      columnGap: columnGap,
+      rowGap: rowGap,
+      expandChildren: expandChildren,
+    );
+  }
+
+  RowLayout buildRowLayout({
+    String label = 'rowLayout',
+    List<BaseElement> children = const [],
+    double? columnGap,
+    double? rowGap,
+    bool? expandChildren,
+  }) {
+    return _baseRowLayoutFactory.build(
+      label: label,
+      children: children,
+      columnGap: columnGap,
+      rowGap: rowGap,
+      expandChildren: expandChildren,
+    );
+  }
+
+  ColumnLayout buildColumnLayout({
+    String label = 'columnLayout',
+    List<BaseElement> children = const [],
+    double? columnGap,
+    double? rowGap,
+    bool? expandChildren,
+  }) {
+    return _baseColumnLayoutFactory.build(
+      label: label,
+      children: children,
+      columnGap: columnGap,
+      rowGap: rowGap,
+      expandChildren: expandChildren,
+    );
+  }
+
+  HorizontalSpacer buildHorizontalSpacer({String label = 'horizontalSpacer'}) {
+    return _baseHorizontalSpacerFactory.build();
+  }
+
+  VerticalSpacer buildVerticalSpacer({String label = 'verticalSpacer'}) {
+    return _baseVerticalSpacerFactory.build();
+  }
+
+  /* endregion Layout Builders */
 }
 
 class VirtualKeyboardXMLParser {
@@ -291,7 +505,8 @@ class KeyboardXMLNode {
 
   KeyboardXMLNode(this._element);
 
-  String? get type => _element.name.local;
+  String get type => _element.name.local;
+  String get text => _element.text;
 
   String? getAttribute(String name) => _element.getAttribute(name);
   Iterable<KeyboardXMLNode> findElements(String name) =>
@@ -317,16 +532,111 @@ class KeyboardXMLNode {
   Iterable<KeyboardXMLNode> get keyNodes => findElements(_keyNodes.join('|'));
 }
 
-/*
-class VirtualKeyboardRenderer {
-  final VirtualKeyboardXMLParser _parser;
-  final VirtualKeyboardElementFactory _elementFactory;
+/// [KeyboardNodeRenderer] uses a [VirtualKeyboardElementFactory] to render a
+/// [KeyboardXMLNode] into a [BaseElement] displayable widget.
+///
+/// It starts from the provided node and renders all its children recursively,
+/// resulting into a tree of [BaseElement] widgets.
+///
+/// Only [BaseLayout] elements can have children, so the rendering process
+/// will throw an exception if a child is found in a non-layout node.
+extension KeyboardNodeRenderer on KeyboardXMLNode {
+  BaseElement render(VirtualKeyboardElementFactory factory) {
+    switch (type) {
+      case 'row':
+        return _renderRow(factory);
+      case 'column':
+        return _renderColumn(factory);
+      case 'flex':
+        return _renderFlex(factory);
+      case 'horizontal-spacer':
+        return _renderHorizontalSpacer(factory);
+      case 'vertical-spacer':
+        return _renderVerticalSpacer(factory);
+      case 'key':
+        return _renderKey(factory);
+      case 'button':
+        return _renderButton(factory);
+      case 'text':
+        return _renderText(factory);
+      case 'touchpad':
+        // TODO: return _renderTouchpad(factory);
+        throw Exception('Touchpad not implemented yet');
+      default:
+        throw Exception('Unknown node type: $type');
+    }
+  }
 
-  VirtualKeyboardRenderer(this._parser, this._elementFactory);
+  RowLayout _renderRow(VirtualKeyboardElementFactory factory) {
+    final row = factory._baseRowLayoutFactory.build();
+    for (final node in childElements) {
+      row.addChild(node.render(factory));
+    }
+    return row;
+  }
 
-  BaseLayout render() {
-    final root = _parser._root;
-    final menus = _parser.getMenus();
-    final rootColumns = _parser.getRootColumns();
+  ColumnLayout _renderColumn(VirtualKeyboardElementFactory factory) {
+    final column = factory._baseColumnLayoutFactory.build();
+    for (final node in childElements) {
+      column.addChild(node.render(factory));
+    }
+    return column;
+  }
+
+  FlexLayout _renderFlex(VirtualKeyboardElementFactory factory) {
+    final flex = factory._baseFlexLayoutFactory.build();
+    for (final node in childElements) {
+      flex.addChild(node.render(factory));
+    }
+    return flex;
+  }
+
+  HorizontalSpacer _renderHorizontalSpacer(VirtualKeyboardElementFactory factory) {
+    return factory._baseHorizontalSpacerFactory.build();
+  }
+
+  VerticalSpacer _renderVerticalSpacer(VirtualKeyboardElementFactory factory) {
+    return factory._baseVerticalSpacerFactory.build();
+  }
+
+  BaseKeyElement _renderKey(VirtualKeyboardElementFactory factory) {
+    final keyCode = text;
+    if (keyCode.isEmpty) {
+      throw Exception('Key node must have a text with a key code');
+    }
+
+    // TODO: final doubleTapAction = getAttribute('double-tap-action');
+    // TODO: final holdAction = getAttribute('hold-action');
+
+    return factory.buildKeyElementWithKeyCode(keyCode);
+  }
+
+  BaseElement _renderButton(VirtualKeyboardElementFactory factory) {
+    final buttonName = text;
+
+    // One of enum MouseButtonType { LEFT, RIGHT, MIDDLE, X1, X2 }
+    switch (buttonName.toLowerCase()) {
+      case 'left':
+        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.LEFT);
+      case 'right':
+        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.RIGHT);
+      case 'middle':
+        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.MIDDLE);
+      case 'x1':
+        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.X1);
+      case 'x2':
+        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.X2);
+      default:
+        throw Exception('Unknown button type: $buttonName');
+    }
+  }
+
+  BaseTextElement _renderText(VirtualKeyboardElementFactory factory) {
+    final text = this.text;
+    if (text.isEmpty) {
+      throw Exception('Text node must have a text');
+    }
+
+    return factory.buildTextElement(text);
+  }
 }
-*/
