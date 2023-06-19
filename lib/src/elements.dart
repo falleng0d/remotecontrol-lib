@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import '../action_contexts.dart';
 import 'actions.dart';
 import 'base.dart';
 
@@ -12,7 +13,10 @@ abstract class BaseTextElement implements BaseElement {
   @override
   Widget build(BuildContext context);
 
-  BaseTextElement({this.geometry = const Geometry(), this.label = ''});
+  BaseTextElement({
+    this.label = '',
+    this.geometry = const Geometry(),
+  });
 }
 
 abstract class BaseKeyElement implements BaseElement {
@@ -21,19 +25,22 @@ abstract class BaseKeyElement implements BaseElement {
   @override
   final String label;
 
-  BaseAction get action;
+  BaseAction<KeyActionContext> get action;
   bool get toggle;
   double get keyRep;
   double get keyRepeatDelay;
 
-  BaseAction? get holdAction;
+  BaseAction<KeyActionContext>? get holdAction;
   double get holdTimeThreshold;
 
-  BaseAction? get doubleTapAction;
+  BaseAction<KeyActionContext>? get doubleTapAction;
   double get doubleTapThershold;
 
-  const BaseKeyElement(BaseAction action,
-      {this.geometry = const Geometry(), this.label = ''});
+  const BaseKeyElement(
+    BaseAction<KeyActionContext> action, {
+    this.label = '',
+    this.geometry = const Geometry(),
+  });
 
   @override
   Widget build(BuildContext context);
@@ -69,8 +76,8 @@ abstract class BaseTouchpadElement implements BaseElement {
 
   const BaseTouchpadElement(
     TouchpadActions actions, {
-    this.geometry = const Geometry(),
     this.label = '',
+    this.geometry = const Geometry(),
     bool scrollbar = true,
     bool mouseButtons = true,
     bool tapToClick = true,
@@ -81,16 +88,19 @@ abstract class BaseTouchpadElement implements BaseElement {
   Widget build(BuildContext context);
 }
 
-abstract class BaseMouseButtonElement implements BaseElement {
+abstract class BaseButtonElement implements BaseElement {
   @override
   final Geometry geometry;
   @override
   final String label;
 
-  BaseAction get action;
+  BaseAction<ButtonActionContext> get action;
 
-  const BaseMouseButtonElement(BaseAction action,
-      {this.geometry = const Geometry(), this.label = ''});
+  const BaseButtonElement(
+    BaseAction<ButtonActionContext> action, {
+    this.label = '',
+    this.geometry = const Geometry(),
+  });
 
   @override
   Widget build(BuildContext context);

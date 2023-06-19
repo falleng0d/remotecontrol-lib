@@ -11,13 +11,13 @@ import 'action_contexts.dart';
 ///
 /// An action should not be executed directly, but rather scheduled through
 /// a [ActionQueue].
-abstract class BaseAction {
+abstract class BaseAction<T extends ActionContext> {
   const BaseAction();
 
-  Future<bool> doAction(covariant ActionContext ctx);
+  Future<bool> doAction(covariant T ctx);
 }
 
-abstract class BaseKeyAction extends BaseAction {
+abstract class BaseKeyAction extends BaseAction<KeyActionContext> {
   int get keyCode;
 
   const BaseKeyAction(int keyCode);
@@ -26,7 +26,7 @@ abstract class BaseKeyAction extends BaseAction {
   Future<bool> doAction(KeyActionContext ctx);
 }
 
-abstract class BaseMouseButtonAction extends BaseAction {
+abstract class BaseMouseButtonAction extends BaseAction<ButtonActionContext> {
   MouseButtonType get button;
 
   const BaseMouseButtonAction(MouseButtonType button);
@@ -35,7 +35,7 @@ abstract class BaseMouseButtonAction extends BaseAction {
   Future<bool> doAction(ButtonActionContext ctx);
 }
 
-abstract class BaseMouseMoveAction extends BaseAction {
+abstract class BaseMouseMoveAction extends BaseAction<MouseMoveActionContext> {
   const BaseMouseMoveAction();
 
   @override
@@ -50,13 +50,13 @@ abstract class BaseMouseMoveAction extends BaseAction {
 ///
 /// An action should not be executed directly, but rather scheduled through
 /// a [ActionQueue].
-class CallbackAction extends BaseAction {
-  final Future<bool> Function(ActionContext) callback;
+class CallbackAction<T extends ActionContext> extends BaseAction<T> {
+  final Future<bool> Function(T) callback;
 
   const CallbackAction(this.callback);
 
   @override
-  Future<bool> doAction(ActionContext ctx) async {
+  Future<bool> doAction(T ctx) async {
     return await callback(ctx);
   }
 }

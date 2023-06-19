@@ -17,17 +17,17 @@ class ActionContext {
 
 /// [KeyActionContext] is the context in which a keyboard key action is executed.
 class KeyActionContext extends ActionContext {
-  final KeyState keyState;
+  final KeyActionType actionType;
 
-  const KeyActionContext(BaseElement target, this.keyState, {String? description})
+  const KeyActionContext(BaseElement target, this.actionType, {String? description})
       : super(target, description: description);
 }
 
 /// [ButtonActionContext] is the context in which a mouse button action is executed.
 class ButtonActionContext extends ActionContext {
-  final ButtonState buttonState;
+  final ButtonActionType actionType;
 
-  const ButtonActionContext(BaseElement target, this.buttonState, {String? description})
+  const ButtonActionContext(BaseElement target, this.actionType, {String? description})
       : super(target, description: description);
 }
 
