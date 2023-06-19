@@ -4,6 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart' show EdgeInsets, Key;
 import 'package:get/get.dart';
 import 'package:xml/xml.dart';
 
+import '../action_contexts.dart';
 import '../input/virtualkeys.dart';
 import '../keyboard.dart';
 
@@ -71,17 +72,19 @@ abstract class BaseKeyElementFactory extends BaseElementFactory {
 
   BaseKeyElementFactory([Geometry? geometry]) : super(geometry);
 
-  BaseKeyElement build(BaseAction action,
-      {String? label, BaseAction? doubleTapAction, BaseAction? holdAction});
+  BaseKeyElement build(
+    covariant BaseAction<KeyActionContext> action, {
+    String? label,
+    covariant BaseAction<KeyActionContext>? doubleTapAction,
+    covariant BaseAction<KeyActionContext>? holdAction,
+  });
 }
 
 abstract class BaseMouseButtonElementFactory extends BaseElementFactory {
-  BaseAction get action;
+  BaseMouseButtonElementFactory([Geometry? geometry]) : super(geometry);
 
-  BaseMouseButtonElementFactory(BaseAction action, [Geometry? geometry])
-      : super(geometry);
-
-  BaseMouseButtonElement build(BaseAction action, {String? label});
+  BaseButtonElement build(covariant BaseAction<ButtonActionContext> action,
+      {String? label});
 }
 
 abstract class BaseTextElementFactory extends BaseElementFactory {
@@ -95,6 +98,7 @@ abstract class BaseTouchpadElementFactory extends BaseElementFactory {
   bool get mouseButtons;
   bool get tapToClick;
   bool get doubleTapAndHold;
+
   TouchpadActions get actions;
 
   BaseTouchpadElementFactory([Geometry? geometry]) : super(geometry);
@@ -338,24 +342,28 @@ class VirtualKeyboardElementFactory {
 
   /* region Element Builders */
   BaseKeyElement buildKeyElement(BaseKeyAction action,
-      {String label = 'key', BaseAction? doubleTapAction, BaseAction? holdAction}) {
+      {String label = 'key',
+      BaseAction<KeyActionContext>? doubleTapAction,
+      BaseAction<KeyActionContext>? holdAction}) {
     return _baseKeyElementFactory.build(action,
         label: label, doubleTapAction: doubleTapAction, holdAction: holdAction);
   }
 
   BaseKeyElement buildKeyElementWithKeyCode(String keyCode,
-      {String label = 'key', BaseAction? doubleTapAction, BaseAction? holdAction}) {
+      {String label = 'key',
+      BaseAction<KeyActionContext>? doubleTapAction,
+      BaseAction<KeyActionContext>? holdAction}) {
     final action = buildKeyAction(keyCode);
     return buildKeyElement(action,
         label: label, doubleTapAction: doubleTapAction, holdAction: holdAction);
   }
 
-  BaseMouseButtonElement buildMouseButtonElement(BaseMouseButtonAction action,
+  BaseButtonElement buildMouseButtonElement(BaseAction<ButtonActionContext> action,
       {String label = 'mouseButton'}) {
     return _baseMouseButtonElementFactory.build(action, label: label);
   }
 
-  BaseMouseButtonElement buildMouseButtonElementWithButtonType(MouseButtonType button,
+  BaseButtonElement buildMouseButtonElementWithButtonType(MouseButtonType button,
       {String label = 'mouseButton'}) {
     final action = buildMouseButtonAction(button);
     return buildMouseButtonElement(action, label: label);
@@ -474,69 +482,65 @@ class VirtualKeyboardXMLParser {
   Iterable<XmlElement> getDefs() => getDefsRoot().childElements;
 
   /// /keyboard/defs/def/[tag]
-  XmlElement getDefItem(String nodeName) =>
-      getDefs().firstWhere((def) => def.name.local == nodeName);
+  XmlElement? getDefItem(String nodeName) {
+    try {
+      return getDefs().firstWhere((def) => def.name.local == nodeName);
+    } on StateError catch (_) {
+      return null;
+    }
+  }
 
   /// /keyboard/defs/def/[tag]/@[attr]
   String? getDefItemAttribute(String nodeName, String attrName) =>
-      getDefItem(nodeName).getAttribute(attrName);
+      getDefItem(nodeName)?.getAttribute(attrName);
 
   /* endregion Defs */
 
   /* region Keyboard Items */
 
   /// /keyboard/root
-  KeyboardXMLNode getKeyboardRoot() => KeyboardXMLNode(_root.findElements('root').first);
+  XmlElement getKeyboardRoot() => _root;
 
   /* endregion Keyboard Items */
 }
 
-class KeyboardXMLNode {
-  final XmlElement _element;
+extension VirtualKeyboardXmlElementHelpers on XmlElement {
+  String get tag => name.local;
 
-  final _layoutNodes = ['row', 'column', 'flex', 'horizontal-spacer', 'vertical-spacer'];
-  final _keyNodes = ['key', 'button', 'text', 'touchpad'];
+  List<String> get _layoutTypes =>
+      ['row', 'column', 'flex', 'horizontal-spacer', 'vertical-spacer'];
+  List<String> get _elementTypes => ['key', 'button', 'text', 'touchpad'];
 
-  KeyboardXMLNode(this._element);
+  Iterable<XmlElement> get rows => findElements('row');
+  Iterable<XmlElement> get columns => findElements('column');
+  Iterable<XmlElement> get flexs => findElements('flex');
+  Iterable<XmlElement> get horizontalSpacers => findElements('horizontal-spacer');
+  Iterable<XmlElement> get verticalSpacers => findElements('vertical-spacer');
 
-  String get type => _element.name.local;
-  String get text => _element.text;
+  Iterable<XmlElement> get keys => findElements('key');
+  Iterable<XmlElement> get buttons => findElements('button');
+  Iterable<XmlElement> get texts => findElements('text');
+  Iterable<XmlElement> get touchpads => findElements('touchpad');
 
-  String? getAttribute(String name) => _element.getAttribute(name);
-  Iterable<KeyboardXMLNode> findElements(String name) =>
-      _element.findElements(name).map((e) => KeyboardXMLNode(e));
+  Iterable<XmlElement> get allNodes {
+    return findElements(_layoutTypes.join('|') + '|' + _elementTypes.join('|'));
+  }
 
-  Iterable<KeyboardXMLNode> get childElements =>
-      _element.childElements.map((e) => KeyboardXMLNode(e));
-
-  Iterable<KeyboardXMLNode> get rows => findElements('row');
-  Iterable<KeyboardXMLNode> get columns => findElements('column');
-  Iterable<KeyboardXMLNode> get flexs => findElements('flex');
-  Iterable<KeyboardXMLNode> get horizontalSpacers => findElements('horizontal-spacer');
-  Iterable<KeyboardXMLNode> get verticalSpacers => findElements('vertical-spacer');
-
-  Iterable<KeyboardXMLNode> get keys => findElements('key');
-  Iterable<KeyboardXMLNode> get buttons => findElements('button');
-  Iterable<KeyboardXMLNode> get texts => findElements('text');
-  Iterable<KeyboardXMLNode> get touchpads => findElements('touchpad');
-
-  Iterable<KeyboardXMLNode> get allNodes =>
-      findElements(_layoutNodes.join('|') + '|' + _keyNodes.join('|'));
-  Iterable<KeyboardXMLNode> get layoutNodes => findElements(_layoutNodes.join('|'));
-  Iterable<KeyboardXMLNode> get keyNodes => findElements(_keyNodes.join('|'));
+  Iterable<XmlElement> get layoutNodes => findElements(_layoutTypes.join('|'));
+  Iterable<XmlElement> get keyNodes => findElements(_elementTypes.join('|'));
 }
 
 /// [KeyboardNodeRenderer] uses a [VirtualKeyboardElementFactory] to render a
-/// [KeyboardXMLNode] into a [BaseElement] displayable widget.
+/// [XmlElement] into a [BaseElement] displayable widget.
 ///
 /// It starts from the provided node and renders all its children recursively,
 /// resulting into a tree of [BaseElement] widgets.
 ///
 /// Only [BaseLayout] elements can have children, so the rendering process
 /// will throw an exception if a child is found in a non-layout node.
-extension KeyboardNodeRenderer on KeyboardXMLNode {
+extension KeyboardNodeRenderer on XmlElement {
   BaseElement render(VirtualKeyboardElementFactory factory) {
-    switch (type) {
+    switch (tag) {
       case 'row':
         return _renderRow(factory);
       case 'column':
@@ -557,7 +561,7 @@ extension KeyboardNodeRenderer on KeyboardXMLNode {
         // TODO: return _renderTouchpad(factory);
         throw Exception('Touchpad not implemented yet');
       default:
-        throw Exception('Unknown node type: $type');
+        throw Exception('Unknown node type: $tag');
     }
   }
 
@@ -632,5 +636,65 @@ extension KeyboardNodeRenderer on KeyboardXMLNode {
     }
 
     return factory.buildTextElement(text);
+  }
+}
+
+/// [GeometryXMLNodeDeserializer] adds utility method to [Geometry]
+/// that allows load attributes from a [XmlElement] and create a new
+/// [Geometry] instance with those attributes.
+extension GeometryXMLNodeDeserializer on Geometry {
+  Geometry withAttributes(XmlElement node) {
+    final attributes = node.attributes;
+
+    final doubleTypedFields = <String>[
+      'minWidth',
+      'maxWidth',
+      'minHeight',
+      'maxHeight',
+      'pl',
+      'pt',
+      'pr',
+      'pb',
+      'ml',
+      'mt',
+      'mr',
+      'mb',
+    ];
+    final boolTypedFields = <String>[
+      'expand',
+    ];
+
+    final fields = <String, dynamic>{};
+
+    for (var attribute in attributes) {
+      final name = attribute.name.local;
+      final value = attribute.value;
+
+      if (doubleTypedFields.contains(name)) {
+        fields[name] = double.parse(value);
+      } else if (boolTypedFields.contains(name)) {
+        fields[name] = value.toLowerCase() == 'true';
+      }
+    }
+
+    return Geometry(
+      minWidth: fields['minWidth'] ?? minWidth,
+      maxWidth: fields['maxWidth'] ?? maxWidth,
+      minHeight: fields['minHeight'] ?? minHeight,
+      maxHeight: fields['maxHeight'] ?? maxHeight,
+      expand: fields['expand'] ?? expand,
+      padding: EdgeInsets.fromLTRB(
+        fields['pl'] ?? padding?.left,
+        fields['pt'] ?? padding?.top,
+        fields['pr'] ?? padding?.right,
+        fields['pb'] ?? padding?.bottom,
+      ),
+      margin: EdgeInsets.fromLTRB(
+        fields['ml'] ?? margin?.left,
+        fields['mt'] ?? margin?.top,
+        fields['mr'] ?? margin?.right,
+        fields['mb'] ?? margin?.bottom,
+      ),
+    );
   }
 }

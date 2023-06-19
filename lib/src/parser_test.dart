@@ -11,14 +11,14 @@ import 'parser.dart';
 
 class TestKeyElement extends BaseKeyElement {
   @override
-  BaseAction action;
+  BaseAction<KeyActionContext> action;
   @override
-  BaseAction? doubleTapAction;
+  BaseAction<KeyActionContext>? doubleTapAction;
 
   @override
   double doubleTapThershold;
   @override
-  BaseAction? holdAction;
+  BaseAction<KeyActionContext>? holdAction;
   @override
   double holdTimeThreshold;
 
@@ -70,8 +70,12 @@ class TestKeyElementFactory extends BaseKeyElementFactory {
   }) : super(geometry);
 
   @override
-  BaseKeyElement build(BaseAction action,
-      {String? label, BaseAction? doubleTapAction, BaseAction? holdAction}) {
+  BaseKeyElement build(
+    BaseAction<KeyActionContext> action, {
+    String? label,
+    BaseAction<KeyActionContext>? doubleTapAction,
+    BaseAction<KeyActionContext>? holdAction,
+  }) {
     return TestKeyElement(
       geometry: geometry,
       label: label ??= '',
@@ -149,6 +153,11 @@ void main() {
       expect(defs.length, 5);
       expect(defs.first.name.local, 'key');
       expect(defs.first.getAttribute('maxWidth'), '40');
+      expect(defs.first.attributes.length, 6);
+
+      final attr1 = defs.first.attributes[0];
+      expect(attr1.name.local, 'maxWidth');
+      expect(attr1.value, '40');
     });
 
     test('getDefsItems', () {
