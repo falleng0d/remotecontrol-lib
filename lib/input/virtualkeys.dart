@@ -42,13 +42,13 @@ const VK_Z = 90;
 
 enum MouseButtonType { LEFT, RIGHT, MIDDLE, X1, X2 }
 
-enum KeyActionType { KEY_UP, KEY_DOWN, KEY_PRESS }
+enum KeyActionType { UP, DOWN, PRESS }
 
-enum MouseActionType { KEY_UP, KEY_DOWN, KEY_PRESS, CURSOR_MOVE }
+enum ButtonActionType { UP, DOWN, PRESS, MOVE }
 
 enum KeyState { UP, DOWN }
 
-enum ButtonState { UP, DOWN, PRESS }
+enum ButtonState { UP, DOWN }
 
 Map<MouseButtonType, int> _mouseButtonToVK = {
   MouseButtonType.LEFT: VK_LBUTTON,
@@ -76,51 +76,52 @@ MouseButtonType vkToMouseButton(int vk) {
   return _vkToMouseButton[vk]!;
 }
 
-Map<KeyState, pb.Key_KeyActionType> _keyStateToPb = {
-  KeyState.UP: pb.Key_KeyActionType.UP,
-  KeyState.DOWN: pb.Key_KeyActionType.DOWN
+Map<KeyActionType, pb.Key_KeyActionType> _keyActionTypeToPb = {
+  KeyActionType.UP: pb.Key_KeyActionType.UP,
+  KeyActionType.DOWN: pb.Key_KeyActionType.DOWN,
+  KeyActionType.PRESS: pb.Key_KeyActionType.PRESS
 };
-Map<pb.Key_KeyActionType, KeyState> _pbToKeyState =
-    _keyStateToPb.map((k, v) => MapEntry(v, k));
+Map<pb.Key_KeyActionType, KeyActionType> _pbToKeyActionType =
+    _keyActionTypeToPb.map((k, v) => MapEntry(v, k));
 
-Map<ButtonState, pb.MouseKey_KeyActionType> _buttonStateToPb = {
-  ButtonState.UP: pb.MouseKey_KeyActionType.UP,
-  ButtonState.DOWN: pb.MouseKey_KeyActionType.DOWN,
-  ButtonState.PRESS: pb.MouseKey_KeyActionType.PRESS
+Map<ButtonActionType, pb.MouseKey_KeyActionType> _buttonActionTypeStateToPb = {
+  ButtonActionType.UP: pb.MouseKey_KeyActionType.UP,
+  ButtonActionType.DOWN: pb.MouseKey_KeyActionType.DOWN,
+  ButtonActionType.PRESS: pb.MouseKey_KeyActionType.PRESS
 };
-Map<pb.MouseKey_KeyActionType, ButtonState> _pbToButtonState =
-    _buttonStateToPb.map((k, v) => MapEntry(v, k));
+Map<pb.MouseKey_KeyActionType, ButtonActionType> _pbToButtonActionType =
+    _buttonActionTypeStateToPb.map((k, v) => MapEntry(v, k));
 
-pb.Key_KeyActionType keyStateToPb(KeyState state) {
-  if (!_keyStateToPb.containsKey(state)) {
+pb.Key_KeyActionType keyActionTypeToPb(KeyActionType state) {
+  if (!_keyActionTypeToPb.containsKey(state)) {
     throw ArgumentError('Invalid key state');
   }
 
-  return _keyStateToPb[state]!;
+  return _keyActionTypeToPb[state]!;
 }
 
-KeyState pbToKeyState(pb.Key_KeyActionType state) {
-  if (!_pbToKeyState.containsKey(state)) {
+KeyActionType pbToKeyActionType(pb.Key_KeyActionType state) {
+  if (!_pbToKeyActionType.containsKey(state)) {
     throw ArgumentError('Invalid key state');
   }
 
-  return _pbToKeyState[state]!;
+  return _pbToKeyActionType[state]!;
 }
 
-pb.MouseKey_KeyActionType buttonStateToPb(ButtonState state) {
-  if (!_buttonStateToPb.containsKey(state)) {
+pb.MouseKey_KeyActionType buttonActionTypeToPb(ButtonActionType state) {
+  if (!_buttonActionTypeStateToPb.containsKey(state)) {
     throw ArgumentError('Invalid button state');
   }
 
-  return _buttonStateToPb[state]!;
+  return _buttonActionTypeStateToPb[state]!;
 }
 
-ButtonState pbToButtonState(pb.MouseKey_KeyActionType state) {
-  if (!_pbToButtonState.containsKey(state)) {
+ButtonActionType pbToButtonActionType(pb.MouseKey_KeyActionType state) {
+  if (!_pbToButtonActionType.containsKey(state)) {
     throw ArgumentError('Invalid button state');
   }
 
-  return _pbToButtonState[state]!;
+  return _pbToButtonActionType[state]!;
 }
 
 @immutable
