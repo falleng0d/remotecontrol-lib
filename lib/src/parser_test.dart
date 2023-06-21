@@ -162,6 +162,9 @@ void main() {
 
     test('getDefsItems', () {
       final def = parser.getDefItem('button');
+      if (def == null) {
+        fail('def is null');
+      }
 
       expect(def.name.local, 'button');
       expect(def.getAttribute('mr'), '3');
@@ -171,6 +174,30 @@ void main() {
       final attr = parser.getDefItemAttribute('button', 'mr');
 
       expect(attr, '3');
+    });
+
+    test('Geometry withAttributes', () {
+      // <key maxWidth="40" maxHeight="30" ml="3" mr="3" mt="2" mb="2" />
+      final def = parser.getDefItem('key');
+      if (def == null) {
+        fail('def is null');
+      }
+
+      expect(def.getAttribute('maxWidth'), '40');
+      expect(def.getAttribute('maxHeight'), '30');
+      expect(def.getAttribute('ml'), '3');
+      expect(def.getAttribute('mr'), '3');
+      expect(def.getAttribute('mt'), '2');
+      expect(def.getAttribute('mb'), '2');
+
+      final geometry = Geometry().withAttributes(def);
+
+      expect(geometry.maxWidth, 40);
+      expect(geometry.maxHeight, 30);
+      expect(geometry.margin?.left, 3);
+      expect(geometry.margin?.right, 3);
+      expect(geometry.margin?.top, 2);
+      expect(geometry.margin?.bottom, 2);
     });
   });
 

@@ -450,6 +450,10 @@ class VirtualKeyboardXMLParser {
     return VirtualKeyboardXMLParser(_readFileContent(fileName));
   }
 
+  factory VirtualKeyboardXMLParser.fromString(String xml) {
+    return VirtualKeyboardXMLParser(xml);
+  }
+
   // Helper method to read the file content
   static String _readFileContent(String fileName) => File(fileName).readAsStringSync();
 
@@ -504,6 +508,11 @@ class VirtualKeyboardXMLParser {
   /* endregion Keyboard Items */
 }
 
+typedef double_opt = double?;
+typedef bool_opt = bool?;
+typedef int_opt = int?;
+typedef String_opt = String?;
+
 extension VirtualKeyboardXmlElementHelpers on XmlElement {
   String get tag => name.local;
 
@@ -528,6 +537,22 @@ extension VirtualKeyboardXmlElementHelpers on XmlElement {
 
   Iterable<XmlElement> get layoutNodes => findElements(_layoutTypes.join('|'));
   Iterable<XmlElement> get keyNodes => findElements(_elementTypes.join('|'));
+
+  T getAttributeValue<T>(String name, T defaultValue) {
+    final attribute = getAttribute(name);
+    if (attribute == null) return defaultValue;
+
+    if (T == double || T == double_opt) {
+      return double.parse(attribute) as T;
+    } else if (T == bool || T == bool_opt) {
+      return (attribute.toLowerCase() == 'true') as T;
+    } else if (T == int || T == int_opt) {
+      return int.parse(attribute) as T;
+    } else if (T == String || T == String_opt) {
+      return attribute as T;
+    }
+    return defaultValue;
+  }
 }
 
 /// [KeyboardNodeRenderer] uses a [VirtualKeyboardElementFactory] to render a
@@ -644,56 +669,23 @@ extension KeyboardNodeRenderer on XmlElement {
 /// [Geometry] instance with those attributes.
 extension GeometryXMLNodeDeserializer on Geometry {
   Geometry withAttributes(XmlElement node) {
-    final attributes = node.attributes;
-
-    final doubleTypedFields = <String>[
-      'minWidth',
-      'maxWidth',
-      'minHeight',
-      'maxHeight',
-      'pl',
-      'pt',
-      'pr',
-      'pb',
-      'ml',
-      'mt',
-      'mr',
-      'mb',
-    ];
-    final boolTypedFields = <String>[
-      'expand',
-    ];
-
-    final fields = <String, dynamic>{};
-
-    for (var attribute in attributes) {
-      final name = attribute.name.local;
-      final value = attribute.value;
-
-      if (doubleTypedFields.contains(name)) {
-        fields[name] = double.parse(value);
-      } else if (boolTypedFields.contains(name)) {
-        fields[name] = value.toLowerCase() == 'true';
-      }
-    }
-
     return Geometry(
-      minWidth: fields['minWidth'] ?? minWidth,
-      maxWidth: fields['maxWidth'] ?? maxWidth,
-      minHeight: fields['minHeight'] ?? minHeight,
-      maxHeight: fields['maxHeight'] ?? maxHeight,
-      expand: fields['expand'] ?? expand,
+      minWidth: node.getAttributeValue('minWidth', minWidth),
+      maxWidth: node.getAttributeValue('maxWidth', maxWidth),
+      minHeight: node.getAttributeValue('minHeight', minHeight),
+      maxHeight: node.getAttributeValue('maxHeight', maxHeight),
+      expand: node.getAttributeValue('expand', expand),
       padding: EdgeInsets.fromLTRB(
-        fields['pl'] ?? padding?.left,
-        fields['pt'] ?? padding?.top,
-        fields['pr'] ?? padding?.right,
-        fields['pb'] ?? padding?.bottom,
+        node.getAttributeValue('pl', padding?.left) ?? 0,
+        node.getAttributeValue('pt', padding?.top) ?? 0,
+        node.getAttributeValue('pr', padding?.right) ?? 0,
+        node.getAttributeValue('pb', padding?.bottom) ?? 0,
       ),
       margin: EdgeInsets.fromLTRB(
-        fields['ml'] ?? margin?.left,
-        fields['mt'] ?? margin?.top,
-        fields['mr'] ?? margin?.right,
-        fields['mb'] ?? margin?.bottom,
+        node.getAttributeValue('ml', margin?.left) ?? 0,
+        node.getAttributeValue('mt', margin?.top) ?? 0,
+        node.getAttributeValue('mr', margin?.right) ?? 0,
+        node.getAttributeValue('mb', margin?.bottom) ?? 0,
       ),
     );
   }
