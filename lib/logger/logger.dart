@@ -73,21 +73,21 @@ class Logger {
   @visibleForTesting
   String format(String message, Level level) => _format(message, level);
 
-  void _log(String message, {Level? level}) {
+  void log(String message, {Level? level}) {
     var messageLogLevel = level ?? defaultLevel;
     final formattedMessage = _format(message, messageLogLevel);
     _dispatch(messageLogLevel, formattedMessage);
   }
 
-  dynamic debug(String message) => _log(message, level: Level.debug);
+  dynamic debug(String message) => log(message, level: Level.debug);
 
-  dynamic info(String message) => _log(message, level: Level.info);
+  dynamic info(String message) => log(message, level: Level.info);
 
-  dynamic warning(String message) => _log(message, level: Level.warning);
+  dynamic warning(String message) => log(message, level: Level.warning);
 
-  dynamic error(String message) => _log(message, level: Level.error);
+  dynamic error(String message) => log(message, level: Level.error);
 
-  dynamic trace(String message) => _log(message, level: Level.trace);
+  dynamic trace(String message) => log(message, level: Level.trace);
 }
 
 /// Singleton instance of the logger.
