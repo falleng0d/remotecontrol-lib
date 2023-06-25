@@ -58,7 +58,7 @@ mixin SizeableFactory {
 /* region Abstract Element Factories */
 abstract class BaseElementFactory with SizeableFactory {
   BaseElementFactory([Geometry? geometry]) {
-    this.geometry = geometry ?? const Geometry();
+    _geometry = geometry ?? const Geometry();
   }
 }
 
