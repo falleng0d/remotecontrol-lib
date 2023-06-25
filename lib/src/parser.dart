@@ -639,7 +639,7 @@ extension KeyboardNodeRenderer on XmlElement {
     // TODO: final doubleTapAction = getAttribute('double-tap-action');
     // TODO: final holdAction = getAttribute('hold-action');
 
-    return factory.buildKeyElementWithKeyCode(keyCode);
+    return factory.buildKeyElementWithKeyCode(keyCode, label: keyCode);
   }
 
   BaseElement _renderButton(VirtualKeyboardElementFactory factory) {
@@ -648,15 +648,20 @@ extension KeyboardNodeRenderer on XmlElement {
     // One of enum MouseButtonType { LEFT, RIGHT, MIDDLE, X1, X2 }
     switch (buttonName.toLowerCase()) {
       case 'left':
-        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.LEFT);
+        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.LEFT,
+            label: 'LEFT');
       case 'right':
-        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.RIGHT);
+        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.RIGHT,
+            label: 'RIGHT');
       case 'middle':
-        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.MIDDLE);
+        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.MIDDLE,
+            label: 'MIDDLE');
       case 'x1':
-        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.X1);
+        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.X1,
+            label: 'X1');
       case 'x2':
-        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.X2);
+        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.X2,
+            label: 'X2');
       default:
         throw Exception('Unknown button type: $buttonName');
     }
