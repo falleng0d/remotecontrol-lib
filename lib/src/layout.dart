@@ -115,7 +115,6 @@ class FlexLayout implements BaseLayout {
     };
 
     var transformChildren = (Widget widget) {
-      widget = addContainer(widget);
       widget = addExpandToChildren(widget);
       return widget;
     };
@@ -127,7 +126,7 @@ class FlexLayout implements BaseLayout {
       } else {
         widget = children[0];
       }
-      widget = addExpand(widget);
+      widget = addExpand(addContainer(widget));
       return widget;
     };
 
