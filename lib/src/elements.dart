@@ -25,19 +25,19 @@ abstract class BaseKeyElement implements BaseElement {
   @override
   final String label;
 
-  BaseAction<KeyActionContext> get action;
+  BaseAction<BaseKeyActionContext> get action;
   bool get toggle;
   double get keyRep;
   double get keyRepeatDelay;
 
-  BaseAction<KeyActionContext>? get holdAction;
+  BaseAction<BaseKeyActionContext>? get holdAction;
   double get holdTimeThreshold;
 
-  BaseAction<KeyActionContext>? get doubleTapAction;
+  BaseAction<BaseKeyActionContext>? get doubleTapAction;
   double get doubleTapThershold;
 
   const BaseKeyElement(
-    BaseAction<KeyActionContext> action, {
+    BaseAction<BaseKeyActionContext> action, {
     this.label = '',
     this.geometry = const Geometry(),
   });
@@ -94,10 +94,10 @@ abstract class BaseButtonElement implements BaseElement {
   @override
   final String label;
 
-  BaseAction<ButtonActionContext> get action;
+  BaseAction<BaseButtonActionContext> get action;
 
   const BaseButtonElement(
-    BaseAction<ButtonActionContext> action, {
+    BaseAction<BaseButtonActionContext> action, {
     this.label = '',
     this.geometry = const Geometry(),
   });

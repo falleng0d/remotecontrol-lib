@@ -73,17 +73,17 @@ abstract class BaseKeyElementFactory extends BaseElementFactory {
   BaseKeyElementFactory([Geometry? geometry]) : super(geometry);
 
   BaseKeyElement build(
-    covariant BaseAction<KeyActionContext> action, {
+    covariant BaseAction<BaseKeyActionContext> action, {
     String? label,
-    covariant BaseAction<KeyActionContext>? doubleTapAction,
-    covariant BaseAction<KeyActionContext>? holdAction,
+    covariant BaseAction<BaseKeyActionContext>? doubleTapAction,
+    covariant BaseAction<BaseKeyActionContext>? holdAction,
   });
 }
 
 abstract class BaseMouseButtonElementFactory extends BaseElementFactory {
   BaseMouseButtonElementFactory([Geometry? geometry]) : super(geometry);
 
-  BaseButtonElement build(covariant BaseAction<ButtonActionContext> action,
+  BaseButtonElement build(covariant BaseAction<BaseButtonActionContext> action,
       {String? label});
 }
 
@@ -341,24 +341,25 @@ class VirtualKeyboardElementFactory {
   /* endregion Action Builders */
 
   /* region Element Builders */
-  BaseKeyElement buildKeyElement(BaseKeyAction action,
+  BaseKeyElement buildKeyElement(covariant BaseKeyAction action,
       {String label = 'key',
-      BaseAction<KeyActionContext>? doubleTapAction,
-      BaseAction<KeyActionContext>? holdAction}) {
+      covariant BaseAction<BaseKeyActionContext>? doubleTapAction,
+      covariant BaseAction<BaseKeyActionContext>? holdAction}) {
     return _baseKeyElementFactory.build(action,
         label: label, doubleTapAction: doubleTapAction, holdAction: holdAction);
   }
 
   BaseKeyElement buildKeyElementWithKeyCode(String keyCode,
       {String label = 'key',
-      BaseAction<KeyActionContext>? doubleTapAction,
-      BaseAction<KeyActionContext>? holdAction}) {
+      covariant BaseAction<BaseKeyActionContext>? doubleTapAction,
+      covariant BaseAction<BaseKeyActionContext>? holdAction}) {
     final action = buildKeyAction(keyCode);
     return buildKeyElement(action,
         label: label, doubleTapAction: doubleTapAction, holdAction: holdAction);
   }
 
-  BaseButtonElement buildMouseButtonElement(BaseAction<ButtonActionContext> action,
+  BaseButtonElement buildMouseButtonElement(
+      covariant BaseAction<BaseButtonActionContext> action,
       {String label = 'mouseButton'}) {
     return _baseMouseButtonElementFactory.build(action, label: label);
   }
@@ -503,7 +504,7 @@ class VirtualKeyboardXMLParser {
   /* region Keyboard Items */
 
   /// /keyboard/root
-  XmlElement getKeyboardRoot() => _root;
+  XmlElement getKeyboardRoot() => _root.findElements('root').first;
 
   /* endregion Keyboard Items */
 }
@@ -531,12 +532,17 @@ extension VirtualKeyboardXmlElementHelpers on XmlElement {
   Iterable<XmlElement> get texts => findElements('text');
   Iterable<XmlElement> get touchpads => findElements('touchpad');
 
-  Iterable<XmlElement> get allNodes {
-    return findElements(_layoutTypes.join('|') + '|' + _elementTypes.join('|'));
+  Iterable<XmlElement> get layoutNodes {
+    return _layoutTypes.map((type) => findElements(type)).expand((element) => element);
   }
 
-  Iterable<XmlElement> get layoutNodes => findElements(_layoutTypes.join('|'));
-  Iterable<XmlElement> get keyNodes => findElements(_elementTypes.join('|'));
+  Iterable<XmlElement> get keyNodes {
+    return _elementTypes.map((type) => findElements(type)).expand((element) => element);
+  }
+
+  Iterable<XmlElement> get allNodes {
+    return layoutNodes.followedBy(keyNodes);
+  }
 
   T getAttributeValue<T>(String name, T defaultValue) {
     final attribute = getAttribute(name);
@@ -566,6 +572,8 @@ extension VirtualKeyboardXmlElementHelpers on XmlElement {
 extension KeyboardNodeRenderer on XmlElement {
   BaseElement render(VirtualKeyboardElementFactory factory) {
     switch (tag) {
+      case 'root':
+        return allNodes.first.render(factory);
       case 'row':
         return _renderRow(factory);
       case 'column':

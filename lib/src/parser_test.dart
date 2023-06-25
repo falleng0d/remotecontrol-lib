@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart' show BuildContext, Container, Widget;
 import 'package:get/get.dart';
 import 'package:remotecontrol_lib/input.dart';
 import 'package:test/test.dart';
+import 'package:xml/xml.dart';
 
 import '../action_contexts.dart';
 import '../keyboard.dart';
@@ -11,14 +12,14 @@ import 'parser.dart';
 
 class TestKeyElement extends BaseKeyElement {
   @override
-  BaseAction<KeyActionContext> action;
+  BaseAction<BaseKeyActionContext> action;
   @override
-  BaseAction<KeyActionContext>? doubleTapAction;
+  BaseAction<BaseKeyActionContext>? doubleTapAction;
 
   @override
   double doubleTapThershold;
   @override
-  BaseAction<KeyActionContext>? holdAction;
+  BaseAction<BaseKeyActionContext>? holdAction;
   @override
   double holdTimeThreshold;
 
@@ -71,10 +72,10 @@ class TestKeyElementFactory extends BaseKeyElementFactory {
 
   @override
   BaseKeyElement build(
-    BaseAction<KeyActionContext> action, {
+    BaseAction<BaseKeyActionContext> action, {
     String? label,
-    BaseAction<KeyActionContext>? doubleTapAction,
-    BaseAction<KeyActionContext>? holdAction,
+    BaseAction<BaseKeyActionContext>? doubleTapAction,
+    BaseAction<BaseKeyActionContext>? holdAction,
   }) {
     return TestKeyElement(
       geometry: geometry,
@@ -98,7 +99,7 @@ class TestKeyAction extends BaseKeyAction {
   const TestKeyAction(this.keyCode) : super(keyCode);
 
   @override
-  Future<bool> doAction(ActionContext ctx) async {
+  Future<bool> doAction(BaseActionContext ctx) async {
     print('TestKeyAction.doAction: $keyCode');
     return true;
   }
@@ -198,6 +199,63 @@ void main() {
       expect(geometry.margin?.right, 3);
       expect(geometry.margin?.top, 2);
       expect(geometry.margin?.bottom, 2);
+    });
+  });
+
+  group('VirtualKeyboardXmlElementHelpers', () {
+    // Tests for VirtualKeyboardXmlElementHelpers
+    // Reference:
+    // List<String> get _layoutTypes => ['row', 'column', 'flex', 'horizontal-spacer', 'vertical-spacer'];
+    // List<String> get _elementTypes => ['key', 'button', 'text', 'touchpad'];
+    // Iterable<XmlElement> get rows => findElements('row');
+    // Iterable<XmlElement> get columns => findElements('column');
+    // Iterable<XmlElement> get flexs => findElements('flex');
+    // Iterable<XmlElement> get horizontalSpacers => findElements('horizontal-spacer');
+    // Iterable<XmlElement> get verticalSpacers => findElements('vertical-spacer');
+    // Iterable<XmlElement> get keys => findElements('key');
+    // Iterable<XmlElement> get buttons => findElements('button');
+    // Iterable<XmlElement> get texts => findElements('text');
+    // Iterable<XmlElement> get touchpads => findElements('touchpad');
+    // Iterable<XmlElement> get allNodes;
+    // Iterable<XmlElement> get layoutNodes => findElements(_layoutTypes.join('|'));
+    // Iterable<XmlElement> get keyNodes => findElements(_elementTypes.join('|'));
+
+    late XmlElement root;
+
+    setUp(() {
+      xmlContent = File('lib/src/keyboard.xml').readAsStringSync();
+      parser = VirtualKeyboardXMLParser(xmlContent);
+      root = parser.getKeyboardRoot();
+    });
+
+    test('getKeyboardRoot', () {
+      expect(root.tag, 'root');
+    });
+
+    test('column', () {
+      expect(root.columns.length, 1);
+    });
+
+    test('rows', () {
+      final column = root.columns.first;
+      final rows = column.rows;
+
+      expect(rows.length, 4);
+    });
+
+    test('layoutNodes', () {
+      final column = root.columns.first;
+
+      expect(column.layoutNodes.length, 4);
+    });
+
+    test('allNodes', () {
+      final column = root.columns.first;
+      final rows = column.rows;
+      final row3 = rows.elementAt(2);
+
+      final allNodes = row3.allNodes;
+      expect(allNodes.length, 13);
     });
   });
 

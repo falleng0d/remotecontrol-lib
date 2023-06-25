@@ -1,10 +1,10 @@
 import 'action_contexts.dart';
 import 'actions.dart';
 
-/// [ActionTask] is a task contains the [ActionContext] in which the action
+/// [ActionTask] is a task contains the [BaseActionContext] in which the action
 /// is executed, the [BaseAction] to execute and a [timeout]
 class ActionTask {
-  final ActionContext ctx;
+  final BaseActionContext ctx;
   final BaseAction action;
   final DateTime createdAt = DateTime.now();
   final int? timeout;
