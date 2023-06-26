@@ -1,5 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../keyboard.dart';
+
 class Geometry {
   final double? minWidth;
   final double? maxWidth;
@@ -7,6 +9,7 @@ class Geometry {
   final double? maxHeight;
 
   final bool? expand;
+  final int? flex;
   final EdgeInsets? padding;
   final EdgeInsets? margin;
 
@@ -26,6 +29,7 @@ class Geometry {
       this.minHeight,
       this.maxHeight,
       this.expand,
+      this.flex,
       this.padding,
       this.margin});
 
@@ -35,27 +39,45 @@ class Geometry {
       double? minHeight,
       double? maxHeight,
       bool? expand,
+      int? flex,
       EdgeInsets? padding,
       EdgeInsets? margin}) {
+    assert(!(expand == false && flex != null));
     return Geometry(
         minWidth: minWidth ?? this.minWidth,
         maxWidth: maxWidth ?? this.maxWidth,
         minHeight: minHeight ?? this.minHeight,
         maxHeight: maxHeight ?? this.maxHeight,
         expand: expand ?? this.expand,
+        flex: flex ?? this.flex,
         padding: padding ?? this.padding,
         margin: margin ?? this.margin);
   }
 
+  Geometry copyFrom(Geometry other) {
+    return Geometry(
+      minWidth: other.minWidth ?? minWidth,
+      maxWidth: other.maxWidth ?? maxWidth,
+      minHeight: other.minHeight ?? minHeight,
+      maxHeight: other.maxHeight ?? maxHeight,
+      expand: other.expand ?? expand,
+      flex: other.flex ?? flex,
+      padding: other.padding ?? padding,
+      margin: other.margin ?? margin,
+    );
+  }
+
   Geometry copy() {
     return Geometry(
-        minWidth: minWidth,
-        maxWidth: maxWidth,
-        minHeight: minHeight,
-        maxHeight: maxHeight,
-        expand: expand,
-        padding: padding,
-        margin: margin);
+      minWidth: minWidth,
+      maxWidth: maxWidth,
+      minHeight: minHeight,
+      maxHeight: maxHeight,
+      expand: expand,
+      flex: flex,
+      padding: padding,
+      margin: margin,
+    );
   }
 }
 

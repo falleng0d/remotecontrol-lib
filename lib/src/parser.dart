@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fluent_ui/fluent_ui.dart' show EdgeInsets, Key;
+import 'package:fluent_ui/fluent_ui.dart' show EdgeInsets, Element, Key;
 import 'package:get/get.dart';
 import 'package:xml/xml.dart';
 
@@ -42,6 +42,9 @@ mixin SizeableFactory {
   bool get expand => _geometry.expand!;
   set expand(bool expand) => _geometry = _geometry.copyWith(expand: expand);
 
+  int get flex => _geometry.flex!;
+  set flex(int flex) => _geometry = _geometry.copyWith(flex: flex);
+
   Geometry fillGeometryEmptyWithDefaults(Geometry geometry) {
     return geometry.copyWith(
       minWidth: geometry.minWidth ?? 10,
@@ -49,125 +52,484 @@ mixin SizeableFactory {
       minHeight: geometry.minHeight ?? 10,
       maxHeight: geometry.maxHeight ?? double.infinity,
       expand: geometry.expand ?? false,
+      flex: geometry.flex ?? 1,
       padding: geometry.padding ?? EdgeInsets.zero,
       margin: geometry.margin ?? EdgeInsets.zero,
     );
   }
 }
 
-/* region Abstract Element Factories */
-abstract class BaseElementFactory with SizeableFactory {
-  BaseElementFactory([Geometry? geometry]) {
-    _geometry = geometry ?? const Geometry();
+/* region Value Objects */
+abstract class BaseElementProps {
+  final String? label;
+  final Geometry? geometry;
+
+  bool get isFilled => label != null && geometry != null;
+
+  const BaseElementProps({this.label, this.geometry});
+}
+
+class KeyElementProps extends BaseElementProps {
+  final double? keyRep;
+  final double? keyRepeatDelay;
+  final bool? toggle;
+
+  final double? holdTimeThreshold;
+  final double? doubleTapThershold;
+
+  final BaseAction<BaseKeyActionContext>? doubleTapAction;
+  final BaseAction<BaseKeyActionContext>? holdAction;
+
+  @override
+  bool get isFilled {
+    return super.isFilled &&
+        keyRep != null &&
+        keyRepeatDelay != null &&
+        toggle != null &&
+        holdTimeThreshold != null &&
+        doubleTapThershold != null;
+  }
+
+  const KeyElementProps({
+    String? label,
+    Geometry? geometry,
+    this.keyRep,
+    this.keyRepeatDelay,
+    this.toggle,
+    this.holdTimeThreshold,
+    this.doubleTapThershold,
+    this.doubleTapAction,
+    this.holdAction,
+  }) : super(label: label, geometry: geometry);
+}
+
+class MouseElementProps extends BaseElementProps {
+  const MouseElementProps({String? label, Geometry? geometry})
+      : super(label: label, geometry: geometry);
+}
+
+class TextElementProps extends BaseElementProps {
+  const TextElementProps({String? label, Geometry? geometry})
+      : super(label: label, geometry: geometry);
+}
+
+class TouchpadElementProps extends BaseElementProps {
+  final bool? scrollbar;
+  final bool? mouseButtons;
+  final bool? tapToClick;
+  final bool? doubleTapAndHold;
+
+  @override
+  bool get isFilled {
+    return super.isFilled &&
+        scrollbar != null &&
+        mouseButtons != null &&
+        tapToClick != null &&
+        doubleTapAndHold != null;
+  }
+
+  const TouchpadElementProps({
+    String? label,
+    Geometry? geometry,
+    this.scrollbar,
+    this.mouseButtons,
+    this.tapToClick,
+    this.doubleTapAndHold,
+  }) : super(label: label, geometry: geometry);
+}
+
+class FlexLayoutProps extends BaseElementProps {
+  final Direction? direction;
+  final double? columnGap;
+  final double? rowGap;
+  final bool? expandChildren;
+
+  @override
+  bool get isFilled {
+    return super.isFilled &&
+        direction != null &&
+        columnGap != null &&
+        rowGap != null &&
+        expandChildren != null;
+  }
+
+  const FlexLayoutProps({
+    String? label,
+    Geometry? geometry,
+    this.direction,
+    this.columnGap,
+    this.rowGap,
+    this.expandChildren,
+  }) : super(label: label, geometry: geometry);
+}
+
+class RowLayoutProps extends BaseElementProps {
+  final double? columnGap;
+  final bool? expandChildren;
+
+  @override
+  bool get isFilled {
+    return super.isFilled && columnGap != null && expandChildren != null;
+  }
+
+  const RowLayoutProps({
+    String? label,
+    Geometry? geometry,
+    this.columnGap,
+    this.expandChildren,
+  }) : super(label: label, geometry: geometry);
+}
+
+class ColumnLayoutProps extends BaseElementProps {
+  final double? rowGap;
+  final bool? expandChildren;
+
+  @override
+  bool get isFilled {
+    return super.isFilled && rowGap != null && expandChildren != null;
+  }
+
+  const ColumnLayoutProps({
+    String? label,
+    Geometry? geometry,
+    this.rowGap,
+    this.expandChildren,
+  }) : super(label: label, geometry: geometry);
+}
+
+class HorizontalSpacerProps extends BaseElementProps {
+  const HorizontalSpacerProps({String? label, Geometry? geometry})
+      : super(label: label, geometry: geometry);
+}
+
+class VerticalSpacerProps extends BaseElementProps {
+  const VerticalSpacerProps({String? label, Geometry? geometry})
+      : super(label: label, geometry: geometry);
+}
+/* endregion Value Objects */
+
+/* region Props Loaders */
+abstract class XmlPropsLoader<T> {
+  T load(XmlElement node, {T? defaults});
+  T merge(T into, {required XmlElement node});
+}
+
+class GeometryPropsLoader extends XmlPropsLoader<Geometry> {
+  @override
+  Geometry load(XmlElement node, {Geometry? defaults}) {
+    return defaults != null
+        ? defaults.withAttributes(node)
+        : Geometry().withAttributes(node);
+  }
+
+  @override
+  Geometry merge(Geometry into, {required XmlElement node}) {
+    return into.withAttributes(node);
   }
 }
 
-abstract class BaseKeyElementFactory extends BaseElementFactory {
-  double get keyRep;
-  double get keyRepeatDelay;
-  bool get toggle;
+class KeyElementPropsLoader extends XmlPropsLoader<KeyElementProps> {
+  @override
+  KeyElementProps load(XmlElement node, {KeyElementProps? defaults}) {
+    return KeyElementProps(
+      label: node.getAttributeValue('label', defaults?.label),
+      geometry: GeometryPropsLoader().load(node, defaults: defaults?.geometry),
+      keyRep: node.getAttributeValue('key-rep', defaults?.keyRep),
+      keyRepeatDelay:
+          node.getAttributeValue('key-repeat-delay', defaults?.keyRepeatDelay),
+      toggle: node.getAttributeValue('toggle', defaults?.toggle),
+      holdTimeThreshold:
+          node.getAttributeValue('hold-time-threshold', defaults?.holdTimeThreshold),
+      doubleTapThershold:
+          node.getAttributeValue('double-tap-threshold', defaults?.doubleTapThershold),
+      // doubleTapAction: node.getAttributeValue('double-tap-action', defaults?.doubleTapAction),
+      // holdAction: node.getAttributeValue('hold-action', defaults?.holdAction),
+    );
+  }
 
-  double get holdTimeThreshold;
-  double get doubleTapThershold;
+  @override
+  KeyElementProps merge(KeyElementProps into, {required XmlElement node}) {
+    return KeyElementProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: into.geometry ?? GeometryPropsLoader().merge(into.geometry!, node: node),
+      keyRep: node.getAttributeValue('key-rep', into.keyRep),
+      keyRepeatDelay: node.getAttributeValue('key-repeat-delay', into.keyRepeatDelay),
+      toggle: node.getAttributeValue('toggle', into.toggle),
+      holdTimeThreshold:
+          node.getAttributeValue('hold-time-threshold', into.holdTimeThreshold),
+      doubleTapThershold:
+          node.getAttributeValue('double-tap-threshold', into.doubleTapThershold),
+      // doubleTapAction: node.getAttributeValue('double-tap-action', into.doubleTapAction),
+      // holdAction: node.getAttributeValue('hold-action', into.holdAction),
+    );
+  }
+}
 
-  BaseKeyElementFactory([Geometry? geometry]) : super(geometry);
+class MouseElementPropsLoader extends XmlPropsLoader<MouseElementProps> {
+  @override
+  MouseElementProps load(XmlElement node, {MouseElementProps? defaults}) {
+    return MouseElementProps(
+      label: node.getAttributeValue('label', defaults?.label),
+      geometry: GeometryPropsLoader().load(node, defaults: defaults?.geometry),
+    );
+  }
+
+  @override
+  MouseElementProps merge(MouseElementProps into, {required XmlElement node}) {
+    return MouseElementProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: into.geometry ?? GeometryPropsLoader().merge(into.geometry!, node: node),
+    );
+  }
+}
+
+class TextElementPropsLoader extends XmlPropsLoader<TextElementProps> {
+  @override
+  TextElementProps load(XmlElement node, {TextElementProps? defaults}) {
+    return TextElementProps(
+      label: node.getAttributeValue('label', defaults?.label),
+      geometry: GeometryPropsLoader().load(node, defaults: defaults?.geometry),
+    );
+  }
+
+  @override
+  TextElementProps merge(TextElementProps into, {required XmlElement node}) {
+    return TextElementProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: into.geometry ?? GeometryPropsLoader().merge(into.geometry!, node: node),
+    );
+  }
+}
+
+class TouchpadElementPropsLoader extends XmlPropsLoader<TouchpadElementProps> {
+  @override
+  TouchpadElementProps load(XmlElement node, {TouchpadElementProps? defaults}) {
+    return TouchpadElementProps(
+      label: node.getAttributeValue('label', defaults?.label),
+      geometry: GeometryPropsLoader().load(node, defaults: defaults?.geometry),
+      scrollbar: node.getAttributeValue('scrollbar', defaults?.scrollbar),
+      mouseButtons: node.getAttributeValue('mouse-buttons', defaults?.mouseButtons),
+      tapToClick: node.getAttributeValue('tap-to-click', defaults?.tapToClick),
+      doubleTapAndHold:
+          node.getAttributeValue('double-tap-and-hold', defaults?.doubleTapAndHold),
+    );
+  }
+
+  @override
+  TouchpadElementProps merge(TouchpadElementProps into, {required XmlElement node}) {
+    return TouchpadElementProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: into.geometry ?? GeometryPropsLoader().merge(into.geometry!, node: node),
+      scrollbar: node.getAttributeValue('scrollbar', into.scrollbar),
+      mouseButtons: node.getAttributeValue('mouse-buttons', into.mouseButtons),
+      tapToClick: node.getAttributeValue('tap-to-click', into.tapToClick),
+      doubleTapAndHold:
+          node.getAttributeValue('double-tap-and-hold', into.doubleTapAndHold),
+    );
+  }
+}
+
+class FlexLayoutPropsLoader extends XmlPropsLoader<FlexLayoutProps> {
+  @override
+  FlexLayoutProps load(XmlElement node, {FlexLayoutProps? defaults}) {
+    return FlexLayoutProps(
+      label: node.getAttributeValue('label', defaults?.label),
+      geometry: GeometryPropsLoader().load(node, defaults: defaults?.geometry),
+      direction: node.getAttributeValue('direction', defaults?.direction),
+      columnGap: node.getAttributeValue('column-gap', defaults?.columnGap),
+      rowGap: node.getAttributeValue('row-gap', defaults?.rowGap),
+      expandChildren: node.getAttributeValue('expand-children', defaults?.expandChildren),
+    );
+  }
+
+  @override
+  FlexLayoutProps merge(FlexLayoutProps into, {required XmlElement node}) {
+    return FlexLayoutProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: GeometryPropsLoader().load(node, defaults: into.geometry),
+      direction: node.getAttributeValue('direction', into.direction),
+      columnGap: node.getAttributeValue('column-gap', into.columnGap),
+      rowGap: node.getAttributeValue('row-gap', into.rowGap),
+      expandChildren: node.getAttributeValue('expand-children', into.expandChildren),
+    );
+  }
+}
+
+class RowLayoutPropsLoader extends XmlPropsLoader<RowLayoutProps> {
+  @override
+  RowLayoutProps load(XmlElement node, {RowLayoutProps? defaults}) {
+    return RowLayoutProps(
+      label: node.getAttributeValue('label', defaults?.label),
+      geometry: GeometryPropsLoader().load(node, defaults: defaults?.geometry),
+      columnGap: node.getAttributeValue('column-gap', defaults?.columnGap),
+      expandChildren: node.getAttributeValue('expand-children', defaults?.expandChildren),
+    );
+  }
+
+  @override
+  RowLayoutProps merge(RowLayoutProps into, {required XmlElement node}) {
+    return RowLayoutProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: GeometryPropsLoader().load(node, defaults: into.geometry),
+      columnGap: node.getAttributeValue('column-gap', into.columnGap),
+      expandChildren: node.getAttributeValue('expand-children', into.expandChildren),
+    );
+  }
+}
+
+class ColumnLayoutPropsLoader extends XmlPropsLoader<ColumnLayoutProps> {
+  @override
+  ColumnLayoutProps load(XmlElement node, {ColumnLayoutProps? defaults}) {
+    return ColumnLayoutProps(
+      label: node.getAttributeValue('label', defaults?.label),
+      geometry: GeometryPropsLoader().load(node, defaults: defaults?.geometry),
+      rowGap: node.getAttributeValue('row-gap', defaults?.rowGap),
+      expandChildren: node.getAttributeValue('expand-children', defaults?.expandChildren),
+    );
+  }
+
+  @override
+  ColumnLayoutProps merge(ColumnLayoutProps into, {required XmlElement node}) {
+    return ColumnLayoutProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: GeometryPropsLoader().load(node, defaults: into.geometry),
+      rowGap: node.getAttributeValue('row-gap', into.rowGap),
+      expandChildren: node.getAttributeValue('expand-children', into.expandChildren),
+    );
+  }
+}
+
+class HorizontalSpacerPropsLoader extends XmlPropsLoader<HorizontalSpacerProps> {
+  @override
+  HorizontalSpacerProps load(XmlElement node, {HorizontalSpacerProps? defaults}) {
+    return HorizontalSpacerProps(
+      label: node.getAttributeValue('label', defaults?.label),
+      geometry: GeometryPropsLoader().load(node, defaults: defaults?.geometry),
+    );
+  }
+
+  @override
+  HorizontalSpacerProps merge(HorizontalSpacerProps into, {required XmlElement node}) {
+    return HorizontalSpacerProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: GeometryPropsLoader().load(node, defaults: into.geometry),
+    );
+  }
+}
+
+class VerticalSpacerPropsLoader extends XmlPropsLoader<VerticalSpacerProps> {
+  @override
+  VerticalSpacerProps load(XmlElement node, {VerticalSpacerProps? defaults}) {
+    return VerticalSpacerProps(
+      label: node.getAttributeValue('label', defaults?.label),
+      geometry: GeometryPropsLoader().load(node, defaults: defaults?.geometry),
+    );
+  }
+
+  @override
+  VerticalSpacerProps merge(VerticalSpacerProps into, {required XmlElement node}) {
+    return VerticalSpacerProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: GeometryPropsLoader().load(node, defaults: into.geometry),
+    );
+  }
+}
+/* endregion Props Loaders */
+
+/* region Abstract Element Factories */
+class BaseElementFactory<T extends BaseElementProps, E extends XmlPropsLoader<T>>
+    with SizeableFactory {
+  covariant T props;
+  covariant E propsLoader;
+
+  BaseElementFactory(T props, E propsLoader)
+      : props = props,
+        propsLoader = propsLoader {
+    assert(props.isFilled);
+  }
+}
+
+abstract class BaseKeyElementFactory
+    extends BaseElementFactory<KeyElementProps, KeyElementPropsLoader> {
+  BaseKeyElementFactory(KeyElementProps props, propsLoader) : super(props, propsLoader);
 
   BaseKeyElement build(
     covariant BaseAction<BaseKeyActionContext> action, {
     String? label,
-    covariant BaseAction<BaseKeyActionContext>? doubleTapAction,
-    covariant BaseAction<BaseKeyActionContext>? holdAction,
+    KeyElementProps? overrides,
   });
 }
 
-abstract class BaseMouseButtonElementFactory extends BaseElementFactory {
-  BaseMouseButtonElementFactory([Geometry? geometry]) : super(geometry);
+abstract class BaseMouseButtonElementFactory
+    extends BaseElementFactory<MouseElementProps, MouseElementPropsLoader> {
+  BaseMouseButtonElementFactory(props, propsLoader) : super(props, propsLoader);
 
-  BaseButtonElement build(covariant BaseAction<BaseButtonActionContext> action,
-      {String? label});
+  BaseButtonElement build(
+    covariant BaseAction<BaseButtonActionContext> action, {
+    String? label,
+    MouseElementProps? overrides,
+  });
 }
 
-abstract class BaseTextElementFactory extends BaseElementFactory {
-  BaseTextElementFactory([Geometry? geometry]) : super(geometry);
+abstract class BaseTextElementFactory
+    extends BaseElementFactory<TextElementProps, TextElementPropsLoader> {
+  BaseTextElementFactory(props, propsLoader) : super(props, propsLoader);
 
-  BaseTextElement build(String label);
+  BaseTextElement build(String label, {TextElementProps? overrides});
 }
 
-abstract class BaseTouchpadElementFactory extends BaseElementFactory {
-  bool get scrollbar;
-  bool get mouseButtons;
-  bool get tapToClick;
-  bool get doubleTapAndHold;
-
+abstract class BaseTouchpadElementFactory
+    extends BaseElementFactory<TouchpadElementProps, TouchpadElementPropsLoader> {
   TouchpadActions get actions;
 
-  BaseTouchpadElementFactory([Geometry? geometry]) : super(geometry);
+  BaseTouchpadElementFactory(props, propsLoader) : super(props, propsLoader);
 
-  BaseTouchpadElement build({String? label});
+  BaseTouchpadElement build({String? label, TouchpadElementProps? overrides});
 }
 /* endregion Abstract Element Factories */
 
 /* region Abstract Layout Element Factories */
-abstract class BaseLayoutFactory extends BaseElementFactory {
-  BaseLayoutFactory([Geometry? geometry]) : super(geometry);
+abstract class BaseLayoutFactory<T extends BaseElementProps, E extends XmlPropsLoader<T>>
+    extends BaseElementFactory<T, E> {
+  BaseLayoutFactory(props, propsLoader) : super(props, propsLoader);
 }
 
-abstract class BaseFlexLayoutFactory extends BaseLayoutFactory {
-  Direction get direction;
-  double get columnGap;
-  double get rowGap;
-  bool get expandChildren;
+abstract class BaseFlexLayoutFactory
+    extends BaseLayoutFactory<FlexLayoutProps, FlexLayoutPropsLoader> {
+  BaseFlexLayoutFactory(props, propsLoader) : super(props, propsLoader);
 
-  BaseFlexLayoutFactory([Geometry? geometry]) : super(geometry);
-
-  FlexLayout build({
-    String? label,
-    Direction? direction,
-    double? columnGap,
-    double? rowGap,
-    bool? expandChildren,
-    List<BaseElement>? children,
-  });
+  FlexLayout build(
+      {String? label, FlexLayoutProps? overrides, List<BaseElement>? children});
 }
 
-abstract class BaseRowLayoutFactory extends BaseLayoutFactory {
-  double get columnGap;
-  bool get expandChildren;
+abstract class BaseRowLayoutFactory
+    extends BaseLayoutFactory<RowLayoutProps, RowLayoutPropsLoader> {
+  BaseRowLayoutFactory(props, propsLoader) : super(props, propsLoader);
 
-  BaseRowLayoutFactory([Geometry? geometry]) : super(geometry);
-
-  RowLayout build({
-    String? label,
-    double? columnGap,
-    bool? expandChildren,
-    List<BaseElement>? children,
-  });
+  RowLayout build(
+      {String? label, RowLayoutProps? overrides, List<BaseElement>? children});
 }
 
-abstract class BaseColumnLayoutFactory extends BaseLayoutFactory {
-  double get rowGap;
-  bool get expandChildren;
+abstract class BaseColumnLayoutFactory
+    extends BaseLayoutFactory<ColumnLayoutProps, ColumnLayoutPropsLoader> {
+  BaseColumnLayoutFactory(props, propsLoader) : super(props, propsLoader);
 
-  BaseColumnLayoutFactory([Geometry? geometry]) : super(geometry);
-
-  ColumnLayout build({
-    String? label,
-    double? rowGap,
-    bool? expandChildren,
-    List<BaseElement>? children,
-  });
+  ColumnLayout build(
+      {String? label, ColumnLayoutProps? overrides, List<BaseElement>? children});
 }
 
-abstract class BaseHorizontalSpacerFactory extends BaseLayoutFactory {
-  BaseHorizontalSpacerFactory([Geometry? geometry]) : super(geometry);
+abstract class BaseHorizontalSpacerFactory
+    extends BaseLayoutFactory<HorizontalSpacerProps, HorizontalSpacerPropsLoader> {
+  BaseHorizontalSpacerFactory(props, propsLoader) : super(props, propsLoader);
 
-  HorizontalSpacer build({String? label});
+  HorizontalSpacer build({String? label, HorizontalSpacerProps? overrides});
 }
 
-abstract class BaseVerticalSpacerFactory extends BaseLayoutFactory {
-  BaseVerticalSpacerFactory([Geometry? geometry]) : super(geometry);
+abstract class BaseVerticalSpacerFactory
+    extends BaseLayoutFactory<VerticalSpacerProps, VerticalSpacerPropsLoader> {
+  BaseVerticalSpacerFactory(props, propsLoader) : super(props, propsLoader);
 
-  VerticalSpacer build({String? label});
+  VerticalSpacer build({String? label, VerticalSpacerProps? overrides});
 }
 /* endregion Abstract Layout Element Factories */
 
@@ -341,99 +703,150 @@ class VirtualKeyboardElementFactory {
   /* endregion Action Builders */
 
   /* region Element Builders */
-  BaseKeyElement buildKeyElement(covariant BaseKeyAction action,
-      {String label = 'key',
-      covariant BaseAction<BaseKeyActionContext>? doubleTapAction,
-      covariant BaseAction<BaseKeyActionContext>? holdAction}) {
-    return _baseKeyElementFactory.build(action,
-        label: label, doubleTapAction: doubleTapAction, holdAction: holdAction);
+  BaseKeyElement buildKeyElement(
+    XmlElement node,
+    covariant BaseKeyAction action, {
+    String label = 'key',
+    KeyElementProps? overrides,
+  }) {
+    return _baseKeyElementFactory.build(
+      action,
+      label: label,
+      overrides: _baseKeyElementFactory.propsLoader.merge(
+        _baseKeyElementFactory.props,
+        node: node,
+      ),
+    );
   }
 
-  BaseKeyElement buildKeyElementWithKeyCode(String keyCode,
-      {String label = 'key',
-      covariant BaseAction<BaseKeyActionContext>? doubleTapAction,
-      covariant BaseAction<BaseKeyActionContext>? holdAction}) {
+  BaseKeyElement buildKeyElementWithKeyCode(XmlElement node, String keyCode,
+      {String label = 'key', KeyElementProps? overrides, Geometry? geometryOverrides}) {
     final action = buildKeyAction(keyCode);
-    return buildKeyElement(action,
-        label: label, doubleTapAction: doubleTapAction, holdAction: holdAction);
+    return buildKeyElement(
+      node,
+      action,
+      label: label,
+      overrides: overrides,
+    );
   }
 
   BaseButtonElement buildMouseButtonElement(
-      covariant BaseAction<BaseButtonActionContext> action,
-      {String label = 'mouseButton'}) {
-    return _baseMouseButtonElementFactory.build(action, label: label);
+    XmlElement node,
+    covariant BaseAction<BaseButtonActionContext> action, {
+    String label = 'mouseButton',
+    MouseElementProps? overrides,
+  }) {
+    return _baseMouseButtonElementFactory.build(action,
+        label: label,
+        overrides: _baseMouseButtonElementFactory.propsLoader.merge(
+          _baseMouseButtonElementFactory.props,
+          node: node,
+        ));
   }
 
-  BaseButtonElement buildMouseButtonElementWithButtonType(MouseButtonType button,
-      {String label = 'mouseButton'}) {
+  BaseButtonElement buildMouseButtonElementWithButtonType(
+    XmlElement node,
+    MouseButtonType button, {
+    String label = 'mouseButton',
+    MouseElementProps? overrides,
+  }) {
     final action = buildMouseButtonAction(button);
-    return buildMouseButtonElement(action, label: label);
+    return buildMouseButtonElement(
+      node,
+      action,
+      label: label,
+      overrides: overrides,
+    );
   }
 
-  BaseTextElement buildTextElement(String label) {
-    return _baseTextElementFactory.build(label);
+  BaseTextElement buildTextElement(XmlElement node, String label) {
+    return _baseTextElementFactory.build(
+      label,
+      overrides: _baseTextElementFactory.propsLoader.merge(
+        _baseTextElementFactory.props,
+        node: node,
+      ),
+    );
   }
 
-  BaseTouchpadElement buildTouchpadElement({String label = 'touchpad'}) {
+  BaseTouchpadElement buildTouchpadElement(XmlElement node, {String label = 'touchpad'}) {
     throw UnimplementedError('buildTouchpadElement is not implemented');
   }
   /* endregion Element Builders */
 
   /* region Layout Builders */
-  FlexLayout buildFlexLayout({
+  FlexLayout buildFlexLayout(
+    XmlElement node, {
     String label = 'flexLayout',
     List<BaseElement> children = const [],
-    Direction? direction,
-    double? columnGap,
-    double? rowGap,
-    bool? expandChildren,
+    FlexLayoutProps? overrides,
   }) {
     return _baseFlexLayoutFactory.build(
       label: label,
       children: children,
-      direction: direction,
-      columnGap: columnGap,
-      rowGap: rowGap,
-      expandChildren: expandChildren,
+      overrides: _baseFlexLayoutFactory.propsLoader
+          .merge(_baseFlexLayoutFactory.props, node: node),
     );
   }
 
-  RowLayout buildRowLayout({
+  RowLayout buildRowLayout(
+    XmlElement node, {
     String label = 'rowLayout',
     List<BaseElement> children = const [],
-    double? columnGap,
-    double? rowGap,
-    bool? expandChildren,
+    RowLayoutProps? overrides,
   }) {
     return _baseRowLayoutFactory.build(
       label: label,
       children: children,
-      columnGap: columnGap,
-      expandChildren: expandChildren,
+      overrides: _baseRowLayoutFactory.propsLoader.merge(
+        _baseRowLayoutFactory.props,
+        node: node,
+      ),
     );
   }
 
-  ColumnLayout buildColumnLayout({
+  ColumnLayout buildColumnLayout(
+    XmlElement node, {
     String label = 'columnLayout',
     List<BaseElement> children = const [],
-    double? columnGap,
-    double? rowGap,
-    bool? expandChildren,
+    ColumnLayoutProps? overrides,
   }) {
     return _baseColumnLayoutFactory.build(
       label: label,
       children: children,
-      rowGap: rowGap,
-      expandChildren: expandChildren,
+      overrides: _baseColumnLayoutFactory.propsLoader.merge(
+        _baseColumnLayoutFactory.props,
+        node: node,
+      ),
     );
   }
 
-  HorizontalSpacer buildHorizontalSpacer({String label = 'horizontalSpacer'}) {
-    return _baseHorizontalSpacerFactory.build();
+  HorizontalSpacer buildHorizontalSpacer(
+    XmlElement node, {
+    String label = 'horizontalSpacer',
+    HorizontalSpacerProps? overrides,
+  }) {
+    return _baseHorizontalSpacerFactory.build(
+      label: label,
+      overrides: _baseHorizontalSpacerFactory.propsLoader.merge(
+        _baseHorizontalSpacerFactory.props,
+        node: node,
+      ),
+    );
   }
 
-  VerticalSpacer buildVerticalSpacer({String label = 'verticalSpacer'}) {
-    return _baseVerticalSpacerFactory.build();
+  VerticalSpacer buildVerticalSpacer(
+    XmlElement node, {
+    String label = 'verticalSpacer',
+    VerticalSpacerProps? overrides,
+  }) {
+    return _baseVerticalSpacerFactory.build(
+      label: label,
+      overrides: _baseVerticalSpacerFactory.propsLoader.merge(
+        _baseVerticalSpacerFactory.props,
+        node: node,
+      ),
+    );
   }
 
   /* endregion Layout Builders */
@@ -598,36 +1011,33 @@ extension KeyboardNodeRenderer on XmlElement {
     }
   }
 
+  FlexLayout _renderFlex(VirtualKeyboardElementFactory factory) {
+    return factory.buildFlexLayout(
+      this,
+      children: childElements.map((node) => node.render(factory)).toList(),
+    );
+  }
+
   RowLayout _renderRow(VirtualKeyboardElementFactory factory) {
-    final row = factory._baseRowLayoutFactory.build();
-    for (final node in childElements) {
-      row.addChild(node.render(factory));
-    }
-    return row;
+    return factory.buildRowLayout(
+      this,
+      children: childElements.map((node) => node.render(factory)).toList(),
+    );
   }
 
   ColumnLayout _renderColumn(VirtualKeyboardElementFactory factory) {
-    final column = factory._baseColumnLayoutFactory.build();
-    for (final node in childElements) {
-      column.addChild(node.render(factory));
-    }
-    return column;
-  }
-
-  FlexLayout _renderFlex(VirtualKeyboardElementFactory factory) {
-    final flex = factory._baseFlexLayoutFactory.build();
-    for (final node in childElements) {
-      flex.addChild(node.render(factory));
-    }
-    return flex;
+    return factory.buildColumnLayout(
+      this,
+      children: childElements.map((node) => node.render(factory)).toList(),
+    );
   }
 
   HorizontalSpacer _renderHorizontalSpacer(VirtualKeyboardElementFactory factory) {
-    return factory._baseHorizontalSpacerFactory.build();
+    return factory.buildHorizontalSpacer(this);
   }
 
   VerticalSpacer _renderVerticalSpacer(VirtualKeyboardElementFactory factory) {
-    return factory._baseVerticalSpacerFactory.build();
+    return factory.buildVerticalSpacer(this);
   }
 
   BaseKeyElement _renderKey(VirtualKeyboardElementFactory factory) {
@@ -636,31 +1046,31 @@ extension KeyboardNodeRenderer on XmlElement {
       throw Exception('Key node must have a text with a key code');
     }
 
-    // TODO: final doubleTapAction = getAttribute('double-tap-action');
-    // TODO: final holdAction = getAttribute('hold-action');
-
-    return factory.buildKeyElementWithKeyCode(keyCode, label: keyCode);
+    return factory.buildKeyElementWithKeyCode(this, keyCode, label: keyCode);
   }
 
   BaseElement _renderButton(VirtualKeyboardElementFactory factory) {
     final buttonName = text;
+    if (buttonName.isEmpty) {
+      throw Exception('Button node must have a text with a button name');
+    }
 
     // One of enum MouseButtonType { LEFT, RIGHT, MIDDLE, X1, X2 }
     switch (buttonName.toLowerCase()) {
       case 'left':
-        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.LEFT,
+        return factory.buildMouseButtonElementWithButtonType(this, MouseButtonType.LEFT,
             label: 'LEFT');
       case 'right':
-        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.RIGHT,
+        return factory.buildMouseButtonElementWithButtonType(this, MouseButtonType.RIGHT,
             label: 'RIGHT');
       case 'middle':
-        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.MIDDLE,
+        return factory.buildMouseButtonElementWithButtonType(this, MouseButtonType.MIDDLE,
             label: 'MIDDLE');
       case 'x1':
-        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.X1,
+        return factory.buildMouseButtonElementWithButtonType(this, MouseButtonType.X1,
             label: 'X1');
       case 'x2':
-        return factory.buildMouseButtonElementWithButtonType(MouseButtonType.X2,
+        return factory.buildMouseButtonElementWithButtonType(this, MouseButtonType.X2,
             label: 'X2');
       default:
         throw Exception('Unknown button type: $buttonName');
@@ -673,7 +1083,7 @@ extension KeyboardNodeRenderer on XmlElement {
       throw Exception('Text node must have a text');
     }
 
-    return factory.buildTextElement(text);
+    return factory.buildTextElement(this, text);
   }
 }
 
@@ -688,6 +1098,7 @@ extension GeometryXMLNodeDeserializer on Geometry {
       minHeight: node.getAttributeValue('minHeight', minHeight),
       maxHeight: node.getAttributeValue('maxHeight', maxHeight),
       expand: node.getAttributeValue('expand', expand),
+      flex: node.getAttributeValue('flex', flex),
       padding: EdgeInsets.fromLTRB(
         node.getAttributeValue('pl', padding?.left) ?? 0,
         node.getAttributeValue('pt', padding?.top) ?? 0,

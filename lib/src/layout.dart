@@ -13,8 +13,6 @@ import 'base.dart';
 abstract class BaseLayout extends BaseElement {
   List<BaseElement> get children;
 
-  void addChild(BaseElement child);
-
   const BaseLayout(Geometry geometry, String label) : super(label);
 }
 
@@ -44,17 +42,15 @@ class FlexLayout implements BaseLayout {
 
   final bool expandChildren;
 
-  const FlexLayout(
-      {String? label,
-      this.geometry = const Geometry(),
-      this.direction = Direction.Row,
-      this.columnGap = 0,
-      this.rowGap = 0,
-      this.expandChildren = false,
-      required this.children});
-
-  @override
-  void addChild(BaseElement child) => children.add(child);
+  const FlexLayout({
+    String? label,
+    this.geometry = const Geometry(),
+    this.direction = Direction.Row,
+    this.columnGap = 0,
+    this.rowGap = 0,
+    this.expandChildren = false,
+    required this.children,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -179,9 +175,9 @@ class HorizontalSpacer implements BaseElement {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: geometry.maxWidth ?? double.infinity,
-      height: geometry.maxHeight ?? double.infinity,
+    return Expanded(
+      flex: geometry.flex ?? 1,
+      child: SizedBox(),
     );
   }
 }
