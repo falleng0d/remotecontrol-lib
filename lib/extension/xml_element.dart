@@ -126,12 +126,17 @@ extension KeyboardNodeRenderer on XmlElement {
   }
 
   BaseKeyElement _renderKey(KeyboardElementFactory factory) {
-    final keyCode = text;
+    var keyCode = text;
+    final keyCodeAtts = getAttribute('k');
+    if (keyCodeAtts != null) {
+      keyCode = keyCodeAtts;
+    }
+
     if (keyCode.isEmpty) {
       throw Exception('Key node must have a text with a key code');
     }
 
-    return factory.buildKeyElementWithKeyCode(this, keyCode, label: keyCode);
+    return factory.buildKeyElementWithKeyCode(this, keyCode, label: text);
   }
 
   BaseElement _renderButton(KeyboardElementFactory factory) {
