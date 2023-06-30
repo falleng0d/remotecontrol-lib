@@ -175,6 +175,20 @@ class HorizontalSpacer implements BaseElement {
 
   @override
   Widget build(BuildContext context) {
+    return HorizontalSpacerWidget(geometry: geometry);
+  }
+}
+
+class HorizontalSpacerWidget extends StatelessWidget {
+  const HorizontalSpacerWidget({
+    super.key,
+    required this.geometry,
+  });
+
+  final Geometry geometry;
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       flex: geometry.flex ?? 1,
       child: SizedBox(),
