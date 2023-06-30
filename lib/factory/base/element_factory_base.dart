@@ -1,4 +1,4 @@
-import 'package:remotecontrol_lib/factory/props.dart';
+import 'package:remotecontrol_lib/factory/props_factory.dart';
 import 'package:remotecontrol_lib/mixin/sizeable.dart';
 
 import '../../keyboard.dart';

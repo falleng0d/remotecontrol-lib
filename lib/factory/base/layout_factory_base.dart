@@ -1,7 +1,7 @@
-import 'package:remotecontrol_lib/factory/props.dart';
-
-import '../../keyboard.dart';
-import 'element_factory_base.dart';
+import '../../elements/element_base.dart';
+import '../../elements/layout.dart';
+import '../../values/props.dart';
+import '../factory.dart';
 
 abstract class BaseLayoutFactory<T extends BaseElementProps,
     E extends XmlNodeToObjectFactory<T>> extends BaseElementFactory<T, E> {
