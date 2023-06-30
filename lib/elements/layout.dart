@@ -1,22 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:remotecontrol_lib/widgets.dart' as widget;
 
 import '../components/CrossExpanded.dart';
-import 'base.dart';
-
-/// An abstract base class representing a layout element in the application.
-/// Layout elements are displayable controls that can contain other [BaseElement] objects,
-/// which are defined in the [children] property. The [geometry] property defines the
-/// layout's characteristics such as width, height, expansion behavior, and padding.
-///
-/// Extend this class to create custom layouts using their own [BaseElement] children
-/// and desired layout characteristics.
-abstract class BaseLayout extends BaseElement {
-  List<BaseElement> get children;
-
-  const BaseLayout(Geometry geometry, String label) : super(label);
-}
-
-enum Direction { Row, Column }
+import '../values/direction.dart';
+import '../values/geometry.dart';
+import 'element_base.dart';
 
 /// [FlexLayout] is a customizable, flexible layout for displaying child elements,
 /// child elements in can be either in a row or column direction.
@@ -127,7 +115,7 @@ class FlexLayout implements BaseLayout {
     };
 
     var _children = children.map((e) => transformChildren(e.build(context))).toList();
-    return assemble(_children);
+    return widget.FlexLayout(children: assemble(_children));
   }
 }
 
@@ -175,24 +163,7 @@ class HorizontalSpacer implements BaseElement {
 
   @override
   Widget build(BuildContext context) {
-    return HorizontalSpacerWidget(geometry: geometry);
-  }
-}
-
-class HorizontalSpacerWidget extends StatelessWidget {
-  const HorizontalSpacerWidget({
-    super.key,
-    required this.geometry,
-  });
-
-  final Geometry geometry;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: geometry.flex ?? 1,
-      child: SizedBox(),
-    );
+    return widget.HorizontalSpacer(geometry: geometry);
   }
 }
 
@@ -206,9 +177,6 @@ class VerticalSpacer implements BaseElement {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: geometry.maxWidth ?? double.infinity,
-      height: geometry.maxHeight ?? double.infinity,
-    );
+    return widget.VerticalSpacer(geometry: geometry);
   }
 }

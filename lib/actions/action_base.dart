@@ -1,5 +1,5 @@
-import '../input/virtualkeys.dart';
-import 'action_contexts.dart';
+import '../actions/action_contexts.dart';
+import '../virtualkeys.dart';
 
 /// [BaseAction] is the base class for all actions. Action objects are meant to
 /// contain everything that is needed to execute an action for a
@@ -40,23 +40,4 @@ abstract class BaseMouseMoveAction extends BaseAction<BaseMouseMoveActionContext
 
   @override
   Future<bool> doAction(BaseMouseMoveActionContext ctx);
-}
-
-/// [CallbackAction] is a simple action that executes a callback.
-///
-/// An action is a command that can be executed by the system.
-/// It receives a [BaseActionContext] and returns a boolean indicating if the action
-/// was executed successfully.
-///
-/// An action should not be executed directly, but rather scheduled through
-/// a [ActionQueue].
-class CallbackAction<T extends BaseActionContext> extends BaseAction<T> {
-  final Future<bool> Function(T) callback;
-
-  const CallbackAction(this.callback);
-
-  @override
-  Future<bool> doAction(T ctx) async {
-    return await callback(ctx);
-  }
 }

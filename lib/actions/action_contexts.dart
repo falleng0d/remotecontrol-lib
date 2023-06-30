@@ -1,8 +1,8 @@
 import 'package:fluent_ui/fluent_ui.dart'
     show ScaleUpdateDetails, TapDownDetails, TapUpDetails;
 
-import '../input/virtualkeys.dart';
-import 'base.dart';
+import '../elements/element_base.dart';
+import '../src/virtualkeys.dart';
 
 /// [BaseActionContext] is the context in which an action is executed.
 /// It contains the controller that can be used to execute other actions.

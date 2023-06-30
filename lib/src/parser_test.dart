@@ -2,12 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/widgets.dart' show BuildContext, Container, Widget;
 import 'package:get/get.dart';
-import 'package:remotecontrol_lib/input.dart';
+import 'package:remotecontrol_lib/extension/geometry.dart';
+import 'package:remotecontrol_lib/extension/xml_element.dart';
 import 'package:test/test.dart';
 import 'package:xml/xml.dart';
 
-import '../action_contexts.dart';
+import '../factory/base/actions_factory_base.dart';
+import '../factory/base/element_factory_base.dart';
+import '../factory/keyboard_element_factory.dart';
 import '../keyboard.dart';
+import '../virtualkeys.dart';
 import 'parser.dart';
 
 class TestKeyElement extends BaseKeyElement {
@@ -283,7 +287,7 @@ void main() {
     });
 
     test('buildKeyElementWithKeyCode', () {
-      final factory = VirtualKeyboardElementFactory();
+      final factory = KeyboardElementFactory();
       var key = factory.buildKeyElementWithKeyCode('a');
 
       expect(key.doubleTapThershold, 0);

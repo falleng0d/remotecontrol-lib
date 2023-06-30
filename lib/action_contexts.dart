@@ -3,4 +3,4 @@
 /// More dartdocs go here.
 library action_contexts;
 
-export 'src/action_contexts.dart';
+export 'actions/action_contexts.dart';

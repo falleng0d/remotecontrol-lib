@@ -1,6 +1,4 @@
-import 'package:fluent_ui/fluent_ui.dart';
-
-import '../keyboard.dart';
+import 'package:flutter/rendering.dart';
 
 class Geometry {
   final double? width;
@@ -95,22 +93,4 @@ class Geometry {
       margin: margin,
     );
   }
-}
-
-mixin Sizeable {
-  Geometry get geometry;
-}
-
-mixin Labeled {
-  String get label;
-}
-
-/// A [BaseElement] is a displayable control that can be added to a [BaseLayout]
-abstract class BaseElement with Sizeable, Labeled {
-  @override
-  final String label;
-
-  const BaseElement(this.label);
-
-  Widget build(BuildContext context);
 }

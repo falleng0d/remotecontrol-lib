@@ -1,5 +1,5 @@
-import 'action_contexts.dart';
-import 'actions.dart';
+import '../actions/action_contexts.dart';
+import 'action_base.dart';
 
 /// [ActionTask] is a task contains the [BaseActionContext] in which the action
 /// is executed, the [BaseAction] to execute and a [timeout]

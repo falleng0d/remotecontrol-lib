@@ -1,8 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:remotecontrol_lib/values/touchpad_actions.dart';
 
-import '../action_contexts.dart';
-import 'actions.dart';
-import 'base.dart';
+import '../actions/action_base.dart';
+import '../actions/action_contexts.dart';
+import '../values/geometry.dart';
+import 'element_base.dart';
 
 abstract class BaseTextElement implements BaseElement {
   @override
@@ -44,22 +46,6 @@ abstract class BaseKeyElement implements BaseElement {
 
   @override
   Widget build(BuildContext context);
-}
-
-/// TouchAction
-/// - onPanUpdate: Send mose move events to the server via a [DragUpdateDetails] object.
-class TouchpadActions {
-  final BaseAction? touchpadMove;
-  final BaseAction? tap;
-  final BaseAction? doubleTapAndHold;
-  final BaseAction? releaseDoubleTapAndHold;
-
-  const TouchpadActions({
-    this.touchpadMove,
-    this.tap,
-    this.doubleTapAndHold,
-    this.releaseDoubleTapAndHold,
-  });
 }
 
 abstract class BaseTouchpadElement implements BaseElement {

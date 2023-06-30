@@ -1,8 +1,13 @@
 library keyboard;
 
-export 'src/actions.dart';
-export 'src/base.dart';
-export 'src/elements.dart';
-export 'src/executer.dart';
-export 'src/layout.dart';
-export 'src/virtual_keyboard.dart';
+export 'actions/action_base.dart';
+export 'actions/action_contexts.dart';
+export 'actions/action_task.dart';
+export 'actions/callback.dart';
+export 'elements/element.dart';
+export 'elements/element_base.dart';
+export 'elements/layout.dart';
+export 'values/direction.dart';
+export 'values/geometry.dart';
+export 'values/props.dart';
+export 'values/touchpad_actions.dart';
