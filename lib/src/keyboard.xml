@@ -4,7 +4,7 @@
 <keyboard name="Split Keyboard">
     <defs>
         <!-- Provides default values for widgets -->
-        <key maxWidth="40" maxHeight="30" ml="3" mr="3" mt="2" mb="2" />
+        <key minWidth="90" maxWidth="40" maxHeight="30" ml="3" mr="3" mt="2" mb="2" />
         <button maxWidth="40" maxHeight="30" ml="3" mr="3" mt="2" mb="2" />
         <horizontal-spacer expand="true" />
         <vertical-spacer expand="true" />

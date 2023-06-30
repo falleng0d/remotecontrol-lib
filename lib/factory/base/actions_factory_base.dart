@@ -8,3 +8,7 @@ abstract class BaseKeyActionFactory {
 abstract class BaseButtonActionFactory {
   BaseMouseButtonAction build(MouseButtonType button);
 }
+
+abstract class BaseMouseMoveActionFactory {
+  BaseMouseMoveAction build();
+}

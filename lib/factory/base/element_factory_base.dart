@@ -46,9 +46,8 @@ abstract class BaseTextElementFactory
 
 abstract class BaseTouchpadElementFactory
     extends BaseElementFactory<TouchpadElementProps, TouchpadElementPropsFactory> {
-  TouchpadActions get actions;
-
   BaseTouchpadElementFactory(props, propsLoader) : super(props, propsLoader);
 
-  BaseTouchpadElement build({String? label, TouchpadElementProps? overrides});
+  BaseTouchpadElement build(TouchpadActions actions,
+      {String? label, TouchpadElementProps? overrides});
 }

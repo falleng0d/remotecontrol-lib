@@ -1,11 +1,7 @@
 import 'package:get/get.dart';
+import 'package:remotecontrol_lib/keyboard.dart';
 import 'package:xml/xml.dart';
 
-import '../actions/action_base.dart';
-import '../actions/action_contexts.dart';
-import '../elements/element.dart';
-import '../elements/element_base.dart';
-import '../elements/layout.dart';
 import '../factory.dart';
 import '../src/virtualkeys.dart';
 
@@ -24,6 +20,7 @@ class KeyboardElementFactory {
 
   BaseKeyActionFactory? __baseKeyActionFactory;
   BaseButtonActionFactory? __baseMouseButtonActionFactory;
+  BaseMouseMoveActionFactory? __baseMouseMoveActionFactory;
   /* endregion Fields */
 
   /* region Getters */
@@ -114,6 +111,14 @@ class KeyboardElementFactory {
 
     return __baseMouseButtonActionFactory!;
   }
+
+  BaseMouseMoveActionFactory get _baseMouseMoveActionFactory {
+    if (__baseMouseMoveActionFactory == null) {
+      throw Exception('BaseMouseMoveActionFactory is not registered');
+    }
+
+    return __baseMouseMoveActionFactory!;
+  }
   /* endregion Getters */
 
   KeyboardElementFactory() {
@@ -156,6 +161,9 @@ class KeyboardElementFactory {
     if (Get.isRegistered<BaseButtonActionFactory>()) {
       __baseMouseButtonActionFactory = Get.find<BaseButtonActionFactory>();
     }
+    if (Get.isRegistered<BaseMouseMoveActionFactory>()) {
+      __baseMouseMoveActionFactory = Get.find<BaseMouseMoveActionFactory>();
+    }
   }
 
   /* region Action Builders */
@@ -165,6 +173,10 @@ class KeyboardElementFactory {
 
   BaseMouseButtonAction buildMouseButtonAction(MouseButtonType button) {
     return _baseMouseButtonActionFactory.build(button);
+  }
+
+  BaseMouseMoveAction buildMouseMoveAction() {
+    return _baseMouseMoveActionFactory.build();
   }
   /* endregion Action Builders */
 
@@ -226,7 +238,20 @@ class KeyboardElementFactory {
   }
 
   BaseTouchpadElement buildTouchpadElement(XmlElement node, {String label = 'touchpad'}) {
-    throw UnimplementedError('buildTouchpadElement is not implemented');
+    var actions = TouchpadActions(
+      touchpadMove: buildMouseMoveAction(),
+      tap: buildMouseButtonAction(MouseButtonType.LEFT),
+      rightTap: buildMouseButtonAction(MouseButtonType.RIGHT),
+    );
+
+    return _baseTouchpadElementFactory.build(
+      actions,
+      label: label,
+      overrides: _baseTouchpadElementFactory.propsLoader.merge(
+        _baseTouchpadElementFactory.props,
+        node: node,
+      ),
+    );
   }
   /* endregion Element Builders */
 

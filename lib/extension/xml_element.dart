@@ -89,8 +89,7 @@ extension KeyboardNodeRenderer on XmlElement {
       case 'text':
         return _renderText(factory);
       case 'touchpad':
-        // TODO: return _renderTouchpad(factory);
-        throw Exception('Touchpad not implemented yet');
+        return _renderTouchpad(factory);
       default:
         throw Exception('Unknown node type: $tag');
     }
@@ -174,5 +173,9 @@ extension KeyboardNodeRenderer on XmlElement {
     }
 
     return factory.buildTextElement(this, text);
+  }
+
+  BaseTouchpadElement _renderTouchpad(KeyboardElementFactory factory) {
+    return factory.buildTouchpadElement(this);
   }
 }
