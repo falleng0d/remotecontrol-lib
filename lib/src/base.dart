@@ -3,6 +3,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import '../keyboard.dart';
 
 class Geometry {
+  final double? width;
+  final double? height;
   final double? minWidth;
   final double? maxWidth;
   final double? minHeight;
@@ -14,27 +16,35 @@ class Geometry {
   final EdgeInsets? margin;
 
   bool isEmpty() {
-    return minWidth == null &&
+    return width == null &&
+        height == null &&
+        minWidth == null &&
         maxWidth == null &&
         minHeight == null &&
         maxHeight == null &&
         expand == null &&
+        flex == null &&
         padding == null &&
         margin == null;
   }
 
-  const Geometry(
-      {this.minWidth,
-      this.maxWidth,
-      this.minHeight,
-      this.maxHeight,
-      this.expand,
-      this.flex,
-      this.padding,
-      this.margin});
+  const Geometry({
+    this.width,
+    this.height,
+    this.minWidth,
+    this.maxWidth,
+    this.minHeight,
+    this.maxHeight,
+    this.expand,
+    this.flex,
+    this.padding,
+    this.margin,
+  });
 
   Geometry copyWith(
-      {double? minWidth,
+      {double? width,
+      double? height,
+      double? minWidth,
       double? maxWidth,
       double? minHeight,
       double? maxHeight,
@@ -44,6 +54,8 @@ class Geometry {
       EdgeInsets? margin}) {
     assert(!(expand == false && flex != null));
     return Geometry(
+        width: width ?? this.width,
+        height: height ?? this.height,
         minWidth: minWidth ?? this.minWidth,
         maxWidth: maxWidth ?? this.maxWidth,
         minHeight: minHeight ?? this.minHeight,
@@ -56,6 +68,8 @@ class Geometry {
 
   Geometry copyFrom(Geometry other) {
     return Geometry(
+      width: other.width ?? width,
+      height: other.height ?? height,
       minWidth: other.minWidth ?? minWidth,
       maxWidth: other.maxWidth ?? maxWidth,
       minHeight: other.minHeight ?? minHeight,
@@ -69,6 +83,8 @@ class Geometry {
 
   Geometry copy() {
     return Geometry(
+      width: width,
+      height: height,
       minWidth: minWidth,
       maxWidth: maxWidth,
       minHeight: minHeight,

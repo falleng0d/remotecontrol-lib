@@ -27,6 +27,12 @@ mixin SizeableFactory {
   EdgeInsets get padding => _geometry.padding!;
   set padding(EdgeInsets padding) => _geometry = _geometry.copyWith(padding: padding);
 
+  double get width => _geometry.width!;
+  set width(double width) => _geometry = _geometry.copyWith(width: width);
+
+  double get height => _geometry.height!;
+  set height(double height) => _geometry = _geometry.copyWith(height: height);
+
   double get minWidth => _geometry.minWidth!;
   set minWidth(double minWidth) => _geometry = _geometry.copyWith(minWidth: minWidth);
 
@@ -1093,6 +1099,8 @@ extension KeyboardNodeRenderer on XmlElement {
 extension GeometryXMLNodeDeserializer on Geometry {
   Geometry withAttributes(XmlElement node) {
     return Geometry(
+      width: node.getAttributeValue('width', width),
+      height: node.getAttributeValue('height', height),
       minWidth: node.getAttributeValue('minWidth', minWidth),
       maxWidth: node.getAttributeValue('maxWidth', maxWidth),
       minHeight: node.getAttributeValue('minHeight', minHeight),
