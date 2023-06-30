@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fluent_ui/fluent_ui.dart' show EdgeInsets, Element, Key;
+import 'package:fluent_ui/fluent_ui.dart' show EdgeInsets, Key;
 import 'package:get/get.dart';
 import 'package:xml/xml.dart';
 
@@ -257,7 +257,9 @@ class KeyElementPropsLoader extends XmlPropsLoader<KeyElementProps> {
   KeyElementProps merge(KeyElementProps into, {required XmlElement node}) {
     return KeyElementProps(
       label: node.getAttributeValue('label', into.label),
-      geometry: into.geometry ?? GeometryPropsLoader().merge(into.geometry!, node: node),
+      geometry: into.geometry != null
+          ? GeometryPropsLoader().merge(into.geometry!, node: node)
+          : GeometryPropsLoader().load(node),
       keyRep: node.getAttributeValue('key-rep', into.keyRep),
       keyRepeatDelay: node.getAttributeValue('key-repeat-delay', into.keyRepeatDelay),
       toggle: node.getAttributeValue('toggle', into.toggle),
@@ -284,7 +286,9 @@ class MouseElementPropsLoader extends XmlPropsLoader<MouseElementProps> {
   MouseElementProps merge(MouseElementProps into, {required XmlElement node}) {
     return MouseElementProps(
       label: node.getAttributeValue('label', into.label),
-      geometry: into.geometry ?? GeometryPropsLoader().merge(into.geometry!, node: node),
+      geometry: into.geometry != null
+          ? GeometryPropsLoader().merge(into.geometry!, node: node)
+          : GeometryPropsLoader().load(node),
     );
   }
 }
@@ -302,7 +306,9 @@ class TextElementPropsLoader extends XmlPropsLoader<TextElementProps> {
   TextElementProps merge(TextElementProps into, {required XmlElement node}) {
     return TextElementProps(
       label: node.getAttributeValue('label', into.label),
-      geometry: into.geometry ?? GeometryPropsLoader().merge(into.geometry!, node: node),
+      geometry: into.geometry != null
+          ? GeometryPropsLoader().merge(into.geometry!, node: node)
+          : GeometryPropsLoader().load(node),
     );
   }
 }
@@ -325,7 +331,9 @@ class TouchpadElementPropsLoader extends XmlPropsLoader<TouchpadElementProps> {
   TouchpadElementProps merge(TouchpadElementProps into, {required XmlElement node}) {
     return TouchpadElementProps(
       label: node.getAttributeValue('label', into.label),
-      geometry: into.geometry ?? GeometryPropsLoader().merge(into.geometry!, node: node),
+      geometry: into.geometry != null
+          ? GeometryPropsLoader().merge(into.geometry!, node: node)
+          : GeometryPropsLoader().load(node),
       scrollbar: node.getAttributeValue('scrollbar', into.scrollbar),
       mouseButtons: node.getAttributeValue('mouse-buttons', into.mouseButtons),
       tapToClick: node.getAttributeValue('tap-to-click', into.tapToClick),
@@ -352,7 +360,9 @@ class FlexLayoutPropsLoader extends XmlPropsLoader<FlexLayoutProps> {
   FlexLayoutProps merge(FlexLayoutProps into, {required XmlElement node}) {
     return FlexLayoutProps(
       label: node.getAttributeValue('label', into.label),
-      geometry: GeometryPropsLoader().load(node, defaults: into.geometry),
+      geometry: into.geometry != null
+          ? GeometryPropsLoader().merge(into.geometry!, node: node)
+          : GeometryPropsLoader().load(node),
       direction: node.getAttributeValue('direction', into.direction),
       columnGap: node.getAttributeValue('column-gap', into.columnGap),
       rowGap: node.getAttributeValue('row-gap', into.rowGap),
@@ -376,7 +386,9 @@ class RowLayoutPropsLoader extends XmlPropsLoader<RowLayoutProps> {
   RowLayoutProps merge(RowLayoutProps into, {required XmlElement node}) {
     return RowLayoutProps(
       label: node.getAttributeValue('label', into.label),
-      geometry: GeometryPropsLoader().load(node, defaults: into.geometry),
+      geometry: into.geometry != null
+          ? GeometryPropsLoader().merge(into.geometry!, node: node)
+          : GeometryPropsLoader().load(node),
       columnGap: node.getAttributeValue('column-gap', into.columnGap),
       expandChildren: node.getAttributeValue('expand-children', into.expandChildren),
     );
@@ -398,7 +410,9 @@ class ColumnLayoutPropsLoader extends XmlPropsLoader<ColumnLayoutProps> {
   ColumnLayoutProps merge(ColumnLayoutProps into, {required XmlElement node}) {
     return ColumnLayoutProps(
       label: node.getAttributeValue('label', into.label),
-      geometry: GeometryPropsLoader().load(node, defaults: into.geometry),
+      geometry: into.geometry != null
+          ? GeometryPropsLoader().merge(into.geometry!, node: node)
+          : GeometryPropsLoader().load(node),
       rowGap: node.getAttributeValue('row-gap', into.rowGap),
       expandChildren: node.getAttributeValue('expand-children', into.expandChildren),
     );
@@ -418,7 +432,9 @@ class HorizontalSpacerPropsLoader extends XmlPropsLoader<HorizontalSpacerProps> 
   HorizontalSpacerProps merge(HorizontalSpacerProps into, {required XmlElement node}) {
     return HorizontalSpacerProps(
       label: node.getAttributeValue('label', into.label),
-      geometry: GeometryPropsLoader().load(node, defaults: into.geometry),
+      geometry: into.geometry != null
+          ? GeometryPropsLoader().merge(into.geometry!, node: node)
+          : GeometryPropsLoader().load(node),
     );
   }
 }
@@ -436,7 +452,9 @@ class VerticalSpacerPropsLoader extends XmlPropsLoader<VerticalSpacerProps> {
   VerticalSpacerProps merge(VerticalSpacerProps into, {required XmlElement node}) {
     return VerticalSpacerProps(
       label: node.getAttributeValue('label', into.label),
-      geometry: GeometryPropsLoader().load(node, defaults: into.geometry),
+      geometry: into.geometry != null
+          ? GeometryPropsLoader().merge(into.geometry!, node: node)
+          : GeometryPropsLoader().load(node),
     );
   }
 }
@@ -713,7 +731,6 @@ class VirtualKeyboardElementFactory {
     XmlElement node,
     covariant BaseKeyAction action, {
     String label = 'key',
-    KeyElementProps? overrides,
   }) {
     return _baseKeyElementFactory.build(
       action,
@@ -725,22 +742,19 @@ class VirtualKeyboardElementFactory {
     );
   }
 
-  BaseKeyElement buildKeyElementWithKeyCode(XmlElement node, String keyCode,
-      {String label = 'key', KeyElementProps? overrides, Geometry? geometryOverrides}) {
+  BaseKeyElement buildKeyElementWithKeyCode(
+    XmlElement node,
+    String keyCode, {
+    String label = 'key',
+  }) {
     final action = buildKeyAction(keyCode);
-    return buildKeyElement(
-      node,
-      action,
-      label: label,
-      overrides: overrides,
-    );
+    return buildKeyElement(node, action, label: label);
   }
 
   BaseButtonElement buildMouseButtonElement(
     XmlElement node,
     covariant BaseAction<BaseButtonActionContext> action, {
     String label = 'mouseButton',
-    MouseElementProps? overrides,
   }) {
     return _baseMouseButtonElementFactory.build(action,
         label: label,
@@ -754,15 +768,9 @@ class VirtualKeyboardElementFactory {
     XmlElement node,
     MouseButtonType button, {
     String label = 'mouseButton',
-    MouseElementProps? overrides,
   }) {
     final action = buildMouseButtonAction(button);
-    return buildMouseButtonElement(
-      node,
-      action,
-      label: label,
-      overrides: overrides,
-    );
+    return buildMouseButtonElement(node, action, label: label);
   }
 
   BaseTextElement buildTextElement(XmlElement node, String label) {
@@ -785,7 +793,6 @@ class VirtualKeyboardElementFactory {
     XmlElement node, {
     String label = 'flexLayout',
     List<BaseElement> children = const [],
-    FlexLayoutProps? overrides,
   }) {
     return _baseFlexLayoutFactory.build(
       label: label,
@@ -799,7 +806,6 @@ class VirtualKeyboardElementFactory {
     XmlElement node, {
     String label = 'rowLayout',
     List<BaseElement> children = const [],
-    RowLayoutProps? overrides,
   }) {
     return _baseRowLayoutFactory.build(
       label: label,
@@ -815,7 +821,6 @@ class VirtualKeyboardElementFactory {
     XmlElement node, {
     String label = 'columnLayout',
     List<BaseElement> children = const [],
-    ColumnLayoutProps? overrides,
   }) {
     return _baseColumnLayoutFactory.build(
       label: label,
@@ -830,7 +835,6 @@ class VirtualKeyboardElementFactory {
   HorizontalSpacer buildHorizontalSpacer(
     XmlElement node, {
     String label = 'horizontalSpacer',
-    HorizontalSpacerProps? overrides,
   }) {
     return _baseHorizontalSpacerFactory.build(
       label: label,
@@ -844,7 +848,6 @@ class VirtualKeyboardElementFactory {
   VerticalSpacer buildVerticalSpacer(
     XmlElement node, {
     String label = 'verticalSpacer',
-    VerticalSpacerProps? overrides,
   }) {
     return _baseVerticalSpacerFactory.build(
       label: label,
