@@ -971,6 +971,9 @@ extension VirtualKeyboardXmlElementHelpers on XmlElement {
     if (attribute == null) return defaultValue;
 
     if (T == double || T == double_opt) {
+      if (attribute == 'infinity') {
+        return double.infinity as T;
+      }
       return double.parse(attribute) as T;
     } else if (T == bool || T == bool_opt) {
       return (attribute.toLowerCase() == 'true') as T;
