@@ -50,6 +50,16 @@ enum KeyState { UP, DOWN }
 
 enum ButtonState { UP, DOWN }
 
+KeyState keyActionTypeToKeyState(KeyActionType action) {
+  switch (action) {
+    case KeyActionType.UP:
+      return KeyState.UP;
+    case KeyActionType.DOWN:
+    case KeyActionType.PRESS:
+      throw ArgumentError.value(action, 'action', 'Invalid key action type');
+  }
+}
+
 Map<MouseButtonType, int> _mouseButtonToVK = {
   MouseButtonType.LEFT: VK_LBUTTON,
   MouseButtonType.RIGHT: VK_RBUTTON,
