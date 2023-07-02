@@ -18,6 +18,8 @@ abstract class BaseElement with Sizeable, Labeled {
   const BaseElement(this.label);
 
   Widget build(BuildContext context);
+
+  void dispose() {}
 }
 
 /// An abstract base class representing a layout element in the application.
@@ -31,4 +33,9 @@ abstract class BaseLayout extends BaseElement {
   List<BaseElement> get children;
 
   const BaseLayout(Geometry geometry, String label) : super(label);
+
+  @override
+  void dispose() {
+    children.forEach((element) => element.dispose());
+  }
 }

@@ -26,13 +26,19 @@ class GeometryPropsFactory extends XmlNodeToObjectFactory<Geometry> {
 class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
   @override
   KeyElementProps load(XmlElement node, {KeyElementProps? defaults}) {
+    final actuationTypeName = node.getAttributeValue<String?>('type', null);
+    final actuationType = actuationTypeName != null
+        ? KeyActuationType.values.firstWhere((e) => e.name == actuationTypeName)
+        : defaults?.actuationType;
+
     return KeyElementProps(
       label: node.getAttributeValue('label', defaults?.label),
       geometry: GeometryPropsFactory().load(node, defaults: defaults?.geometry),
+      actuationType: actuationType,
+      toggle: node.getAttributeValue('toggle', defaults?.toggle),
       keyRep: node.getAttributeValue('key-rep', defaults?.keyRep),
       keyRepeatDelay:
           node.getAttributeValue('key-repeat-delay', defaults?.keyRepeatDelay),
-      toggle: node.getAttributeValue('toggle', defaults?.toggle),
       holdTimeThreshold:
           node.getAttributeValue('hold-time-threshold', defaults?.holdTimeThreshold),
       doubleTapThershold:
@@ -44,14 +50,20 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
 
   @override
   KeyElementProps merge(KeyElementProps into, {required XmlElement node}) {
+    final actuationTypeName = node.getAttributeValue<String?>('type', null);
+    final actuationType = actuationTypeName != null
+        ? KeyActuationType.values.firstWhere((e) => e.toString() == actuationTypeName)
+        : into.actuationType;
+
     return KeyElementProps(
       label: node.getAttributeValue('label', into.label),
       geometry: into.geometry != null
           ? GeometryPropsFactory().merge(into.geometry!, node: node)
           : GeometryPropsFactory().load(node),
+      toggle: node.getAttributeValue('toggle', into.toggle),
+      actuationType: actuationType,
       keyRep: node.getAttributeValue('key-rep', into.keyRep),
       keyRepeatDelay: node.getAttributeValue('key-repeat-delay', into.keyRepeatDelay),
-      toggle: node.getAttributeValue('toggle', into.toggle),
       holdTimeThreshold:
           node.getAttributeValue('hold-time-threshold', into.holdTimeThreshold),
       doubleTapThershold:

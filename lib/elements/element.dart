@@ -6,7 +6,7 @@ import '../actions/action_contexts.dart';
 import '../values/geometry.dart';
 import 'element_base.dart';
 
-abstract class BaseTextElement implements BaseElement {
+abstract class BaseTextElement extends BaseElement {
   @override
   final Geometry geometry;
   @override
@@ -18,17 +18,26 @@ abstract class BaseTextElement implements BaseElement {
   BaseTextElement({
     this.label = '',
     this.geometry = const Geometry(),
-  });
+  }) : super(label);
 }
 
-abstract class BaseKeyElement implements BaseElement {
+/// [KeyActuationType] is the type of actuation of a key.
+/// - TAP means the key is actuated when the user taps on it.
+/// - PRESS means the key enters DOWN state when the user taps on it and UP
+/// state when the user releases it.
+enum KeyActuationType { TAP, PRESS }
+
+abstract class BaseKeyElement extends BaseElement {
   @override
   final Geometry geometry;
   @override
   final String label;
 
   BaseAction<BaseKeyActionContext> get action;
+
+  KeyActuationType get actuationType;
   bool get toggle;
+
   double get keyRep;
   double get keyRepeatDelay;
 
@@ -42,13 +51,13 @@ abstract class BaseKeyElement implements BaseElement {
     BaseAction<BaseKeyActionContext> action, {
     this.label = '',
     this.geometry = const Geometry(),
-  });
+  }) : super(label);
 
   @override
   Widget build(BuildContext context);
 }
 
-abstract class BaseTouchpadElement implements BaseElement {
+abstract class BaseTouchpadElement extends BaseElement {
   @override
   final Geometry geometry;
   @override
@@ -68,13 +77,13 @@ abstract class BaseTouchpadElement implements BaseElement {
     bool mouseButtons = true,
     bool tapToClick = true,
     bool doubleTapAndHold = true,
-  });
+  }) : super(label);
 
   @override
   Widget build(BuildContext context);
 }
 
-abstract class BaseButtonElement implements BaseElement {
+abstract class BaseButtonElement extends BaseElement {
   @override
   final Geometry geometry;
   @override
@@ -86,7 +95,7 @@ abstract class BaseButtonElement implements BaseElement {
     BaseAction<BaseButtonActionContext> action, {
     this.label = '',
     this.geometry = const Geometry(),
-  });
+  }) : super(label);
 
   @override
   Widget build(BuildContext context);

@@ -16,11 +16,11 @@ import 'element_base.dart';
 /// The layout can be configured with an optional [Geometry] object which
 /// contains properties like maxWidth, maxHeight, expand, and padding that influence
 /// the appearance of the layout.
-class FlexLayout implements BaseLayout {
+class FlexLayout extends BaseLayout {
   @override
   final Geometry geometry;
   @override
-  final String label = '';
+  final String label;
   @override
   final List<BaseElement> children;
 
@@ -31,14 +31,14 @@ class FlexLayout implements BaseLayout {
   final bool expandChildren;
 
   const FlexLayout({
-    String? label,
+    this.label = '',
     this.geometry = const Geometry(),
     this.direction = Direction.Row,
     this.columnGap = 0,
     this.rowGap = 0,
     this.expandChildren = false,
     required this.children,
-  });
+  }) : super(geometry, label);
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +121,7 @@ class FlexLayout implements BaseLayout {
 
 class RowLayout extends FlexLayout {
   const RowLayout({
-    String? label,
+    String label = '',
     Geometry geometry = const Geometry(),
     double columnGap = 0,
     bool expandChildren = false,
@@ -138,7 +138,7 @@ class RowLayout extends FlexLayout {
 
 class ColumnLayout extends FlexLayout {
   const ColumnLayout({
-    String? label,
+    String label = '',
     Geometry geometry = const Geometry(),
     double rowGap = 0,
     bool expandChildren = false,
@@ -153,13 +153,16 @@ class ColumnLayout extends FlexLayout {
             children: children);
 }
 
-class HorizontalSpacer implements BaseElement {
+class HorizontalSpacer extends BaseElement {
   @override
   final Geometry geometry;
   @override
   final String label;
 
-  const HorizontalSpacer({this.label = '', this.geometry = const Geometry()});
+  const HorizontalSpacer({
+    this.label = '',
+    this.geometry = const Geometry(),
+  }) : super(label);
 
   @override
   Widget build(BuildContext context) {
@@ -167,13 +170,16 @@ class HorizontalSpacer implements BaseElement {
   }
 }
 
-class VerticalSpacer implements BaseElement {
+class VerticalSpacer extends BaseElement {
   @override
   final Geometry geometry;
   @override
   final String label;
 
-  const VerticalSpacer({this.label = '', this.geometry = const Geometry()});
+  const VerticalSpacer({
+    this.label = '',
+    this.geometry = const Geometry(),
+  }) : super(label);
 
   @override
   Widget build(BuildContext context) {

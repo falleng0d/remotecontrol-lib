@@ -1,4 +1,3 @@
-import '../action_contexts.dart';
 import '../keyboard.dart';
 
 abstract class BaseElementProps {
@@ -11,9 +10,12 @@ abstract class BaseElementProps {
 }
 
 class KeyElementProps extends BaseElementProps {
+  final KeyActuationType? actuationType;
+
+  final bool? toggle;
+
   final double? keyRep;
   final double? keyRepeatDelay;
-  final bool? toggle;
 
   final double? holdTimeThreshold;
   final double? doubleTapThershold;
@@ -24,9 +26,10 @@ class KeyElementProps extends BaseElementProps {
   @override
   bool get isFilled {
     return super.isFilled &&
+        actuationType != null &&
+        toggle != null &&
         keyRep != null &&
         keyRepeatDelay != null &&
-        toggle != null &&
         holdTimeThreshold != null &&
         doubleTapThershold != null;
   }
@@ -34,9 +37,10 @@ class KeyElementProps extends BaseElementProps {
   const KeyElementProps({
     String? label,
     Geometry? geometry,
+    this.actuationType,
+    this.toggle,
     this.keyRep,
     this.keyRepeatDelay,
-    this.toggle,
     this.holdTimeThreshold,
     this.doubleTapThershold,
     this.doubleTapAction,
