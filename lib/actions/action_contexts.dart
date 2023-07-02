@@ -2,6 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart'
     show ScaleUpdateDetails, TapDownDetails, TapUpDetails;
 
 import '../elements/element_base.dart';
+import '../proto/interface.dart';
 import '../src/virtualkeys.dart';
 
 /// [BaseActionContext] is the context in which an action is executed.
@@ -18,8 +19,10 @@ class BaseActionContext {
 /// [BaseKeyActionContext] is the context in which a keyboard key action is executed.
 class BaseKeyActionContext extends BaseActionContext {
   final KeyActionType actionType;
+  final KeyOptions? options;
 
-  const BaseKeyActionContext(BaseElement target, this.actionType, {String? description})
+  const BaseKeyActionContext(BaseElement target, this.actionType,
+      {String? description, this.options})
       : super(target, description: description);
 }
 

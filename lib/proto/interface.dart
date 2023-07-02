@@ -1,8 +1,28 @@
+import 'package:flutter/widgets.dart';
+
 import '../proto/input.pbgrpc.dart' as pb;
 
 enum ServerStatus { online, offline }
 
 enum ClientStatus { connected, disconnected, connecting }
+
+@immutable
+class KeyOptions {
+  final bool? noRepeat;
+
+  const KeyOptions({this.noRepeat});
+
+  factory KeyOptions.fromPb(pb.KeyOptions options) {
+    return KeyOptions(
+      noRepeat: options.noRepeat,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'KeyOptions(noRepeat: $noRepeat)';
+  }
+}
 
 /// Base class for protobuf input clients
 abstract class BasePbInputClient {

@@ -12,6 +12,10 @@ service InputMethods {
     rpc GetConfig(Empty) returns (Config);
 }
 
+message KeyOptions {
+    optional bool no_repeat = 1;
+}
+
 // The key message containing a key code and a state
 message Key {
     int32 id = 1;
@@ -21,6 +25,7 @@ message Key {
         PRESS = 3;
     }
     KeyActionType type = 2;
+    optional KeyOptions options = 3;
 }
 
 message MouseKey {

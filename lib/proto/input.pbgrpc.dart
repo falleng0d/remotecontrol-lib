@@ -1,16 +1,22 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: input.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
+
+// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
 import 'dart:async' as $async;
-
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
+import 'package:protobuf/protobuf.dart' as $pb;
+
 import 'input.pb.dart' as $0;
+
 export 'input.pb.dart';
 
 class InputMethodsClient extends $grpc.Client {
@@ -40,8 +46,7 @@ class InputMethodsClient extends $grpc.Client {
       ($core.List<$core.int> value) => $0.Config.fromBuffer(value));
 
   InputMethodsClient($grpc.ClientChannel channel,
-      {$grpc.CallOptions? options,
-      $core.Iterable<$grpc.ClientInterceptor>? interceptors})
+      {$grpc.CallOptions? options, $core.Iterable<$grpc.ClientInterceptor>? interceptors})
       : super(channel, options: options, interceptors: interceptors);
 
   $grpc.ResponseFuture<$0.Response> pressKey($0.Key request,
@@ -59,8 +64,7 @@ class InputMethodsClient extends $grpc.Client {
     return $createUnaryCall(_$moveMouse, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Response> ping($0.Empty request,
-      {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.Response> ping($0.Empty request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$ping, request, options: options);
   }
 
@@ -154,10 +158,8 @@ abstract class InputMethodsServiceBase extends $grpc.Service {
   }
 
   $async.Future<$0.Response> pressKey($grpc.ServiceCall call, $0.Key request);
-  $async.Future<$0.Response> pressMouseKey(
-      $grpc.ServiceCall call, $0.MouseKey request);
-  $async.Future<$0.Response> moveMouse(
-      $grpc.ServiceCall call, $0.MouseMove request);
+  $async.Future<$0.Response> pressMouseKey($grpc.ServiceCall call, $0.MouseKey request);
+  $async.Future<$0.Response> moveMouse($grpc.ServiceCall call, $0.MouseMove request);
   $async.Future<$0.Response> ping($grpc.ServiceCall call, $0.Empty request);
   $async.Future<$0.Config> setConfig($grpc.ServiceCall call, $0.Config request);
   $async.Future<$0.Config> getConfig($grpc.ServiceCall call, $0.Empty request);

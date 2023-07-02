@@ -1,9 +1,13 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: input.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
+
+// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
 
 import 'dart:core' as $core;
 
@@ -13,29 +17,61 @@ import 'input.pbenum.dart';
 
 export 'input.pbenum.dart';
 
-class Key extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Key', createEmptyInstance: create)
-    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.O3)
-    ..e<Key_KeyActionType>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: Key_KeyActionType.UP, valueOf: Key_KeyActionType.valueOf, enumValues: Key_KeyActionType.values)
+class KeyOptions extends $pb.GeneratedMessage {
+  factory KeyOptions() => create();
+  KeyOptions._() : super();
+  factory KeyOptions.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory KeyOptions.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeyOptions', createEmptyInstance: create)
+    ..aOB(1, _omitFieldNames ? '' : 'noRepeat')
     ..hasRequiredFields = false
   ;
 
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  KeyOptions clone() => KeyOptions()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  KeyOptions copyWith(void Function(KeyOptions) updates) => super.copyWith((message) => updates(message as KeyOptions)) as KeyOptions;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static KeyOptions create() => KeyOptions._();
+  KeyOptions createEmptyInstance() => create();
+  static $pb.PbList<KeyOptions> createRepeated() => $pb.PbList<KeyOptions>();
+  @$core.pragma('dart2js:noInline')
+  static KeyOptions getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<KeyOptions>(create);
+  static KeyOptions? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.bool get noRepeat => $_getBF(0);
+  @$pb.TagNumber(1)
+  set noRepeat($core.bool v) { $_setBool(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasNoRepeat() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearNoRepeat() => clearField(1);
+}
+
+class Key extends $pb.GeneratedMessage {
+  factory Key() => create();
   Key._() : super();
-  factory Key({
-    $core.int? id,
-    Key_KeyActionType? type,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (type != null) {
-      _result.type = type;
-    }
-    return _result;
-  }
   factory Key.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Key.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Key', createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.O3)
+    ..e<Key_KeyActionType>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: Key_KeyActionType.UP, valueOf: Key_KeyActionType.valueOf, enumValues: Key_KeyActionType.values)
+    ..aOM<KeyOptions>(3, _omitFieldNames ? '' : 'options', subBuilder: KeyOptions.create)
+    ..hasRequiredFields = false
+  ;
+
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -45,8 +81,10 @@ class Key extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Key copyWith(void Function(Key) updates) => super.copyWith((message) => updates(message as Key)) as Key; // ignore: deprecated_member_use
+  Key copyWith(void Function(Key) updates) => super.copyWith((message) => updates(message as Key)) as Key;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Key create() => Key._();
   Key createEmptyInstance() => create();
@@ -72,31 +110,31 @@ class Key extends $pb.GeneratedMessage {
   $core.bool hasType() => $_has(1);
   @$pb.TagNumber(2)
   void clearType() => clearField(2);
+
+  @$pb.TagNumber(3)
+  KeyOptions get options => $_getN(2);
+  @$pb.TagNumber(3)
+  set options(KeyOptions v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasOptions() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearOptions() => clearField(3);
+  @$pb.TagNumber(3)
+  KeyOptions ensureOptions() => $_ensure(2);
 }
 
 class MouseKey extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MouseKey', createEmptyInstance: create)
-    ..a<$core.int>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'id', $pb.PbFieldType.O3)
-    ..e<MouseKey_KeyActionType>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: MouseKey_KeyActionType.UP, valueOf: MouseKey_KeyActionType.valueOf, enumValues: MouseKey_KeyActionType.values)
+  factory MouseKey() => create();
+  MouseKey._() : super();
+  factory MouseKey.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MouseKey.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MouseKey', createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.O3)
+    ..e<MouseKey_KeyActionType>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: MouseKey_KeyActionType.UP, valueOf: MouseKey_KeyActionType.valueOf, enumValues: MouseKey_KeyActionType.values)
     ..hasRequiredFields = false
   ;
 
-  MouseKey._() : super();
-  factory MouseKey({
-    $core.int? id,
-    MouseKey_KeyActionType? type,
-  }) {
-    final _result = create();
-    if (id != null) {
-      _result.id = id;
-    }
-    if (type != null) {
-      _result.type = type;
-    }
-    return _result;
-  }
-  factory MouseKey.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory MouseKey.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -106,8 +144,10 @@ class MouseKey extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  MouseKey copyWith(void Function(MouseKey) updates) => super.copyWith((message) => updates(message as MouseKey)) as MouseKey; // ignore: deprecated_member_use
+  MouseKey copyWith(void Function(MouseKey) updates) => super.copyWith((message) => updates(message as MouseKey)) as MouseKey;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static MouseKey create() => MouseKey._();
   MouseKey createEmptyInstance() => create();
@@ -136,33 +176,18 @@ class MouseKey extends $pb.GeneratedMessage {
 }
 
 class MouseMove extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MouseMove', createEmptyInstance: create)
-    ..a<$core.double>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'x', $pb.PbFieldType.OF)
-    ..a<$core.double>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'y', $pb.PbFieldType.OF)
-    ..aOB(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'relative')
+  factory MouseMove() => create();
+  MouseMove._() : super();
+  factory MouseMove.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory MouseMove.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'MouseMove', createEmptyInstance: create)
+    ..a<$core.double>(1, _omitFieldNames ? '' : 'x', $pb.PbFieldType.OF)
+    ..a<$core.double>(2, _omitFieldNames ? '' : 'y', $pb.PbFieldType.OF)
+    ..aOB(3, _omitFieldNames ? '' : 'relative')
     ..hasRequiredFields = false
   ;
 
-  MouseMove._() : super();
-  factory MouseMove({
-    $core.double? x,
-    $core.double? y,
-    $core.bool? relative,
-  }) {
-    final _result = create();
-    if (x != null) {
-      _result.x = x;
-    }
-    if (y != null) {
-      _result.y = y;
-    }
-    if (relative != null) {
-      _result.relative = relative;
-    }
-    return _result;
-  }
-  factory MouseMove.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory MouseMove.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -172,8 +197,10 @@ class MouseMove extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  MouseMove copyWith(void Function(MouseMove) updates) => super.copyWith((message) => updates(message as MouseMove)) as MouseMove; // ignore: deprecated_member_use
+  MouseMove copyWith(void Function(MouseMove) updates) => super.copyWith((message) => updates(message as MouseMove)) as MouseMove;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static MouseMove create() => MouseMove._();
   MouseMove createEmptyInstance() => create();
@@ -211,23 +238,16 @@ class MouseMove extends $pb.GeneratedMessage {
 }
 
 class Response extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Response', createEmptyInstance: create)
-    ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'message')
+  factory Response() => create();
+  Response._() : super();
+  factory Response.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Response.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Response', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'message')
     ..hasRequiredFields = false
   ;
 
-  Response._() : super();
-  factory Response({
-    $core.String? message,
-  }) {
-    final _result = create();
-    if (message != null) {
-      _result.message = message;
-    }
-    return _result;
-  }
-  factory Response.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Response.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -237,8 +257,10 @@ class Response extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Response copyWith(void Function(Response) updates) => super.copyWith((message) => updates(message as Response)) as Response; // ignore: deprecated_member_use
+  Response copyWith(void Function(Response) updates) => super.copyWith((message) => updates(message as Response)) as Response;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Response create() => Response._();
   Response createEmptyInstance() => create();
@@ -258,28 +280,17 @@ class Response extends $pb.GeneratedMessage {
 }
 
 class Config extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Config', createEmptyInstance: create)
-    ..a<$core.double>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cursorSpeed', $pb.PbFieldType.OF)
-    ..a<$core.double>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cursorAcceleration', $pb.PbFieldType.OF)
+  factory Config() => create();
+  Config._() : super();
+  factory Config.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Config.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Config', createEmptyInstance: create)
+    ..a<$core.double>(1, _omitFieldNames ? '' : 'cursorSpeed', $pb.PbFieldType.OF)
+    ..a<$core.double>(2, _omitFieldNames ? '' : 'cursorAcceleration', $pb.PbFieldType.OF)
     ..hasRequiredFields = false
   ;
 
-  Config._() : super();
-  factory Config({
-    $core.double? cursorSpeed,
-    $core.double? cursorAcceleration,
-  }) {
-    final _result = create();
-    if (cursorSpeed != null) {
-      _result.cursorSpeed = cursorSpeed;
-    }
-    if (cursorAcceleration != null) {
-      _result.cursorAcceleration = cursorAcceleration;
-    }
-    return _result;
-  }
-  factory Config.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Config.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -289,8 +300,10 @@ class Config extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Config copyWith(void Function(Config) updates) => super.copyWith((message) => updates(message as Config)) as Config; // ignore: deprecated_member_use
+  Config copyWith(void Function(Config) updates) => super.copyWith((message) => updates(message as Config)) as Config;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Config create() => Config._();
   Config createEmptyInstance() => create();
@@ -319,14 +332,15 @@ class Config extends $pb.GeneratedMessage {
 }
 
 class Empty extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Empty', createEmptyInstance: create)
+  factory Empty() => create();
+  Empty._() : super();
+  factory Empty.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Empty.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Empty', createEmptyInstance: create)
     ..hasRequiredFields = false
   ;
 
-  Empty._() : super();
-  factory Empty() => create();
-  factory Empty.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Empty.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
   @$core.Deprecated(
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
@@ -336,8 +350,10 @@ class Empty extends $pb.GeneratedMessage {
   'Using this can add significant overhead to your binary. '
   'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
   'Will be removed in next major version')
-  Empty copyWith(void Function(Empty) updates) => super.copyWith((message) => updates(message as Empty)) as Empty; // ignore: deprecated_member_use
+  Empty copyWith(void Function(Empty) updates) => super.copyWith((message) => updates(message as Empty)) as Empty;
+
   $pb.BuilderInfo get info_ => _i;
+
   @$core.pragma('dart2js:noInline')
   static Empty create() => Empty._();
   Empty createEmptyInstance() => create();
@@ -347,3 +363,6 @@ class Empty extends $pb.GeneratedMessage {
   static Empty? _defaultInstance;
 }
 
+
+const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
+const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

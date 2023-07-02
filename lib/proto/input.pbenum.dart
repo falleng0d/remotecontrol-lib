@@ -1,18 +1,22 @@
-///
+//
 //  Generated code. Do not modify.
 //  source: input.proto
 //
 // @dart = 2.12
-// ignore_for_file: annotate_overrides,camel_case_types,constant_identifier_names,directives_ordering,library_prefixes,non_constant_identifier_names,prefer_final_fields,return_of_invalid_type,unnecessary_const,unnecessary_import,unnecessary_this,unused_import,unused_shown_name
 
-// ignore_for_file: UNDEFINED_SHOWN_NAME
+// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: constant_identifier_names, library_prefixes
+// ignore_for_file: non_constant_identifier_names, prefer_final_fields
+// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+
 import 'dart:core' as $core;
+
 import 'package:protobuf/protobuf.dart' as $pb;
 
 class Key_KeyActionType extends $pb.ProtobufEnum {
-  static const Key_KeyActionType UP = Key_KeyActionType._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'UP');
-  static const Key_KeyActionType DOWN = Key_KeyActionType._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'DOWN');
-  static const Key_KeyActionType PRESS = Key_KeyActionType._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PRESS');
+  static const Key_KeyActionType UP = Key_KeyActionType._(0, _omitEnumNames ? '' : 'UP');
+  static const Key_KeyActionType DOWN = Key_KeyActionType._(1, _omitEnumNames ? '' : 'DOWN');
+  static const Key_KeyActionType PRESS = Key_KeyActionType._(3, _omitEnumNames ? '' : 'PRESS');
 
   static const $core.List<Key_KeyActionType> values = <Key_KeyActionType> [
     UP,
@@ -27,9 +31,9 @@ class Key_KeyActionType extends $pb.ProtobufEnum {
 }
 
 class MouseKey_KeyActionType extends $pb.ProtobufEnum {
-  static const MouseKey_KeyActionType UP = MouseKey_KeyActionType._(0, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'UP');
-  static const MouseKey_KeyActionType DOWN = MouseKey_KeyActionType._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'DOWN');
-  static const MouseKey_KeyActionType PRESS = MouseKey_KeyActionType._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'PRESS');
+  static const MouseKey_KeyActionType UP = MouseKey_KeyActionType._(0, _omitEnumNames ? '' : 'UP');
+  static const MouseKey_KeyActionType DOWN = MouseKey_KeyActionType._(1, _omitEnumNames ? '' : 'DOWN');
+  static const MouseKey_KeyActionType PRESS = MouseKey_KeyActionType._(3, _omitEnumNames ? '' : 'PRESS');
 
   static const $core.List<MouseKey_KeyActionType> values = <MouseKey_KeyActionType> [
     UP,
@@ -43,3 +47,5 @@ class MouseKey_KeyActionType extends $pb.ProtobufEnum {
   const MouseKey_KeyActionType._($core.int v, $core.String n) : super(v, n);
 }
 
+
+const _omitEnumNames = $core.bool.fromEnvironment('protobuf.omit_enum_names');
