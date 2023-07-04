@@ -298,6 +298,11 @@ const Map<String, int> _keyToVK = {
   '/': VK_DIVIDE,
   ';': VK_OEM_1,
   '=': VK_OEM_PLUS,
+  '[': VK_OEM_4,
+  ']': VK_OEM_6,
+  '\\': VK_OEM_5,
+  '\'': VK_OEM_7,
+  '`': VK_OEM_3,
 };
 
 Map<int, String> _vKToKey = _keyToVK.map((k, v) => MapEntry(v, k));
