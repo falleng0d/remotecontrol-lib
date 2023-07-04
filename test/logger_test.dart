@@ -32,7 +32,7 @@ void main() {
 
     test('Test logging with no subscribers', () {
       final messages = <String>[];
-      var fn = (level, message) => messages.add(message);
+      fn(level, message) => messages.add(message);
 
       logger.subscribe(Level.warning, fn);
       logger.unsubscribe(Level.warning, fn);

@@ -9,14 +9,12 @@ import 'element_base.dart';
 abstract class BaseTextElement extends BaseElement {
   @override
   final Geometry geometry;
-  @override
-  final String label;
 
   @override
   Widget build(BuildContext context);
 
   BaseTextElement({
-    this.label = '',
+    String label = '',
     this.geometry = const Geometry(),
   }) : super(label);
 }
@@ -30,8 +28,6 @@ enum KeyActuationType { TAP, PRESS }
 abstract class BaseKeyElement extends BaseElement {
   @override
   final Geometry geometry;
-  @override
-  final String label;
 
   BaseAction<BaseKeyActionContext> get action;
 
@@ -49,7 +45,7 @@ abstract class BaseKeyElement extends BaseElement {
 
   const BaseKeyElement(
     BaseAction<BaseKeyActionContext> action, {
-    this.label = '',
+    String label = '',
     this.geometry = const Geometry(),
   }) : super(label);
 
@@ -60,8 +56,6 @@ abstract class BaseKeyElement extends BaseElement {
 abstract class BaseTouchpadElement extends BaseElement {
   @override
   final Geometry geometry;
-  @override
-  final String label;
 
   TouchpadActions get actions;
   bool get scrollbar;
@@ -71,7 +65,7 @@ abstract class BaseTouchpadElement extends BaseElement {
 
   const BaseTouchpadElement(
     TouchpadActions actions, {
-    this.label = '',
+    String label = '',
     this.geometry = const Geometry(),
     bool scrollbar = true,
     bool mouseButtons = true,
@@ -86,14 +80,12 @@ abstract class BaseTouchpadElement extends BaseElement {
 abstract class BaseButtonElement extends BaseElement {
   @override
   final Geometry geometry;
-  @override
-  final String label;
 
   BaseAction<BaseButtonActionContext> get action;
 
   const BaseButtonElement(
     BaseAction<BaseButtonActionContext> action, {
-    this.label = '',
+    String label = '',
     this.geometry = const Geometry(),
   }) : super(label);
 

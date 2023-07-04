@@ -67,10 +67,10 @@ class PalmForest extends Forest {
 }
 
 void main() {
-  final forest = PalmForest([Palm('Palm 1'), Palm('Palm 2')]);
+  const forest = PalmForest([Palm('Palm 1'), Palm('Palm 2')]);
   print(forest.plants);
 
-  final dog = Dog('Dog 1');
+  const dog = Dog('Dog 1');
 
   print(dog.name);
 

@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+// ignore: depend_on_referenced_packages
 import 'package:yaml/yaml.dart';
 
 void main() {
-  async_main().then((value) => exit(0));
+  asyncMain().then((value) => exit(0));
 }
 
-Future async_main() async {
+Future asyncMain() async {
   // load yaml file from ./example/example.yaml
   var file = File('./example/keyboard_layout.yaml');
   var content = await file.readAsString();

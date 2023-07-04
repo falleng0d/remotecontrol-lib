@@ -14,7 +14,7 @@ class GeometryPropsFactory extends XmlNodeToObjectFactory<Geometry> {
   Geometry load(XmlElement node, {Geometry? defaults}) {
     return defaults != null
         ? defaults.withAttributes(node)
-        : Geometry().withAttributes(node);
+        : const Geometry().withAttributes(node);
   }
 
   @override

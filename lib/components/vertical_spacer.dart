@@ -14,7 +14,7 @@ class VerticalSpacer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: geometry.flex ?? 1,
-      child: SizedBox(),
+      child: const SizedBox(),
     );
   }
 }

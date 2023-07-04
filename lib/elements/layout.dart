@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:remotecontrol_lib/widgets.dart' as widget;
 
-import '../components/CrossExpanded.dart';
+import '../components/cross_expanded.dart';
 import '../values/direction.dart';
 import '../values/geometry.dart';
 import 'element_base.dart';
@@ -20,8 +20,6 @@ class FlexLayout extends BaseLayout {
   @override
   final Geometry geometry;
   @override
-  final String label;
-  @override
   final List<BaseElement> children;
 
   final Direction direction;
@@ -31,7 +29,7 @@ class FlexLayout extends BaseLayout {
   final bool expandChildren;
 
   const FlexLayout({
-    this.label = '',
+    String label = '',
     this.geometry = const Geometry(),
     this.direction = Direction.Row,
     this.columnGap = 0,
@@ -43,7 +41,7 @@ class FlexLayout extends BaseLayout {
   @override
   Widget build(BuildContext context) {
     // Build wrapper
-    var addWrapper = (List<Widget> children) {
+    addWrapper(List<Widget> children) {
       if (direction == Direction.Row) {
         return Row(
           mainAxisSize: MainAxisSize.max,
@@ -56,9 +54,9 @@ class FlexLayout extends BaseLayout {
           children: children,
         );
       }
-    };
+    }
 
-    var addExpand = (Widget widget) {
+    addExpand(Widget widget) {
       if (geometry.expand == true) {
         return Expanded(
           child: Row(
@@ -71,14 +69,14 @@ class FlexLayout extends BaseLayout {
       } else {
         return widget;
       }
-    };
+    }
 
     // Build children
-    var addContainer = (Widget widget) {
+    addContainer(Widget widget) {
       return !geometry.isEmpty()
           ? Container(
-              padding: geometry.padding ?? EdgeInsets.all(0),
-              margin: geometry.margin ?? EdgeInsets.all(0),
+              padding: geometry.padding ?? const EdgeInsets.all(0),
+              margin: geometry.margin ?? const EdgeInsets.all(0),
               constraints: BoxConstraints(
                 maxWidth: geometry.maxWidth ?? double.infinity,
                 maxHeight: geometry.maxHeight ?? double.infinity,
@@ -88,22 +86,22 @@ class FlexLayout extends BaseLayout {
               child: widget,
             )
           : widget;
-    };
+    }
 
-    var addExpandToChildren = (Widget widget) {
+    addExpandToChildren(Widget widget) {
       if (expandChildren == true) {
         return CrossExpanded(child: widget);
       } else {
         return widget;
       }
-    };
+    }
 
-    var transformChildren = (Widget widget) {
+    transformChildren(Widget widget) {
       widget = addExpandToChildren(widget);
       return widget;
-    };
+    }
 
-    var assemble = (List<Widget> children) {
+    assemble(List<Widget> children) {
       Widget widget;
       if (children.length > 1) {
         widget = addWrapper(children);
@@ -112,10 +110,13 @@ class FlexLayout extends BaseLayout {
       }
       widget = addExpand(addContainer(widget));
       return widget;
-    };
+    }
 
-    var _children = children.map((e) => transformChildren(e.build(context))).toList();
-    return widget.FlexLayout(children: assemble(_children));
+    return widget.FlexLayout(
+      children: assemble(
+        children.map((e) => transformChildren(e.build(context))).toList(),
+      ),
+    );
   }
 }
 
@@ -156,11 +157,9 @@ class ColumnLayout extends FlexLayout {
 class HorizontalSpacer extends BaseElement {
   @override
   final Geometry geometry;
-  @override
-  final String label;
 
   const HorizontalSpacer({
-    this.label = '',
+    String label = '',
     this.geometry = const Geometry(),
   }) : super(label);
 
@@ -173,11 +172,9 @@ class HorizontalSpacer extends BaseElement {
 class VerticalSpacer extends BaseElement {
   @override
   final Geometry geometry;
-  @override
-  final String label;
 
   const VerticalSpacer({
-    this.label = '',
+    String label = '',
     this.geometry = const Geometry(),
   }) : super(label);
 

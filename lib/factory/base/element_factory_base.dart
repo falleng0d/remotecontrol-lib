@@ -8,9 +8,7 @@ class BaseElementFactory<T extends BaseElementProps, E extends XmlNodeToObjectFa
   covariant T props;
   covariant E propsLoader;
 
-  BaseElementFactory(T props, E propsLoader)
-      : props = props,
-        propsLoader = propsLoader {
+  BaseElementFactory(this.props, this.propsLoader) {
     assert(props.isFilled);
   }
 }

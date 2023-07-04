@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 import 'package:xml/xml.dart';
 
 import '../factory/keyboard_element_factory.dart';
@@ -125,22 +127,22 @@ extension KeyboardNodeRenderer on XmlElement {
   }
 
   BaseKeyElement _renderKey(KeyboardElementFactory factory) {
-    var keyCode = text;
+    var keyCode = value;
     final keyCodeAtts = getAttribute('k');
     if (keyCodeAtts != null) {
       keyCode = keyCodeAtts;
     }
 
-    if (keyCode.isEmpty) {
+    if (keyCode == null || keyCode.isEmpty) {
       throw Exception('Key node must have a text with a key code');
     }
 
-    return factory.buildKeyElementWithKeyCode(this, keyCode, label: text);
+    return factory.buildKeyElementWithKeyCode(this, keyCode, label: value ?? keyCode);
   }
 
   BaseElement _renderButton(KeyboardElementFactory factory) {
-    final buttonName = text;
-    if (buttonName.isEmpty) {
+    final buttonName = value;
+    if (buttonName == null || buttonName.isEmpty) {
       throw Exception('Button node must have a text with a button name');
     }
 
@@ -167,8 +169,8 @@ extension KeyboardNodeRenderer on XmlElement {
   }
 
   BaseTextElement _renderText(KeyboardElementFactory factory) {
-    final text = this.text;
-    if (text.isEmpty) {
+    final text = value;
+    if (text == null || text.isEmpty) {
       throw Exception('Text node must have a text');
     }
 

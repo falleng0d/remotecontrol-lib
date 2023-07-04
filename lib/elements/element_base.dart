@@ -36,6 +36,8 @@ abstract class BaseLayout extends BaseElement {
 
   @override
   void dispose() {
-    children.forEach((element) => element.dispose());
+    for (var element in children) {
+      element.dispose();
+    }
   }
 }
