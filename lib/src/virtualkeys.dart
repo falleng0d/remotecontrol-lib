@@ -136,22 +136,23 @@ ButtonActionType pbToButtonActionType(pb.MouseKey_KeyActionType state) {
 
 @immutable
 class MouseButton {
+  final MouseButtonType button;
   final int keyDown;
   final int keyUp;
 
-  const MouseButton(this.keyDown, this.keyUp);
+  const MouseButton(this.button, this.keyDown, this.keyUp);
 
   // construct from MouseButton
   static MouseButton fromMouseButton(MouseButtonType button) {
     switch (button) {
       case MouseButtonType.LEFT:
-        return MouseButton(MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP);
+        return MouseButton(button, MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP);
       case MouseButtonType.RIGHT:
-        return MouseButton(MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP);
+        return MouseButton(button, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP);
       case MouseButtonType.MIDDLE:
-        return MouseButton(MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP);
+        return MouseButton(button, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP);
       case MouseButtonType.X1:
-        return MouseButton(MOUSEEVENTF_XDOWN, MOUSEEVENTF_XUP);
+        return MouseButton(button, MOUSEEVENTF_XDOWN, MOUSEEVENTF_XUP);
       case MouseButtonType.X2:
         throw UnimplementedError('X2 button not implemented');
     }
@@ -167,12 +168,20 @@ class MouseButton {
 
   @override
   int get hashCode => keyDown.hashCode ^ keyUp.hashCode;
+
+  @override
+  String toString() {
+    return button.toString();
+  }
 }
 
-const MB_LEFT = MouseButton(MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP);
-const MB_RIGHT = MouseButton(MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP);
-const MB_MIDDLE = MouseButton(MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP);
-const MB_X = MouseButton(MOUSEEVENTF_XDOWN, MOUSEEVENTF_XUP);
+const MB_LEFT =
+    MouseButton(MouseButtonType.LEFT, MOUSEEVENTF_LEFTDOWN, MOUSEEVENTF_LEFTUP);
+const MB_RIGHT =
+    MouseButton(MouseButtonType.RIGHT, MOUSEEVENTF_RIGHTDOWN, MOUSEEVENTF_RIGHTUP);
+const MB_MIDDLE =
+    MouseButton(MouseButtonType.MIDDLE, MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP);
+const MB_X = MouseButton(MouseButtonType.X1, MOUSEEVENTF_XDOWN, MOUSEEVENTF_XUP);
 
 const Map<String, int> _keyToVK = {
   '0': VK_0,
