@@ -66,7 +66,7 @@ class PalmForest extends Forest {
   }
 }
 
-main() {
+void main() {
   final forest = PalmForest([Palm('Palm 1'), Palm('Palm 2')]);
   print(forest.plants);
 
