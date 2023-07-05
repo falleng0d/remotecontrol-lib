@@ -280,6 +280,8 @@ const Map<String, int> _keyToVK = {
   'RWIN': VK_RWIN,
   'APPS': VK_APPS,
   'SLEEP': VK_SLEEP,
+  'PGUP': VK_PRIOR,
+  'PGDOWN': VK_NEXT,
   'N0': VK_NUMPAD0,
   'N1': VK_NUMPAD1,
   'N2': VK_NUMPAD2,
@@ -325,7 +327,7 @@ String vkToKey(int vk) {
   throw Exception('Invalid VK: $vk');
 }
 
-bool isModifier(int vk) {
+bool isModifierKey(int vk) {
   return vk == VK_SHIFT ||
       vk == VK_LSHIFT ||
       vk == VK_RSHIFT ||
