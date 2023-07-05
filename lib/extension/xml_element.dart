@@ -9,6 +9,10 @@ typedef String_opt = String?;
 
 extension KeyboardXmlElementHelpers on XmlElement {
   String get tag => name.local;
+  String get innerText => descendants
+      .where((node) => node is XmlText || node is XmlCDATA)
+      .map((node) => node.value)
+      .join();
 
   List<String> get _layoutTypes =>
       ['row', 'column', 'flex', 'horizontal-spacer', 'vertical-spacer'];
