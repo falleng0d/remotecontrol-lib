@@ -23,6 +23,12 @@ class KeyElementProps extends BaseElementProps {
   final BaseAction<BaseKeyActionContext>? doubleTapAction;
   final BaseAction<BaseKeyActionContext>? holdAction;
 
+  final String? shiftModifierLabel;
+
+  final String? modifierId;
+  final bool? disableOnNonModifierPressed;
+  final bool? disableOnSwitchPressed;
+
   @override
   bool get isFilled {
     return super.isFilled &&
@@ -45,6 +51,10 @@ class KeyElementProps extends BaseElementProps {
     this.doubleTapThershold,
     this.doubleTapAction,
     this.holdAction,
+    this.shiftModifierLabel,
+    this.modifierId,
+    this.disableOnNonModifierPressed,
+    this.disableOnSwitchPressed,
   }) : super(label: label, geometry: geometry);
 }
 

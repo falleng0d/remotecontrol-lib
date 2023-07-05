@@ -21,8 +21,11 @@ class BaseKeyActionContext extends BaseActionContext {
   final KeyActionType actionType;
   final KeyOptions? options;
 
+  final String? modifierId;
+  bool get isModifier => modifierId?.isNotEmpty ?? false;
+
   const BaseKeyActionContext(BaseElement target, this.actionType,
-      {String? description, this.options})
+      {String? description, this.options, this.modifierId})
       : super(target, description: description);
 }
 

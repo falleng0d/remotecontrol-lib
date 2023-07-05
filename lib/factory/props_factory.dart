@@ -36,15 +36,21 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
       geometry: GeometryPropsFactory().load(node, defaults: defaults?.geometry),
       actuationType: actuationType,
       toggle: node.getAttributeValue('toggle', defaults?.toggle),
-      keyRep: node.getAttributeValue('key-rep', defaults?.keyRep),
-      keyRepeatDelay:
-          node.getAttributeValue('key-repeat-delay', defaults?.keyRepeatDelay),
+      keyRep: node.getAttributeValue('keyRep', defaults?.keyRep),
+      keyRepeatDelay: node.getAttributeValue('keyRepeatDelay', defaults?.keyRepeatDelay),
       holdTimeThreshold:
-          node.getAttributeValue('hold-time-threshold', defaults?.holdTimeThreshold),
+          node.getAttributeValue('holdTimeThreshold', defaults?.holdTimeThreshold),
       doubleTapThershold:
-          node.getAttributeValue('double-tap-threshold', defaults?.doubleTapThershold),
-      // doubleTapAction: node.getAttributeValue('double-tap-action', defaults?.doubleTapAction),
-      // holdAction: node.getAttributeValue('hold-action', defaults?.holdAction),
+          node.getAttributeValue('doubleTapThreshold', defaults?.doubleTapThershold),
+      modifierId: node.getAttributeValue('mid', defaults?.modifierId),
+      disableOnNonModifierPressed: node.getAttributeValue(
+          'disableOnNonModifierPressed', defaults?.disableOnNonModifierPressed),
+      disableOnSwitchPressed: node.getAttributeValue(
+          'disableOnSwitchPressed', defaults?.disableOnSwitchPressed),
+      shiftModifierLabel:
+          node.getAttributeValue('shiftLabel', defaults?.shiftModifierLabel),
+      // doubleTapAction: node.getAttributeValue('doubleTapAction', defaults?.doubleTapAction),
+      // holdAction: node.getAttributeValue('holdAction', defaults?.holdAction),
     );
   }
 
@@ -62,14 +68,20 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
           : GeometryPropsFactory().load(node),
       toggle: node.getAttributeValue('toggle', into.toggle),
       actuationType: actuationType,
-      keyRep: node.getAttributeValue('key-rep', into.keyRep),
-      keyRepeatDelay: node.getAttributeValue('key-repeat-delay', into.keyRepeatDelay),
+      keyRep: node.getAttributeValue('keyRep', into.keyRep),
+      keyRepeatDelay: node.getAttributeValue('keyRepeatDelay', into.keyRepeatDelay),
       holdTimeThreshold:
-          node.getAttributeValue('hold-time-threshold', into.holdTimeThreshold),
+          node.getAttributeValue('holdTimeThreshold', into.holdTimeThreshold),
       doubleTapThershold:
-          node.getAttributeValue('double-tap-threshold', into.doubleTapThershold),
-      // doubleTapAction: node.getAttributeValue('double-tap-action', into.doubleTapAction),
-      // holdAction: node.getAttributeValue('hold-action', into.holdAction),
+          node.getAttributeValue('doubleTapThreshold', into.doubleTapThershold),
+      modifierId: node.getAttributeValue('mid', into.modifierId),
+      disableOnNonModifierPressed: node.getAttributeValue(
+          'disableOnNonModifierPressed', into.disableOnNonModifierPressed),
+      disableOnSwitchPressed:
+          node.getAttributeValue('disableOnSwitchPressed', into.disableOnSwitchPressed),
+      shiftModifierLabel: node.getAttributeValue('shiftLabel', into.shiftModifierLabel),
+      // doubleTapAction: node.getAttributeValue('doubleTapAction', into.doubleTapAction),
+      // holdAction: node.getAttributeValue('holdAction', into.holdAction),
     );
   }
 }
@@ -121,10 +133,10 @@ class TouchpadElementPropsFactory extends XmlNodeToObjectFactory<TouchpadElement
       label: node.getAttributeValue('label', defaults?.label),
       geometry: GeometryPropsFactory().load(node, defaults: defaults?.geometry),
       scrollbar: node.getAttributeValue('scrollbar', defaults?.scrollbar),
-      mouseButtons: node.getAttributeValue('mouse-buttons', defaults?.mouseButtons),
-      tapToClick: node.getAttributeValue('tap-to-click', defaults?.tapToClick),
+      mouseButtons: node.getAttributeValue('mouseButtons', defaults?.mouseButtons),
+      tapToClick: node.getAttributeValue('tapToClick', defaults?.tapToClick),
       doubleTapAndHold:
-          node.getAttributeValue('double-tap-and-hold', defaults?.doubleTapAndHold),
+          node.getAttributeValue('doubleTapAndHold', defaults?.doubleTapAndHold),
     );
   }
 
@@ -136,10 +148,9 @@ class TouchpadElementPropsFactory extends XmlNodeToObjectFactory<TouchpadElement
           ? GeometryPropsFactory().merge(into.geometry!, node: node)
           : GeometryPropsFactory().load(node),
       scrollbar: node.getAttributeValue('scrollbar', into.scrollbar),
-      mouseButtons: node.getAttributeValue('mouse-buttons', into.mouseButtons),
-      tapToClick: node.getAttributeValue('tap-to-click', into.tapToClick),
-      doubleTapAndHold:
-          node.getAttributeValue('double-tap-and-hold', into.doubleTapAndHold),
+      mouseButtons: node.getAttributeValue('mouseButtons', into.mouseButtons),
+      tapToClick: node.getAttributeValue('tapToClick', into.tapToClick),
+      doubleTapAndHold: node.getAttributeValue('doubleTapAndHold', into.doubleTapAndHold),
     );
   }
 }
@@ -151,9 +162,9 @@ class FlexLayoutPropsFactory extends XmlNodeToObjectFactory<FlexLayoutProps> {
       label: node.getAttributeValue('label', defaults?.label),
       geometry: GeometryPropsFactory().load(node, defaults: defaults?.geometry),
       direction: node.getAttributeValue('direction', defaults?.direction),
-      columnGap: node.getAttributeValue('column-gap', defaults?.columnGap),
-      rowGap: node.getAttributeValue('row-gap', defaults?.rowGap),
-      expandChildren: node.getAttributeValue('expand-children', defaults?.expandChildren),
+      columnGap: node.getAttributeValue('columnGap', defaults?.columnGap),
+      rowGap: node.getAttributeValue('rowGap', defaults?.rowGap),
+      expandChildren: node.getAttributeValue('expandChildren', defaults?.expandChildren),
     );
   }
 
@@ -165,9 +176,9 @@ class FlexLayoutPropsFactory extends XmlNodeToObjectFactory<FlexLayoutProps> {
           ? GeometryPropsFactory().merge(into.geometry!, node: node)
           : GeometryPropsFactory().load(node),
       direction: node.getAttributeValue('direction', into.direction),
-      columnGap: node.getAttributeValue('column-gap', into.columnGap),
-      rowGap: node.getAttributeValue('row-gap', into.rowGap),
-      expandChildren: node.getAttributeValue('expand-children', into.expandChildren),
+      columnGap: node.getAttributeValue('columnGap', into.columnGap),
+      rowGap: node.getAttributeValue('rowGap', into.rowGap),
+      expandChildren: node.getAttributeValue('expandChildren', into.expandChildren),
     );
   }
 }
@@ -178,8 +189,8 @@ class RowLayoutPropsFactory extends XmlNodeToObjectFactory<RowLayoutProps> {
     return RowLayoutProps(
       label: node.getAttributeValue('label', defaults?.label),
       geometry: GeometryPropsFactory().load(node, defaults: defaults?.geometry),
-      columnGap: node.getAttributeValue('column-gap', defaults?.columnGap),
-      expandChildren: node.getAttributeValue('expand-children', defaults?.expandChildren),
+      columnGap: node.getAttributeValue('columnGap', defaults?.columnGap),
+      expandChildren: node.getAttributeValue('expandChildren', defaults?.expandChildren),
     );
   }
 
@@ -190,8 +201,8 @@ class RowLayoutPropsFactory extends XmlNodeToObjectFactory<RowLayoutProps> {
       geometry: into.geometry != null
           ? GeometryPropsFactory().merge(into.geometry!, node: node)
           : GeometryPropsFactory().load(node),
-      columnGap: node.getAttributeValue('column-gap', into.columnGap),
-      expandChildren: node.getAttributeValue('expand-children', into.expandChildren),
+      columnGap: node.getAttributeValue('columnGap', into.columnGap),
+      expandChildren: node.getAttributeValue('expandChildren', into.expandChildren),
     );
   }
 }
@@ -202,8 +213,8 @@ class ColumnLayoutPropsFactory extends XmlNodeToObjectFactory<ColumnLayoutProps>
     return ColumnLayoutProps(
       label: node.getAttributeValue('label', defaults?.label),
       geometry: GeometryPropsFactory().load(node, defaults: defaults?.geometry),
-      rowGap: node.getAttributeValue('row-gap', defaults?.rowGap),
-      expandChildren: node.getAttributeValue('expand-children', defaults?.expandChildren),
+      rowGap: node.getAttributeValue('rowGap', defaults?.rowGap),
+      expandChildren: node.getAttributeValue('expandChildren', defaults?.expandChildren),
     );
   }
 
@@ -214,8 +225,8 @@ class ColumnLayoutPropsFactory extends XmlNodeToObjectFactory<ColumnLayoutProps>
       geometry: into.geometry != null
           ? GeometryPropsFactory().merge(into.geometry!, node: node)
           : GeometryPropsFactory().load(node),
-      rowGap: node.getAttributeValue('row-gap', into.rowGap),
-      expandChildren: node.getAttributeValue('expand-children', into.expandChildren),
+      rowGap: node.getAttributeValue('rowGap', into.rowGap),
+      expandChildren: node.getAttributeValue('expandChildren', into.expandChildren),
     );
   }
 }

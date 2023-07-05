@@ -43,6 +43,15 @@ abstract class BaseKeyElement extends BaseElement {
   BaseAction<BaseKeyActionContext>? get doubleTapAction;
   double get doubleTapThershold;
 
+  String get shiftModifierLabel;
+
+  String get modifierId;
+  bool get disableOnNonModifierPressed;
+  bool get disableOnSwitchPressed;
+
+  // Utility getters
+  bool get isModifier => modifierId.isNotEmpty ? true : false;
+
   const BaseKeyElement(
     BaseAction<BaseKeyActionContext> action, {
     String label = '',
