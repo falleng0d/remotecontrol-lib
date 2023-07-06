@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class GroupContainer extends StatelessWidget {
   final Widget child;
   final String title;
+  final EdgeInsets? margin;
 
-  const GroupContainer({Key? key, required this.title, required this.child})
+  const GroupContainer({Key? key, this.margin, required this.title, required this.child})
       : super(key: key);
 
   @override
@@ -15,14 +16,12 @@ class GroupContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       padding: const EdgeInsets.all(5),
+      margin: margin,
       child: Column(
         children: [
           Text(
             title,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                ?.apply(color: Colors.black54),
+            style: Theme.of(context).textTheme.bodyMedium?.apply(color: Colors.black54),
           ),
           child
         ],
