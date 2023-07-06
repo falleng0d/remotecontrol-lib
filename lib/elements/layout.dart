@@ -45,12 +45,13 @@ class FlexLayout extends BaseLayout {
       if (direction == Direction.Row) {
         return Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: children,
         );
       } else {
         return Column(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: children,
         );
       }
@@ -77,6 +78,8 @@ class FlexLayout extends BaseLayout {
           ? Container(
               padding: geometry.padding ?? const EdgeInsets.all(0),
               margin: geometry.margin ?? const EdgeInsets.all(0),
+              width: geometry.width,
+              height: geometry.height,
               constraints: BoxConstraints(
                 maxWidth: geometry.maxWidth ?? double.infinity,
                 maxHeight: geometry.maxHeight ?? double.infinity,
@@ -103,11 +106,7 @@ class FlexLayout extends BaseLayout {
 
     assemble(List<Widget> children) {
       Widget widget;
-      if (children.length > 1) {
-        widget = addWrapper(children);
-      } else {
-        widget = children[0];
-      }
+      widget = children.length > 1 ? addWrapper(children) : children[0];
       widget = addExpand(addContainer(widget));
       return widget;
     }
