@@ -23,34 +23,23 @@ abstract class BaseTextElement extends BaseElement {
 /// - TAP means the key is actuated when the user taps on it.
 /// - PRESS means the key enters DOWN state when the user taps on it and UP
 /// state when the user releases it.
-enum KeyActuationType { TAP, PRESS }
+enum KeyActuationType {
+  TAP('TAP'),
+  PRESS('PRESS');
+
+  const KeyActuationType(this.token);
+
+  final String token;
+
+  @override
+  String toString() {
+    return token;
+  }
+}
 
 abstract class BaseKeyElement extends BaseElement {
   @override
   final Geometry geometry;
-
-  BaseAction<BaseKeyActionContext> get action;
-
-  KeyActuationType get actuationType;
-  bool get toggle;
-
-  double get keyRep;
-  double get keyRepeatDelay;
-
-  BaseAction<BaseKeyActionContext>? get holdAction;
-  double get holdTimeThreshold;
-
-  BaseAction<BaseKeyActionContext>? get doubleTapAction;
-  double get doubleTapThershold;
-
-  String get shiftModifierLabel;
-
-  String get modifierId;
-  bool get disableOnNonModifierPressed;
-  bool get disableOnSwitchPressed;
-
-  // Utility getters
-  bool get isModifier => modifierId.isNotEmpty ? true : false;
 
   const BaseKeyElement(
     BaseAction<BaseKeyActionContext> action, {
@@ -66,21 +55,9 @@ abstract class BaseTouchpadElement extends BaseElement {
   @override
   final Geometry geometry;
 
-  TouchpadActions get actions;
-  bool get scrollbar;
-  bool get mouseButtons;
-  bool get tapToClick;
-  bool get doubleTapAndHold;
-
-  const BaseTouchpadElement(
-    TouchpadActions actions, {
-    String label = '',
-    this.geometry = const Geometry(),
-    bool scrollbar = true,
-    bool mouseButtons = true,
-    bool tapToClick = true,
-    bool doubleTapAndHold = true,
-  }) : super(label);
+  const BaseTouchpadElement(TouchpadActions actions,
+      {String label = '', this.geometry = const Geometry()})
+      : super(label);
 
   @override
   Widget build(BuildContext context);
@@ -89,8 +66,6 @@ abstract class BaseTouchpadElement extends BaseElement {
 abstract class BaseButtonElement extends BaseElement {
   @override
   final Geometry geometry;
-
-  BaseAction<BaseButtonActionContext> get action;
 
   const BaseButtonElement(
     BaseAction<BaseButtonActionContext> action, {

@@ -6,6 +6,14 @@ abstract class BaseElementProps {
 
   bool get isFilled => label != null && geometry != null;
 
+  Geometry? geometryFrom<T extends BaseElementProps>(T other) {
+    if (other.geometry != null) {
+      return (geometry ?? const Geometry()).copyFrom(other.geometry!);
+    } else {
+      return geometry;
+    }
+  }
+
   const BaseElementProps({this.label, this.geometry});
 }
 
@@ -20,7 +28,9 @@ class KeyElementProps extends BaseElementProps {
   final double? holdTimeThreshold;
   final double? doubleTapThershold;
 
+  // optional
   final BaseAction<BaseKeyActionContext>? doubleTapAction;
+  // optional
   final BaseAction<BaseKeyActionContext>? holdAction;
 
   final String? shiftModifierLabel;
@@ -33,18 +43,21 @@ class KeyElementProps extends BaseElementProps {
   bool get isFilled {
     return super.isFilled &&
         actuationType != null &&
-        toggle != null &&
         keyRep != null &&
         keyRepeatDelay != null &&
         holdTimeThreshold != null &&
-        doubleTapThershold != null;
+        doubleTapThershold != null &&
+        shiftModifierLabel != null &&
+        modifierId != null &&
+        disableOnNonModifierPressed != null &&
+        disableOnSwitchPressed != null;
   }
 
   const KeyElementProps({
     String? label,
     Geometry? geometry,
     this.actuationType,
-    this.toggle,
+    this.toggle = false,
     this.keyRep,
     this.keyRepeatDelay,
     this.holdTimeThreshold,
@@ -56,16 +69,77 @@ class KeyElementProps extends BaseElementProps {
     this.disableOnNonModifierPressed,
     this.disableOnSwitchPressed,
   }) : super(label: label, geometry: geometry);
+
+  const KeyElementProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+    this.actuationType = KeyActuationType.PRESS,
+    this.toggle = false,
+    this.keyRep = 0.0,
+    this.keyRepeatDelay = 0.0,
+    this.holdTimeThreshold = 0.0,
+    this.doubleTapAction,
+    this.holdAction,
+    this.doubleTapThershold = 0.0,
+    this.shiftModifierLabel = '',
+    this.modifierId = '',
+    this.disableOnNonModifierPressed = false,
+    this.disableOnSwitchPressed = false,
+  }) : super(label: label, geometry: geometry);
+
+  KeyElementProps copyFrom(KeyElementProps other) {
+    return KeyElementProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+      actuationType: other.actuationType ?? actuationType,
+      toggle: other.toggle ?? toggle,
+      keyRep: other.keyRep ?? keyRep,
+      keyRepeatDelay: other.keyRepeatDelay ?? keyRepeatDelay,
+      holdTimeThreshold: other.holdTimeThreshold ?? holdTimeThreshold,
+      doubleTapThershold: other.doubleTapThershold ?? doubleTapThershold,
+      doubleTapAction: other.doubleTapAction ?? doubleTapAction,
+      holdAction: other.holdAction ?? holdAction,
+      shiftModifierLabel: other.shiftModifierLabel ?? shiftModifierLabel,
+      modifierId: other.modifierId ?? modifierId,
+      disableOnNonModifierPressed:
+          other.disableOnNonModifierPressed ?? disableOnNonModifierPressed,
+      disableOnSwitchPressed: other.disableOnSwitchPressed ?? disableOnSwitchPressed,
+    );
+  }
 }
 
 class MouseElementProps extends BaseElementProps {
   const MouseElementProps({String? label, Geometry? geometry})
       : super(label: label, geometry: geometry);
+
+  const MouseElementProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+  }) : super(label: label, geometry: geometry);
+
+  MouseElementProps copyFrom(MouseElementProps other) {
+    return MouseElementProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+    );
+  }
 }
 
 class TextElementProps extends BaseElementProps {
   const TextElementProps({String? label, Geometry? geometry})
       : super(label: label, geometry: geometry);
+
+  const TextElementProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+  }) : super(label: label, geometry: geometry);
+
+  TextElementProps copyFrom(TextElementProps other) {
+    return TextElementProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+    );
+  }
 }
 
 class TouchpadElementProps extends BaseElementProps {
@@ -91,6 +165,26 @@ class TouchpadElementProps extends BaseElementProps {
     this.tapToClick,
     this.doubleTapAndHold,
   }) : super(label: label, geometry: geometry);
+
+  const TouchpadElementProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+    this.scrollbar = false,
+    this.mouseButtons = false,
+    this.tapToClick = false,
+    this.doubleTapAndHold = false,
+  }) : super(label: label, geometry: geometry);
+
+  TouchpadElementProps copyFrom(TouchpadElementProps other) {
+    return TouchpadElementProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+      scrollbar: other.scrollbar ?? scrollbar,
+      mouseButtons: other.mouseButtons ?? mouseButtons,
+      tapToClick: other.tapToClick ?? tapToClick,
+      doubleTapAndHold: other.doubleTapAndHold ?? doubleTapAndHold,
+    );
+  }
 }
 
 class FlexLayoutProps extends BaseElementProps {
@@ -116,6 +210,26 @@ class FlexLayoutProps extends BaseElementProps {
     this.rowGap,
     this.expandChildren,
   }) : super(label: label, geometry: geometry);
+
+  const FlexLayoutProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+    this.direction = Direction.Row,
+    this.columnGap = 0.0,
+    this.rowGap = 0.0,
+    this.expandChildren = false,
+  }) : super(label: label, geometry: geometry);
+
+  FlexLayoutProps copyFrom(FlexLayoutProps other) {
+    return FlexLayoutProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+      direction: other.direction ?? direction,
+      columnGap: other.columnGap ?? columnGap,
+      rowGap: other.rowGap ?? rowGap,
+      expandChildren: other.expandChildren ?? expandChildren,
+    );
+  }
 }
 
 class RowLayoutProps extends BaseElementProps {
@@ -133,6 +247,22 @@ class RowLayoutProps extends BaseElementProps {
     this.columnGap,
     this.expandChildren,
   }) : super(label: label, geometry: geometry);
+
+  const RowLayoutProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+    this.columnGap = 0.0,
+    this.expandChildren = false,
+  }) : super(label: label, geometry: geometry);
+
+  RowLayoutProps copyFrom(RowLayoutProps other) {
+    return RowLayoutProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+      columnGap: other.columnGap ?? columnGap,
+      expandChildren: other.expandChildren ?? expandChildren,
+    );
+  }
 }
 
 class ColumnLayoutProps extends BaseElementProps {
@@ -150,14 +280,54 @@ class ColumnLayoutProps extends BaseElementProps {
     this.rowGap,
     this.expandChildren,
   }) : super(label: label, geometry: geometry);
+
+  const ColumnLayoutProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+    this.rowGap = 0.0,
+    this.expandChildren = false,
+  }) : super(label: label, geometry: geometry);
+
+  ColumnLayoutProps copyFrom(ColumnLayoutProps other) {
+    return ColumnLayoutProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+      rowGap: other.rowGap ?? rowGap,
+      expandChildren: other.expandChildren ?? expandChildren,
+    );
+  }
 }
 
 class HorizontalSpacerProps extends BaseElementProps {
   const HorizontalSpacerProps({String? label, Geometry? geometry})
       : super(label: label, geometry: geometry);
+
+  const HorizontalSpacerProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+  }) : super(label: label, geometry: geometry);
+
+  HorizontalSpacerProps copyFrom(HorizontalSpacerProps other) {
+    return HorizontalSpacerProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+    );
+  }
 }
 
 class VerticalSpacerProps extends BaseElementProps {
   const VerticalSpacerProps({String? label, Geometry? geometry})
       : super(label: label, geometry: geometry);
+
+  const VerticalSpacerProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+  }) : super(label: label, geometry: geometry);
+
+  VerticalSpacerProps copyFrom(VerticalSpacerProps other) {
+    return VerticalSpacerProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+    );
+  }
 }
