@@ -1,4 +1,5 @@
 import '../actions/action_contexts.dart';
+import '../logger/logger.dart';
 import 'action_base.dart';
 
 /// [ActionTask] is a task contains the [BaseActionContext] in which the action
@@ -14,10 +15,17 @@ class ActionTask {
   /// Executes the action and returns a [Future] that completes when the action
   /// is finished or the timeout is reached.
   /// If the timeout is reached, a [TimeoutException] is thrown.
-  Future<bool> doAction() {
+  Future<bool> doAction() async {
     // abort if timeout is reached
     if (timeout != null) {
-      return action.doAction(ctx).timeout(Duration(milliseconds: timeout!));
+      final now = DateTime.now();
+      final result = await action.doAction(ctx).timeout(Duration(milliseconds: timeout!));
+      final elapsed = DateTime.now().difference(now).inMilliseconds;
+      if (ctx.description != null && !ctx.description!.contains("Touchpad moved")) {
+        logger.trace('[ActionTask]: ${ctx.description} took $elapsed ms');
+      }
+
+      return result;
     }
 
     return action.doAction(ctx);
