@@ -48,8 +48,8 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
       disableOnSwitchPressed:
           node.getAttributeValue('disableOnSwitchPressed', into.disableOnSwitchPressed),
       shiftModifierLabel: node.getAttributeValue('shiftLabel', into.shiftModifierLabel),
-      // doubleTapAction: node.getAttributeValue('doubleTapAction', into.doubleTapAction),
-      // holdAction: node.getAttributeValue('holdAction', into.holdAction),
+      lockOnDoubleTap: node.getAttributeValue('lockOnDoubleTap', into.lockOnDoubleTap),
+      lockOnHold: node.getAttributeValue('lockOnHold', into.lockOnHold),
     );
   }
 

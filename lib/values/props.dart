@@ -35,9 +35,16 @@ class KeyElementProps extends BaseElementProps {
 
   final String? shiftModifierLabel;
 
+  /// The id of the modifier class that this key will activate if this key is a modifier
   final String? modifierId;
+
+  /// If true and this key is pressedm, it will be released on a non-modifier key press
   final bool? disableOnNonModifierPressed;
   final bool? disableOnSwitchPressed;
+
+  /// If true, the modifier will be locked on double tap. Uses [doubleTapThershold]
+  final bool? lockOnDoubleTap;
+  final bool? lockOnHold;
 
   @override
   bool get isFilled {
@@ -50,7 +57,9 @@ class KeyElementProps extends BaseElementProps {
         shiftModifierLabel != null &&
         modifierId != null &&
         disableOnNonModifierPressed != null &&
-        disableOnSwitchPressed != null;
+        disableOnSwitchPressed != null &&
+        lockOnDoubleTap != null &&
+        lockOnHold != null;
   }
 
   const KeyElementProps({
@@ -68,6 +77,8 @@ class KeyElementProps extends BaseElementProps {
     this.modifierId,
     this.disableOnNonModifierPressed,
     this.disableOnSwitchPressed,
+    this.lockOnDoubleTap,
+    this.lockOnHold,
   }) : super(label: label, geometry: geometry);
 
   const KeyElementProps.filled({
@@ -85,6 +96,8 @@ class KeyElementProps extends BaseElementProps {
     this.modifierId = '',
     this.disableOnNonModifierPressed = false,
     this.disableOnSwitchPressed = false,
+    this.lockOnDoubleTap = false,
+    this.lockOnHold = false,
   }) : super(label: label, geometry: geometry);
 
   KeyElementProps copyFrom(KeyElementProps other) {
@@ -104,6 +117,8 @@ class KeyElementProps extends BaseElementProps {
       disableOnNonModifierPressed:
           other.disableOnNonModifierPressed ?? disableOnNonModifierPressed,
       disableOnSwitchPressed: other.disableOnSwitchPressed ?? disableOnSwitchPressed,
+      lockOnDoubleTap: other.lockOnDoubleTap ?? lockOnDoubleTap,
+      lockOnHold: other.lockOnHold ?? lockOnHold,
     );
   }
 }
