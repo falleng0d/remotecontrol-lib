@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:remotecontrol_lib/keyboard.dart';
+import 'package:remotecontrol_lib/values/color.dart';
 import 'package:xml/xml.dart';
 
 import '../factory.dart';
@@ -21,6 +22,7 @@ class KeyboardElementFactory {
   BaseKeyActionFactory? __baseKeyActionFactory;
   BaseButtonActionFactory? __baseMouseButtonActionFactory;
   BaseMouseMoveActionFactory? __baseMouseMoveActionFactory;
+  ColorFactory? __colorFactory;
   /* endregion Fields */
 
   /* region Getters */
@@ -119,6 +121,14 @@ class KeyboardElementFactory {
 
     return __baseMouseMoveActionFactory!;
   }
+
+  ColorFactory get _colorFactory {
+    if (__colorFactory == null) {
+      throw Exception('ColorFactory is not registered');
+    }
+
+    return __colorFactory!;
+  }
   /* endregion Getters */
 
   KeyboardElementFactory() {
@@ -164,7 +174,21 @@ class KeyboardElementFactory {
     if (Get.isRegistered<BaseMouseMoveActionFactory>()) {
       __baseMouseMoveActionFactory = Get.find<BaseMouseMoveActionFactory>();
     }
+    if (Get.isRegistered<ColorFactory>()) {
+      __colorFactory = Get.find<ColorFactory>();
+    }
   }
+
+  /* region Misc Builders */
+
+  KeyColor? _buildColor(XmlElement node) {
+    final colorName = node.getAttribute('color');
+    if (colorName == null) return null;
+
+    return _colorFactory.build(colorName);
+  }
+
+  /* endregion Misc Builders */
 
   /* region Action Builders */
   BaseKeyAction buildKeyAction(String keyCode) {
@@ -186,12 +210,14 @@ class KeyboardElementFactory {
     covariant BaseKeyAction action, {
     String label = 'key',
   }) {
+    // Load color
     return _baseKeyElementFactory.build(
       action,
       label: label,
       overrides: _baseKeyElementFactory.propsLoader.merge(
         _baseKeyElementFactory.props,
         node: node,
+        color: _buildColor(node),
       ),
     );
   }

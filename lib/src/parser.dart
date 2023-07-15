@@ -1,14 +1,6 @@
 import 'dart:io';
 
-import 'package:fluent_ui/fluent_ui.dart' show Key;
 import 'package:xml/xml.dart';
-
-class Menu {
-  final String id;
-  final List<Key> keys;
-
-  Menu(this.id, this.keys);
-}
 
 class VirtualKeyboardXMLParser {
   final XmlDocument _document;

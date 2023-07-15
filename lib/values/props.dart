@@ -1,3 +1,5 @@
+import 'package:remotecontrol_lib/values/color.dart';
+
 import '../keyboard.dart';
 
 abstract class BaseElementProps {
@@ -46,6 +48,8 @@ class KeyElementProps extends BaseElementProps {
   final bool? lockOnDoubleTap;
   final bool? lockOnHold;
 
+  final KeyColor? color;
+
   @override
   bool get isFilled {
     return super.isFilled &&
@@ -79,6 +83,7 @@ class KeyElementProps extends BaseElementProps {
     this.disableOnSwitchPressed,
     this.lockOnDoubleTap,
     this.lockOnHold,
+    this.color,
   }) : super(label: label, geometry: geometry);
 
   const KeyElementProps.filled({
@@ -98,6 +103,7 @@ class KeyElementProps extends BaseElementProps {
     this.disableOnSwitchPressed = false,
     this.lockOnDoubleTap = false,
     this.lockOnHold = false,
+    this.color,
   }) : super(label: label, geometry: geometry);
 
   KeyElementProps copyFrom(KeyElementProps other) {
@@ -119,6 +125,7 @@ class KeyElementProps extends BaseElementProps {
       disableOnSwitchPressed: other.disableOnSwitchPressed ?? disableOnSwitchPressed,
       lockOnDoubleTap: other.lockOnDoubleTap ?? lockOnDoubleTap,
       lockOnHold: other.lockOnHold ?? lockOnHold,
+      color: other.color ?? color,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:remotecontrol_lib/extension/geometry.dart';
 import 'package:remotecontrol_lib/extension/xml_element.dart';
+import 'package:remotecontrol_lib/values/color.dart';
 import 'package:xml/xml.dart';
 
 import '../keyboard.dart';
@@ -23,7 +24,8 @@ class GeometryPropsFactory extends XmlNodeToObjectFactory<Geometry> {
 
 class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
   @override
-  KeyElementProps merge(KeyElementProps into, {required XmlElement node}) {
+  KeyElementProps merge(KeyElementProps into,
+      {required XmlElement node, KeyColor? color}) {
     final actuationTypeName = node.getAttributeValue<String?>('type', null);
     final actuationType = actuationTypeName != null
         ? KeyActuationType.values.firstWhere((e) => e.toString() == actuationTypeName)
@@ -50,12 +52,13 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
       shiftModifierLabel: node.getAttributeValue('shiftLabel', into.shiftModifierLabel),
       lockOnDoubleTap: node.getAttributeValue('lockOnDoubleTap', into.lockOnDoubleTap),
       lockOnHold: node.getAttributeValue('lockOnHold', into.lockOnHold),
+      color: color ?? into.color,
     );
   }
 
   @override
-  KeyElementProps load(XmlElement node, {KeyElementProps? defaults}) {
-    return merge(defaults ?? const KeyElementProps(), node: node);
+  KeyElementProps load(XmlElement node, {KeyElementProps? defaults, KeyColor? color}) {
+    return merge(defaults ?? const KeyElementProps(), node: node, color: color);
   }
 }
 
