@@ -295,9 +295,9 @@ const Map<String, int> _keyToVK = {
   '*': VK_MULTIPLY,
   '+': VK_ADD,
   ',': VK_OEM_COMMA,
-  '-': VK_SUBTRACT,
+  '-': VK_OEM_MINUS,
   '.': VK_OEM_PERIOD,
-  '/': VK_DIVIDE,
+  '/': VK_OEM_2,
   ';': VK_OEM_1,
   '=': VK_OEM_PLUS,
   '[': VK_OEM_4,
@@ -305,6 +305,7 @@ const Map<String, int> _keyToVK = {
   '\\': VK_OEM_5,
   '\'': VK_OEM_7,
   '`': VK_OEM_3,
+  '_': VK_OEM_MINUS,
 };
 
 Map<int, String> _vKToKey = _keyToVK.map((k, v) => MapEntry(v, k));
