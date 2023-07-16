@@ -386,6 +386,16 @@ String keyNameToShiftName(String keyName) {
       return '*';
     case '9':
       return '(';
+    case 'Space':
+      return 'Space';
+    case 'Tab':
+      return 'Tab';
+    case 'Home':
+      return 'Home';
+    case 'End':
+      return 'End';
+    case 'Esc':
+      return 'Esc';
     default:
       return keyName.toUpperCase();
   }
