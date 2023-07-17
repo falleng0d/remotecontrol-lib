@@ -20,6 +20,8 @@ abstract class BaseElement with Sizeable, Labeled {
   Widget build(BuildContext context);
 
   void dispose() {}
+
+  void init() {}
 }
 
 /// An abstract base class representing a layout element in the application.
@@ -38,6 +40,13 @@ abstract class BaseLayout extends BaseElement {
   void dispose() {
     for (var element in children) {
       element.dispose();
+    }
+  }
+
+  @override
+  void init() {
+    for (var element in children) {
+      element.init();
     }
   }
 }
