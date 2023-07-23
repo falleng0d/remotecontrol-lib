@@ -62,6 +62,38 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
   }
 }
 
+class ToggleElementPropsFactory extends XmlNodeToObjectFactory<ToggleElementProps> {
+  @override
+  ToggleElementProps merge(ToggleElementProps into,
+      {required XmlElement node, KeyColor? color}) {
+    final actuationTypeName = node.getAttributeValue<String?>('type', null);
+    final actuationType = actuationTypeName != null
+        ? KeyActuationType.values.firstWhere((e) => e.toString() == actuationTypeName)
+        : into.actuationType;
+
+    return ToggleElementProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: into.geometry != null
+          ? GeometryPropsFactory().merge(into.geometry!, node: node)
+          : GeometryPropsFactory().load(node),
+      toggle: node.getAttributeValue('toggle', into.toggle),
+      actuationType: actuationType,
+      shiftModifierLabel: node.getAttributeValue('shiftLabel', into.shiftModifierLabel),
+      untoggleOnNonModifierKeyPressed: node.getAttributeValue(
+          'untoggleOnNonModifierKeyPressed', into.untoggleOnNonModifierKeyPressed),
+      lockOnDoubleTap: node.getAttributeValue('lockOnDoubleTap', into.lockOnDoubleTap),
+      lockOnHold: node.getAttributeValue('lockOnHold', into.lockOnHold),
+      color: color ?? into.color,
+    );
+  }
+
+  @override
+  ToggleElementProps load(XmlElement node,
+      {ToggleElementProps? defaults, KeyColor? color}) {
+    return merge(defaults ?? const ToggleElementProps(), node: node, color: color);
+  }
+}
+
 class MouseElementPropsFactory extends XmlNodeToObjectFactory<MouseElementProps> {
   @override
   MouseElementProps merge(MouseElementProps into, {required XmlElement node}) {

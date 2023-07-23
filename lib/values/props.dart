@@ -40,7 +40,7 @@ class KeyElementProps extends BaseElementProps {
   /// The id of the modifier class that this key will activate if this key is a modifier
   final String? modifierId;
 
-  /// If true and this key is pressedm, it will be released on a non-modifier key press
+  /// If true and this key is pressed, it will be released on a non-modifier key press
   final bool? disableOnNonModifierPressed;
   final bool? disableOnSwitchPressed;
 
@@ -123,6 +123,73 @@ class KeyElementProps extends BaseElementProps {
       disableOnNonModifierPressed:
           other.disableOnNonModifierPressed ?? disableOnNonModifierPressed,
       disableOnSwitchPressed: other.disableOnSwitchPressed ?? disableOnSwitchPressed,
+      lockOnDoubleTap: other.lockOnDoubleTap ?? lockOnDoubleTap,
+      lockOnHold: other.lockOnHold ?? lockOnHold,
+      color: other.color ?? color,
+    );
+  }
+}
+
+class ToggleElementProps extends BaseElementProps {
+  final KeyActuationType? actuationType;
+
+  final bool? toggle;
+
+  final String? shiftModifierLabel;
+
+  /// If true and this toggle is toggled, it will be untoggled on a non-modifier key press
+  final bool? untoggleOnNonModifierKeyPressed;
+
+  /// If true, the toggle will be locked on double tap
+  final bool? lockOnDoubleTap;
+  final bool? lockOnHold;
+
+  final KeyColor? color;
+
+  @override
+  bool get isFilled {
+    return super.isFilled &&
+        actuationType != null &&
+        toggle != null &&
+        shiftModifierLabel != null &&
+        untoggleOnNonModifierKeyPressed != null &&
+        lockOnDoubleTap != null &&
+        lockOnHold != null;
+  }
+
+  const ToggleElementProps({
+    String? label,
+    Geometry? geometry,
+    this.actuationType,
+    this.toggle = false,
+    this.shiftModifierLabel,
+    this.untoggleOnNonModifierKeyPressed = false,
+    this.lockOnDoubleTap = false,
+    this.lockOnHold = false,
+    this.color,
+  }) : super(label: label, geometry: geometry);
+
+  const ToggleElementProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+    this.actuationType = KeyActuationType.PRESS,
+    this.toggle = false,
+    this.shiftModifierLabel = '',
+    this.untoggleOnNonModifierKeyPressed = false,
+    this.lockOnDoubleTap = false,
+    this.lockOnHold = false,
+    this.color,
+  }) : super(label: label, geometry: geometry);
+
+  ToggleElementProps copyFrom(ToggleElementProps other) {
+    return ToggleElementProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+      actuationType: other.actuationType ?? actuationType,
+      toggle: other.toggle ?? toggle,
+      shiftModifierLabel: other.shiftModifierLabel ?? shiftModifierLabel,
+      untoggleOnNonModifierKeyPressed:
+          other.untoggleOnNonModifierKeyPressed ?? untoggleOnNonModifierKeyPressed,
       lockOnDoubleTap: other.lockOnDoubleTap ?? lockOnDoubleTap,
       lockOnHold: other.lockOnHold ?? lockOnHold,
       color: other.color ?? color,

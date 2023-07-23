@@ -41,3 +41,12 @@ abstract class BaseMouseMoveAction extends BaseAction<BaseMouseMoveActionContext
   @override
   Future<bool> doAction(BaseMouseMoveActionContext ctx);
 }
+
+abstract class BaseToggleAction extends BaseAction<BaseToggleActionContext> {
+  String get switchId;
+
+  const BaseToggleAction(String switchId);
+
+  @override
+  Future<bool> doAction(BaseToggleActionContext ctx);
+}

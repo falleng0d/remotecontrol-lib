@@ -12,3 +12,7 @@ abstract class BaseButtonActionFactory {
 abstract class BaseMouseMoveActionFactory {
   BaseMouseMoveAction build();
 }
+
+abstract class BaseToggleActionFactory {
+  BaseToggleAction build(String switchId);
+}

@@ -61,3 +61,11 @@ class BaseTapActionContext extends BaseActionContext {
       this.scaleUpdateDetails})
       : super(target, description: description);
 }
+
+/// [BaseToggleActionContext] is the context in which a switch action is executed.
+class BaseToggleActionContext extends BaseActionContext {
+  final bool? state;
+
+  const BaseToggleActionContext(BaseElement target, {String? description, this.state})
+      : super(target, description: description);
+}

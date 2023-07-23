@@ -10,18 +10,25 @@ mixin Labeled {
   String get label;
 }
 
-/// A [BaseElement] is a displayable control that can be added to a [BaseLayout]
-abstract class BaseElement with Sizeable, Labeled {
-  @override
-  final String label;
-
-  const BaseElement(this.label);
-
-  Widget build(BuildContext context);
+abstract class AbstractElement {
+  const AbstractElement();
 
   void dispose() {}
 
   void init() {}
+}
+
+/// A [BaseElement] is a displayable control that can be added to a [BaseLayout]
+abstract class BaseElement extends AbstractElement with Sizeable, Labeled {
+  @override
+  final String label;
+
+  bool get display;
+  set display(bool value);
+
+  const BaseElement(this.label);
+
+  Widget build(BuildContext context);
 }
 
 /// An abstract base class representing a layout element in the application.

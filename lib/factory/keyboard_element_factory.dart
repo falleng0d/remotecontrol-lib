@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:remotecontrol_lib/elements/element.dart';
 import 'package:remotecontrol_lib/keyboard.dart';
 import 'package:remotecontrol_lib/values/color.dart';
 import 'package:xml/xml.dart';
@@ -9,6 +10,7 @@ import '../src/virtualkeys.dart';
 class KeyboardElementFactory {
   /* region Fields */
   BaseKeyElementFactory? __baseKeyElementFactory;
+  BaseToggleElementFactory? __baseToggleElementFactory;
   BaseMouseButtonElementFactory? __baseMouseButtonElementFactory;
   BaseTextElementFactory? __baseTextElementFactory;
   BaseTouchpadElementFactory? __baseTouchpadElementFactory;
@@ -22,7 +24,10 @@ class KeyboardElementFactory {
   BaseKeyActionFactory? __baseKeyActionFactory;
   BaseButtonActionFactory? __baseMouseButtonActionFactory;
   BaseMouseMoveActionFactory? __baseMouseMoveActionFactory;
+  BaseToggleActionFactory? __baseToggleActionFactory;
+
   ColorFactory? __colorFactory;
+  BaseSwitchFactory? __baseSwitchFactory;
   /* endregion Fields */
 
   /* region Getters */
@@ -32,6 +37,14 @@ class KeyboardElementFactory {
     }
 
     return __baseKeyElementFactory!;
+  }
+
+  BaseToggleElementFactory get _baseToggleElememtFactory {
+    if (__baseToggleElementFactory == null) {
+      throw Exception('BaseToggleElementFactory is not registered');
+    }
+
+    return __baseToggleElementFactory!;
   }
 
   BaseMouseButtonElementFactory get _baseMouseButtonElementFactory {
@@ -122,12 +135,28 @@ class KeyboardElementFactory {
     return __baseMouseMoveActionFactory!;
   }
 
+  BaseToggleActionFactory get _baseToggleActionFactory {
+    if (__baseToggleActionFactory == null) {
+      throw Exception('BaseToggleActionFactory is not registered');
+    }
+
+    return __baseToggleActionFactory!;
+  }
+
   ColorFactory get _colorFactory {
     if (__colorFactory == null) {
       throw Exception('ColorFactory is not registered');
     }
 
     return __colorFactory!;
+  }
+
+  BaseSwitchFactory get _baseSwitchFactory {
+    if (__baseSwitchFactory == null) {
+      throw Exception('BaseSwitchFactory is not registered');
+    }
+
+    return __baseSwitchFactory!;
   }
   /* endregion Getters */
 
@@ -138,6 +167,9 @@ class KeyboardElementFactory {
   void resolveDependencies() {
     if (Get.isRegistered<BaseKeyElementFactory>()) {
       __baseKeyElementFactory = Get.find<BaseKeyElementFactory>();
+    }
+    if (Get.isRegistered<BaseToggleElementFactory>()) {
+      __baseToggleElementFactory = Get.find<BaseToggleElementFactory>();
     }
     if (Get.isRegistered<BaseMouseButtonElementFactory>()) {
       __baseMouseButtonElementFactory = Get.find<BaseMouseButtonElementFactory>();
@@ -174,13 +206,18 @@ class KeyboardElementFactory {
     if (Get.isRegistered<BaseMouseMoveActionFactory>()) {
       __baseMouseMoveActionFactory = Get.find<BaseMouseMoveActionFactory>();
     }
+    if (Get.isRegistered<BaseToggleActionFactory>()) {
+      __baseToggleActionFactory = Get.find<BaseToggleActionFactory>();
+    }
     if (Get.isRegistered<ColorFactory>()) {
       __colorFactory = Get.find<ColorFactory>();
+    }
+    if (Get.isRegistered<BaseSwitchFactory>()) {
+      __baseSwitchFactory = Get.find<BaseSwitchFactory>();
     }
   }
 
   /* region Misc Builders */
-
   KeyColor? _buildColor(XmlElement node) {
     final colorName = node.getAttribute('color');
     if (colorName == null) return null;
@@ -188,6 +225,19 @@ class KeyboardElementFactory {
     return _colorFactory.build(colorName);
   }
 
+  Switch buildSwitch(
+    XmlElement node, {
+    required String switchId,
+    required bool initiaState,
+    required List<BaseElement> children,
+  }) {
+    return _baseSwitchFactory.build(
+      node,
+      switchId: switchId,
+      initiaState: initiaState,
+      children: children,
+    );
+  }
   /* endregion Misc Builders */
 
   /* region Action Builders */
@@ -201,6 +251,10 @@ class KeyboardElementFactory {
 
   BaseMouseMoveAction buildMouseMoveAction() {
     return _baseMouseMoveActionFactory.build();
+  }
+
+  BaseToggleAction buildToggleAction(String switchId) {
+    return _baseToggleActionFactory.build(switchId);
   }
   /* endregion Action Builders */
 
@@ -229,6 +283,24 @@ class KeyboardElementFactory {
   }) {
     final action = buildKeyAction(keyCode);
     return buildKeyElement(node, action, label: label);
+  }
+
+  BaseToggleElement buildToggleElememt(
+    XmlElement node,
+    String switchId, {
+    String label = 'toggle',
+  }) {
+    final action = buildToggleAction(switchId);
+    return _baseToggleElememtFactory.build(
+      action,
+      switchId,
+      label: label,
+      overrides: _baseToggleElememtFactory.propsLoader.merge(
+        _baseToggleElememtFactory.props,
+        node: node,
+        color: _buildColor(node),
+      ),
+    );
   }
 
   BaseButtonElement buildMouseButtonElement(

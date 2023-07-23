@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
+import 'package:remotecontrol_lib/elements/element.dart';
 import 'package:remotecontrol_lib/widgets.dart' as widget;
 
 import '../components/cross_expanded.dart';
 import '../values/direction.dart';
 import '../values/geometry.dart';
-import 'element_base.dart';
 
 /// [FlexLayout] is a customizable, flexible layout for displaying child elements,
 /// child elements in can be either in a row or column direction.
@@ -21,6 +21,8 @@ class FlexLayout extends BaseLayout {
   final Geometry geometry;
   @override
   final List<BaseElement> children;
+  @override
+  bool display = true;
 
   final Direction direction;
   final double columnGap;
@@ -28,7 +30,7 @@ class FlexLayout extends BaseLayout {
 
   final bool expandChildren;
 
-  const FlexLayout({
+  FlexLayout({
     String label = '',
     this.geometry = const Geometry(),
     this.direction = Direction.Row,
@@ -111,16 +113,18 @@ class FlexLayout extends BaseLayout {
       return widget;
     }
 
+    final visibleChildren = children.where((element) => element.display == true).toList();
+
     return widget.FlexLayout(
       children: assemble(
-        children.map((e) => transformChildren(e.build(context))).toList(),
+        visibleChildren.map((e) => transformChildren(e.build(context))).toList(),
       ),
     );
   }
 }
 
 class RowLayout extends FlexLayout {
-  const RowLayout({
+  RowLayout({
     String label = '',
     Geometry geometry = const Geometry(),
     double columnGap = 0,
@@ -137,7 +141,7 @@ class RowLayout extends FlexLayout {
 }
 
 class ColumnLayout extends FlexLayout {
-  const ColumnLayout({
+  ColumnLayout({
     String label = '',
     Geometry geometry = const Geometry(),
     double rowGap = 0,
@@ -156,8 +160,10 @@ class ColumnLayout extends FlexLayout {
 class HorizontalSpacer extends BaseElement {
   @override
   final Geometry geometry;
+  @override
+  bool display = true;
 
-  const HorizontalSpacer({
+  HorizontalSpacer({
     String label = '',
     this.geometry = const Geometry(),
   }) : super(label);
@@ -171,8 +177,10 @@ class HorizontalSpacer extends BaseElement {
 class VerticalSpacer extends BaseElement {
   @override
   final Geometry geometry;
+  @override
+  bool display = true;
 
-  const VerticalSpacer({
+  VerticalSpacer({
     String label = '',
     this.geometry = const Geometry(),
   }) : super(label);

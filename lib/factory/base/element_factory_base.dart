@@ -24,6 +24,19 @@ abstract class BaseKeyElementFactory
   });
 }
 
+abstract class BaseToggleElementFactory
+    extends BaseElementFactory<ToggleElementProps, ToggleElementPropsFactory> {
+  BaseToggleElementFactory(ToggleElementProps props, propsLoader)
+      : super(props, propsLoader);
+
+  BaseToggleElement build(
+    covariant BaseAction<BaseToggleActionContext> action,
+    String switchId, {
+    String? label,
+    ToggleElementProps? overrides,
+  });
+}
+
 abstract class BaseMouseButtonElementFactory
     extends BaseElementFactory<MouseElementProps, MouseElementPropsFactory> {
   BaseMouseButtonElementFactory(props, propsLoader) : super(props, propsLoader);
