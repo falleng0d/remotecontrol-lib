@@ -36,9 +36,11 @@ class KeyElementProps extends BaseElementProps {
   final BaseAction<BaseKeyActionContext>? holdAction;
 
   final String? shiftModifierLabel;
+  final bool? unshiftOnRelease;
 
   /// The id of the modifier class that this key will activate if this key is a modifier
   final String? modifierId;
+  final String? switchId;
 
   /// If true and this key is pressed, it will be released on a non-modifier key press
   final bool? disableOnNonModifierPressed;
@@ -60,6 +62,7 @@ class KeyElementProps extends BaseElementProps {
         doubleTapThershold != null &&
         shiftModifierLabel != null &&
         modifierId != null &&
+        switchId != null &&
         disableOnNonModifierPressed != null &&
         disableOnSwitchPressed != null &&
         lockOnDoubleTap != null &&
@@ -78,7 +81,9 @@ class KeyElementProps extends BaseElementProps {
     this.doubleTapAction,
     this.holdAction,
     this.shiftModifierLabel,
+    this.unshiftOnRelease,
     this.modifierId,
+    this.switchId,
     this.disableOnNonModifierPressed,
     this.disableOnSwitchPressed,
     this.lockOnDoubleTap,
@@ -98,7 +103,9 @@ class KeyElementProps extends BaseElementProps {
     this.holdAction,
     this.doubleTapThershold = 0.0,
     this.shiftModifierLabel = '',
+    this.unshiftOnRelease = false,
     this.modifierId = '',
+    this.switchId = '',
     this.disableOnNonModifierPressed = false,
     this.disableOnSwitchPressed = false,
     this.lockOnDoubleTap = false,
@@ -119,7 +126,9 @@ class KeyElementProps extends BaseElementProps {
       doubleTapAction: other.doubleTapAction ?? doubleTapAction,
       holdAction: other.holdAction ?? holdAction,
       shiftModifierLabel: other.shiftModifierLabel ?? shiftModifierLabel,
+      unshiftOnRelease: other.unshiftOnRelease ?? unshiftOnRelease,
       modifierId: other.modifierId ?? modifierId,
+      switchId: other.switchId ?? switchId,
       disableOnNonModifierPressed:
           other.disableOnNonModifierPressed ?? disableOnNonModifierPressed,
       disableOnSwitchPressed: other.disableOnSwitchPressed ?? disableOnSwitchPressed,

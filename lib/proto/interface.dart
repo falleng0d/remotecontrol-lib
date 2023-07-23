@@ -9,8 +9,9 @@ enum ClientStatus { connected, disconnected, connecting }
 @immutable
 class KeyOptions {
   final bool? noRepeat;
+  final bool? unshiftOnRelease;
 
-  const KeyOptions({this.noRepeat});
+  const KeyOptions({this.noRepeat, this.unshiftOnRelease});
 
   factory KeyOptions.fromPb(pb.KeyOptions options) {
     return KeyOptions(
@@ -20,7 +21,7 @@ class KeyOptions {
 
   @override
   String toString() {
-    return 'KeyOptions(noRepeat: $noRepeat)';
+    return 'KeyOptions(noRepeat: $noRepeat, unshiftOnRelease: $unshiftOnRelease)';
   }
 }
 

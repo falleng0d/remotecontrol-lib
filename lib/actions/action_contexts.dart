@@ -64,8 +64,9 @@ class BaseTapActionContext extends BaseActionContext {
 
 /// [BaseToggleActionContext] is the context in which a switch action is executed.
 class BaseToggleActionContext extends BaseActionContext {
-  final bool? state;
+  final bool state;
 
-  const BaseToggleActionContext(BaseElement target, {String? description, this.state})
+  const BaseToggleActionContext(BaseElement target,
+      {String? description, required this.state})
       : super(target, description: description);
 }

@@ -45,11 +45,13 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
       doubleTapThershold:
           node.getAttributeValue('doubleTapThreshold', into.doubleTapThershold),
       modifierId: node.getAttributeValue('mid', into.modifierId),
+      switchId: node.getAttributeValue('switchId', into.switchId),
       disableOnNonModifierPressed: node.getAttributeValue(
           'disableOnNonModifierPressed', into.disableOnNonModifierPressed),
       disableOnSwitchPressed:
           node.getAttributeValue('disableOnSwitchPressed', into.disableOnSwitchPressed),
       shiftModifierLabel: node.getAttributeValue('shiftLabel', into.shiftModifierLabel),
+      unshiftOnRelease: node.getAttributeValue('unshift', into.unshiftOnRelease),
       lockOnDoubleTap: node.getAttributeValue('lockOnDoubleTap', into.lockOnDoubleTap),
       lockOnHold: node.getAttributeValue('lockOnHold', into.lockOnHold),
       color: color ?? into.color,

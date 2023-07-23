@@ -39,6 +39,7 @@ const VK_W = 87;
 const VK_X = 88;
 const VK_Y = 89;
 const VK_Z = 90;
+const VK_SHIFT = 160;
 
 enum MouseButtonType { LEFT, RIGHT, MIDDLE, X1, X2 }
 
@@ -304,8 +305,11 @@ const Map<String, int> _keyToVK = {
   ']': VK_OEM_6,
   '\\': VK_OEM_5,
   '\'': VK_OEM_7,
+  '"': VK_OEM_7,
   '`': VK_OEM_3,
   '_': VK_OEM_MINUS,
+  '!': VK_1,
+  '?': VK_OEM_2,
 };
 
 Map<int, String> _vKToKey = _keyToVK.map((k, v) => MapEntry(v, k));

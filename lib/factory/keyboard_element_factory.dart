@@ -227,12 +227,14 @@ class KeyboardElementFactory {
 
   Switch buildSwitch(
     XmlElement node, {
+    String? label,
     required String switchId,
     required bool initiaState,
     required List<BaseElement> children,
   }) {
     return _baseSwitchFactory.build(
       node,
+      label: label,
       switchId: switchId,
       initiaState: initiaState,
       children: children,
