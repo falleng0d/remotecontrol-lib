@@ -24,6 +24,18 @@ abstract class BaseKeyElementFactory
   });
 }
 
+abstract class BaseHotkeyElementFactory
+    extends BaseElementFactory<HotkeyElementProps, HotkeyElementPropsFactory> {
+  BaseHotkeyElementFactory(HotkeyElementProps props, propsLoader)
+      : super(props, propsLoader);
+
+  BaseHotkeyElement build(
+    covariant BaseAction<BaseHotkeyActionContext> action, {
+    String? label,
+    HotkeyElementProps? overrides,
+  });
+}
+
 abstract class BaseToggleElementFactory
     extends BaseElementFactory<ToggleElementProps, ToggleElementPropsFactory> {
   BaseToggleElementFactory(ToggleElementProps props, propsLoader)

@@ -29,6 +29,16 @@ class BaseKeyActionContext extends BaseActionContext {
       : super(target, description: description);
 }
 
+/// [BaseHotkeyActionContext] is the context in which a keyboard hotkey action is executed.
+class BaseHotkeyActionContext extends BaseActionContext {
+  final KeyActionType actionType;
+  final KeyOptions? options;
+
+  const BaseHotkeyActionContext(BaseElement target, this.actionType,
+      {String? description, this.options})
+      : super(target, description: description);
+}
+
 /// [BaseButtonActionContext] is the context in which a mouse button action is executed.
 class BaseButtonActionContext extends BaseActionContext {
   final ButtonActionType actionType;

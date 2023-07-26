@@ -60,6 +60,35 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
   }
 }
 
+class HotkeyElementPropsFactory extends XmlNodeToObjectFactory<HotkeyElementProps> {
+  @override
+  HotkeyElementProps merge(HotkeyElementProps into,
+      {required XmlElement node, KeyColor? color}) {
+    final actuationTypeName = node.getAttributeValue<String?>('type', null);
+    final actuationType = actuationTypeName != null
+        ? KeyActuationType.values.firstWhere((e) => e.toString() == actuationTypeName)
+        : into.actuationType;
+
+    return HotkeyElementProps(
+      label: node.getAttributeValue('label', into.label),
+      geometry: into.geometry != null
+          ? GeometryPropsFactory().merge(into.geometry!, node: node)
+          : GeometryPropsFactory().load(node),
+      actuationType: actuationType,
+      keyRep: node.getAttributeValue('keyRep', into.keyRep),
+      keyRepeatDelay: node.getAttributeValue('keyRepeatDelay', into.keyRepeatDelay),
+      shiftModifierLabel: node.getAttributeValue('shiftLabel', into.shiftModifierLabel),
+      color: color ?? into.color,
+    );
+  }
+
+  @override
+  HotkeyElementProps load(XmlElement node,
+      {HotkeyElementProps? defaults, KeyColor? color}) {
+    return merge(defaults ?? const HotkeyElementProps(), node: node, color: color);
+  }
+}
+
 class ToggleElementPropsFactory extends XmlNodeToObjectFactory<ToggleElementProps> {
   @override
   ToggleElementProps merge(ToggleElementProps into,

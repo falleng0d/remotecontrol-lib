@@ -10,9 +10,22 @@ enum ClientStatus { connected, disconnected, connecting }
 class KeyOptions {
   final bool? noRepeat;
   final bool? unshiftOnRelease;
+  // TODO: implement keyRepeatDelay
   final double? keyRepeatDelay;
+  // TODO: implement modifiers
+  final List<int>? modifiers;
+  // TODO: implement disableUnwantedModifiers
+  // disables all modifiers except the ones specified in the modifiers list,
+  // then enable them back when the key is released
+  final bool? disableUnwantedModifiers;
 
-  const KeyOptions({this.noRepeat, this.unshiftOnRelease, this.keyRepeatDelay});
+  const KeyOptions({
+    this.noRepeat,
+    this.unshiftOnRelease,
+    this.keyRepeatDelay,
+    this.modifiers,
+    this.disableUnwantedModifiers,
+  });
 
   factory KeyOptions.fromPb(pb.KeyOptions options) {
     return KeyOptions(

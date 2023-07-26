@@ -51,6 +51,20 @@ abstract class BaseKeyElement extends BaseElement {
   Widget build(BuildContext context);
 }
 
+abstract class BaseHotkeyElement extends BaseElement {
+  @override
+  final Geometry geometry;
+
+  BaseHotkeyElement(
+    BaseAction<BaseHotkeyActionContext> action, {
+    String label = '',
+    this.geometry = const Geometry(),
+  }) : super(label);
+
+  @override
+  Widget build(BuildContext context);
+}
+
 abstract class BaseToggleElement extends BaseElement {
   @override
   final Geometry geometry;

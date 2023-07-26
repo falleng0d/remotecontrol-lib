@@ -128,6 +128,58 @@ class KeyElementProps extends BaseElementProps {
   }
 }
 
+class HotkeyElementProps extends BaseElementProps {
+  final KeyActuationType? actuationType;
+
+  final double? keyRep;
+  final double? keyRepeatDelay;
+
+  final String? shiftModifierLabel;
+
+  final KeyColor? color;
+
+  @override
+  bool get isFilled {
+    return super.isFilled &&
+        actuationType != null &&
+        keyRep != null &&
+        keyRepeatDelay != null &&
+        shiftModifierLabel != null;
+  }
+
+  const HotkeyElementProps({
+    String? label,
+    Geometry? geometry,
+    this.actuationType,
+    this.keyRep,
+    this.keyRepeatDelay,
+    this.shiftModifierLabel,
+    this.color,
+  }) : super(label: label, geometry: geometry);
+
+  const HotkeyElementProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+    this.actuationType = KeyActuationType.PRESS,
+    this.keyRep = 0.0,
+    this.keyRepeatDelay = 0.0,
+    this.shiftModifierLabel = '',
+    this.color,
+  }) : super(label: label, geometry: geometry);
+
+  HotkeyElementProps copyFrom(HotkeyElementProps other) {
+    return HotkeyElementProps(
+      label: other.label ?? label,
+      geometry: geometryFrom(other),
+      actuationType: other.actuationType ?? actuationType,
+      keyRep: other.keyRep ?? keyRep,
+      keyRepeatDelay: other.keyRepeatDelay ?? keyRepeatDelay,
+      shiftModifierLabel: other.shiftModifierLabel ?? shiftModifierLabel,
+      color: other.color ?? color,
+    );
+  }
+}
+
 class ToggleElementProps extends BaseElementProps {
   final KeyActuationType? actuationType;
 
