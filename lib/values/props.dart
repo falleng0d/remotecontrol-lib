@@ -27,9 +27,6 @@ class KeyElementProps extends BaseElementProps {
   final double? keyRep;
   final double? keyRepeatDelay;
 
-  final double? holdTimeThreshold;
-  final double? doubleTapThershold;
-
   // optional
   final BaseAction<BaseKeyActionContext>? doubleTapAction;
   // optional
@@ -58,8 +55,6 @@ class KeyElementProps extends BaseElementProps {
         actuationType != null &&
         keyRep != null &&
         keyRepeatDelay != null &&
-        holdTimeThreshold != null &&
-        doubleTapThershold != null &&
         shiftModifierLabel != null &&
         modifierId != null &&
         switchId != null &&
@@ -76,8 +71,6 @@ class KeyElementProps extends BaseElementProps {
     this.toggle = false,
     this.keyRep,
     this.keyRepeatDelay,
-    this.holdTimeThreshold,
-    this.doubleTapThershold,
     this.doubleTapAction,
     this.holdAction,
     this.shiftModifierLabel,
@@ -98,10 +91,8 @@ class KeyElementProps extends BaseElementProps {
     this.toggle = false,
     this.keyRep = 0.0,
     this.keyRepeatDelay = 0.0,
-    this.holdTimeThreshold = 0.0,
     this.doubleTapAction,
     this.holdAction,
-    this.doubleTapThershold = 0.0,
     this.shiftModifierLabel = '',
     this.unshiftOnRelease = false,
     this.modifierId = '',
@@ -121,8 +112,6 @@ class KeyElementProps extends BaseElementProps {
       toggle: other.toggle ?? toggle,
       keyRep: other.keyRep ?? keyRep,
       keyRepeatDelay: other.keyRepeatDelay ?? keyRepeatDelay,
-      holdTimeThreshold: other.holdTimeThreshold ?? holdTimeThreshold,
-      doubleTapThershold: other.doubleTapThershold ?? doubleTapThershold,
       doubleTapAction: other.doubleTapAction ?? doubleTapAction,
       holdAction: other.holdAction ?? holdAction,
       shiftModifierLabel: other.shiftModifierLabel ?? shiftModifierLabel,

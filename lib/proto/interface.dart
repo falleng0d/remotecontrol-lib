@@ -10,8 +10,9 @@ enum ClientStatus { connected, disconnected, connecting }
 class KeyOptions {
   final bool? noRepeat;
   final bool? unshiftOnRelease;
+  final double? keyRepeatDelay;
 
-  const KeyOptions({this.noRepeat, this.unshiftOnRelease});
+  const KeyOptions({this.noRepeat, this.unshiftOnRelease, this.keyRepeatDelay});
 
   factory KeyOptions.fromPb(pb.KeyOptions options) {
     return KeyOptions(

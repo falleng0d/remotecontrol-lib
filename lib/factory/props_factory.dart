@@ -40,10 +40,6 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
       actuationType: actuationType,
       keyRep: node.getAttributeValue('keyRep', into.keyRep),
       keyRepeatDelay: node.getAttributeValue('keyRepeatDelay', into.keyRepeatDelay),
-      holdTimeThreshold:
-          node.getAttributeValue('holdTimeThreshold', into.holdTimeThreshold),
-      doubleTapThershold:
-          node.getAttributeValue('doubleTapThreshold', into.doubleTapThershold),
       modifierId: node.getAttributeValue('mid', into.modifierId),
       switchId: node.getAttributeValue('switchId', into.switchId),
       disableOnNonModifierPressed: node.getAttributeValue(
