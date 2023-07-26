@@ -10,6 +10,7 @@ import '../src/virtualkeys.dart';
 class KeyboardElementFactory {
   /* region Fields */
   BaseKeyElementFactory? __baseKeyElementFactory;
+  BaseHotkeyElementFactory? __baseHotkeyElementFactory;
   BaseToggleElementFactory? __baseToggleElementFactory;
   BaseMouseButtonElementFactory? __baseMouseButtonElementFactory;
   BaseTextElementFactory? __baseTextElementFactory;
@@ -22,6 +23,7 @@ class KeyboardElementFactory {
   BaseVerticalSpacerFactory? __baseVerticalSpacerFactory;
 
   BaseKeyActionFactory? __baseKeyActionFactory;
+  BaseHotkeyActionFactory? __baseHotkeyActionFactory;
   BaseButtonActionFactory? __baseMouseButtonActionFactory;
   BaseMouseMoveActionFactory? __baseMouseMoveActionFactory;
   BaseToggleActionFactory? __baseToggleActionFactory;
@@ -37,6 +39,14 @@ class KeyboardElementFactory {
     }
 
     return __baseKeyElementFactory!;
+  }
+
+  BaseHotkeyElementFactory get _baseHotkeyElementFactory {
+    if (__baseHotkeyElementFactory == null) {
+      throw Exception('BaseHotkeyElementFactory is not registered');
+    }
+
+    return __baseHotkeyElementFactory!;
   }
 
   BaseToggleElementFactory get _baseToggleElememtFactory {
@@ -117,6 +127,14 @@ class KeyboardElementFactory {
     }
 
     return __baseKeyActionFactory!;
+  }
+
+  BaseHotkeyActionFactory get _baseHotkeyActionFactory {
+    if (__baseHotkeyActionFactory == null) {
+      throw Exception('BaseHotkeyActionFactory is not registered');
+    }
+
+    return __baseHotkeyActionFactory!;
   }
 
   BaseButtonActionFactory get _baseMouseButtonActionFactory {
@@ -247,6 +265,10 @@ class KeyboardElementFactory {
     return _baseKeyActionFactory.build(keyCode);
   }
 
+  BaseHotkeyAction buildHotkeyAction(String hotkey) {
+    return _baseHotkeyActionFactory.build(hotkey);
+  }
+
   BaseMouseButtonAction buildMouseButtonAction(MouseButtonType button) {
     return _baseMouseButtonActionFactory.build(button);
   }
@@ -285,6 +307,22 @@ class KeyboardElementFactory {
   }) {
     final action = buildKeyAction(keyCode);
     return buildKeyElement(node, action, label: label);
+  }
+
+  BaseHotkeyElement buildHotkeyElement(
+    XmlElement node,
+    String hotkey, {
+    required String label,
+  }) {
+    final action = buildHotkeyAction(hotkey);
+    return _baseHotkeyElementFactory.build(
+      action,
+      label: label,
+      overrides: _baseHotkeyElementFactory.propsLoader.merge(
+        _baseHotkeyElementFactory.props,
+        node: node,
+      ),
+    );
   }
 
   BaseToggleElement buildToggleElememt(
@@ -424,6 +462,5 @@ class KeyboardElementFactory {
       ),
     );
   }
-
-/* endregion Layout Builders */
+  /* endregion Layout Builders */
 }

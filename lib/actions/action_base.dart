@@ -26,6 +26,15 @@ abstract class BaseKeyAction extends BaseAction<BaseKeyActionContext> {
   Future<bool> doAction(BaseKeyActionContext ctx);
 }
 
+abstract class BaseHotkeyAction extends BaseAction<BaseHotkeyActionContext> {
+  int get hotkey;
+
+  const BaseHotkeyAction(int keyCode);
+
+  @override
+  Future<bool> doAction(BaseHotkeyActionContext ctx);
+}
+
 abstract class BaseMouseButtonAction extends BaseAction<BaseButtonActionContext> {
   MouseButtonType get button;
 
