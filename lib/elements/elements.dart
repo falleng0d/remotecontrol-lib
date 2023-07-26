@@ -41,7 +41,7 @@ abstract class BaseKeyElement extends BaseElement {
   @override
   final Geometry geometry;
 
-  const BaseKeyElement(
+  BaseKeyElement(
     BaseAction<BaseKeyActionContext> action, {
     String label = '',
     this.geometry = const Geometry(),
@@ -55,7 +55,7 @@ abstract class BaseToggleElement extends BaseElement {
   @override
   final Geometry geometry;
 
-  const BaseToggleElement(
+  BaseToggleElement(
     BaseAction<BaseToggleActionContext> action, {
     String label = '',
     this.geometry = const Geometry(),
@@ -69,7 +69,7 @@ abstract class BaseTouchpadElement extends BaseElement {
   @override
   final Geometry geometry;
 
-  const BaseTouchpadElement(TouchpadActions actions,
+  BaseTouchpadElement(TouchpadActions actions,
       {String label = '', this.geometry = const Geometry()})
       : super(label);
 
@@ -81,7 +81,7 @@ abstract class BaseButtonElement extends BaseElement {
   @override
   final Geometry geometry;
 
-  const BaseButtonElement(
+  BaseButtonElement(
     BaseAction<BaseButtonActionContext> action, {
     String label = '',
     this.geometry = const Geometry(),

@@ -1,5 +1,6 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../mixins.dart';
 import '../values/geometry.dart';
 
 mixin Sizeable {
@@ -19,14 +20,12 @@ abstract class AbstractElement {
 }
 
 /// A [BaseElement] is a displayable control that can be added to a [BaseLayout]
-abstract class BaseElement extends AbstractElement with Sizeable, Labeled {
+abstract class BaseElement extends AbstractElement
+    with Sizeable, Labeled, Visible, Displayable {
   @override
   final String label;
 
-  bool get display;
-  set display(bool value);
-
-  const BaseElement(this.label);
+  BaseElement(this.label);
 
   Widget build(BuildContext context);
 }
@@ -41,7 +40,7 @@ abstract class BaseElement extends AbstractElement with Sizeable, Labeled {
 abstract class BaseLayout extends BaseElement {
   List<BaseElement> get children;
 
-  const BaseLayout(Geometry geometry, String label) : super(label);
+  BaseLayout(String label) : super(label);
 
   @override
   void dispose() {
@@ -54,6 +53,20 @@ abstract class BaseLayout extends BaseElement {
   void init() {
     for (var element in children) {
       element.init();
+    }
+  }
+
+  @override
+  void onHide() {
+    for (var element in children) {
+      element.visible = false;
+    }
+  }
+
+  @override
+  void onShow() {
+    for (var element in children) {
+      element.visible = true;
     }
   }
 }

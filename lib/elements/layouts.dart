@@ -21,8 +21,6 @@ class FlexLayout extends BaseLayout {
   final Geometry geometry;
   @override
   final List<BaseElement> children;
-  @override
-  bool display = true;
 
   final Direction direction;
   final double columnGap;
@@ -38,86 +36,84 @@ class FlexLayout extends BaseLayout {
     this.rowGap = 0,
     this.expandChildren = false,
     required this.children,
-  }) : super(geometry, label);
+  }) : super(label);
+
+  Widget _addWrapper(List<Widget> children) {
+    if (direction == Direction.Row) {
+      return Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: children,
+      );
+    } else {
+      return Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: children,
+      );
+    }
+  }
+
+  Widget _addExpand(Widget widget) {
+    if (geometry.expand == true) {
+      return Expanded(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(child: widget),
+          ],
+        ),
+      );
+    } else {
+      return widget;
+    }
+  }
+
+  Widget _addContainer(Widget widget) {
+    return !geometry.isEmpty()
+        ? Container(
+            padding: geometry.padding ?? const EdgeInsets.all(0),
+            margin: geometry.margin ?? const EdgeInsets.all(0),
+            width: geometry.width,
+            height: geometry.height,
+            constraints: BoxConstraints(
+              maxWidth: geometry.maxWidth ?? double.infinity,
+              maxHeight: geometry.maxHeight ?? double.infinity,
+              minHeight: geometry.minHeight ?? 0,
+              minWidth: geometry.minWidth ?? 0,
+            ),
+            child: widget,
+          )
+        : widget;
+  }
+
+  Widget _addExpandToChildren(Widget widget) {
+    if (expandChildren == true) {
+      return CrossExpanded(child: widget);
+    } else {
+      return widget;
+    }
+  }
+
+  Widget _transformChildren(Widget widget) {
+    widget = _addExpandToChildren(widget);
+    return widget;
+  }
 
   @override
   Widget build(BuildContext context) {
-    // Build wrapper
-    addWrapper(List<Widget> children) {
-      if (direction == Direction.Row) {
-        return Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: children,
-        );
-      } else {
-        return Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: children,
-        );
-      }
-    }
-
-    addExpand(Widget widget) {
-      if (geometry.expand == true) {
-        return Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(child: widget),
-            ],
-          ),
-        );
-      } else {
-        return widget;
-      }
-    }
-
-    // Build children
-    addContainer(Widget widget) {
-      return !geometry.isEmpty()
-          ? Container(
-              padding: geometry.padding ?? const EdgeInsets.all(0),
-              margin: geometry.margin ?? const EdgeInsets.all(0),
-              width: geometry.width,
-              height: geometry.height,
-              constraints: BoxConstraints(
-                maxWidth: geometry.maxWidth ?? double.infinity,
-                maxHeight: geometry.maxHeight ?? double.infinity,
-                minHeight: geometry.minHeight ?? 0,
-                minWidth: geometry.minWidth ?? 0,
-              ),
-              child: widget,
-            )
-          : widget;
-    }
-
-    addExpandToChildren(Widget widget) {
-      if (expandChildren == true) {
-        return CrossExpanded(child: widget);
-      } else {
-        return widget;
-      }
-    }
-
-    transformChildren(Widget widget) {
-      widget = addExpandToChildren(widget);
-      return widget;
-    }
-
     assemble(List<Widget> children) {
       Widget widget;
-      widget = children.length > 1 ? addWrapper(children) : children[0];
-      widget = addExpand(addContainer(widget));
+      widget = children.length > 1 ? _addWrapper(children) : children[0];
+      widget = _addExpand(_addContainer(widget));
       return widget;
     }
 
-    final visibleChildren = children.where((element) => element.display == true).toList();
+    final visibleChildren = children.where((element) => element.isVisible == true);
 
     return widget.FlexLayout(
       children: assemble(
-        visibleChildren.map((e) => transformChildren(e.build(context))).toList(),
+        visibleChildren.map((e) => _transformChildren(e.build(context))).toList(),
       ),
     );
   }
@@ -161,7 +157,7 @@ class HorizontalSpacer extends BaseElement {
   @override
   final Geometry geometry;
   @override
-  bool display = true;
+  bool isVisible = true;
 
   HorizontalSpacer({
     String label = '',
@@ -172,13 +168,19 @@ class HorizontalSpacer extends BaseElement {
   Widget build(BuildContext context) {
     return widget.HorizontalSpacer(geometry: geometry);
   }
+
+  @override
+  void onHide() {}
+
+  @override
+  void onShow() {}
 }
 
 class VerticalSpacer extends BaseElement {
   @override
   final Geometry geometry;
   @override
-  bool display = true;
+  bool isVisible = true;
 
   VerticalSpacer({
     String label = '',
@@ -189,4 +191,43 @@ class VerticalSpacer extends BaseElement {
   Widget build(BuildContext context) {
     return widget.VerticalSpacer(geometry: geometry);
   }
+
+  @override
+  void onHide() {}
+
+  @override
+  void onShow() {}
+}
+
+/// [VisibilityElement] is a layout element that can be used to hide or show
+/// a child element.
+///
+/// Its display property is controlled by a [Switch]
+class VisibilityElement extends BaseElement {
+  @override
+  final Geometry geometry = const Geometry();
+  final BaseElement child;
+
+  VisibilityElement({
+    String label = '',
+    bool display = true,
+    required this.child,
+  }) : super(label) {
+    this.display = display;
+  }
+
+  @override
+  Widget build(BuildContext context) => child.build(context);
+
+  @override
+  void dispose() => child.dispose();
+
+  @override
+  void init() => child.init();
+
+  @override
+  void onHide() => child.visible = false;
+
+  @override
+  void onShow() => child.visible = true;
 }

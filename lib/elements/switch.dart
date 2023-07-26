@@ -50,4 +50,8 @@ class Switch {
       child.display = state;
     }
   }
+
+  void onShow() => update();
+
+  void onHide() => update();
 }
