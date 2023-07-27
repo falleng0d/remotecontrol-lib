@@ -186,6 +186,9 @@ class KeyboardElementFactory {
     if (Get.isRegistered<BaseKeyElementFactory>()) {
       __baseKeyElementFactory = Get.find<BaseKeyElementFactory>();
     }
+    if (Get.isRegistered<BaseHotkeyElementFactory>()) {
+      __baseHotkeyElementFactory = Get.find<BaseHotkeyElementFactory>();
+    }
     if (Get.isRegistered<BaseToggleElementFactory>()) {
       __baseToggleElementFactory = Get.find<BaseToggleElementFactory>();
     }
@@ -217,6 +220,9 @@ class KeyboardElementFactory {
 
     if (Get.isRegistered<BaseKeyActionFactory>()) {
       __baseKeyActionFactory = Get.find<BaseKeyActionFactory>();
+    }
+    if (Get.isRegistered<BaseHotkeyActionFactory>()) {
+      __baseHotkeyActionFactory = Get.find<BaseHotkeyActionFactory>();
     }
     if (Get.isRegistered<BaseButtonActionFactory>()) {
       __baseMouseButtonActionFactory = Get.find<BaseButtonActionFactory>();

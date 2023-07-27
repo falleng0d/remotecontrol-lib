@@ -27,9 +27,9 @@ abstract class BaseKeyAction extends BaseAction<BaseKeyActionContext> {
 }
 
 abstract class BaseHotkeyAction extends BaseAction<BaseHotkeyActionContext> {
-  int get hotkey;
+  String get hotkey;
 
-  const BaseHotkeyAction(int keyCode);
+  const BaseHotkeyAction(String hotkey);
 
   @override
   Future<bool> doAction(BaseHotkeyActionContext ctx);
