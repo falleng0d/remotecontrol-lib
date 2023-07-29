@@ -5,7 +5,6 @@ import 'package:remotecontrol_lib/values/color.dart';
 import 'package:xml/xml.dart';
 
 import '../factory.dart';
-import '../src/virtualkeys.dart';
 
 class KeyboardElementFactory {
   /* region Fields */
@@ -21,12 +20,6 @@ class KeyboardElementFactory {
   BaseColumnLayoutFactory? __baseColumnLayoutFactory;
   BaseHorizontalSpacerFactory? __baseHorizontalSpacerFactory;
   BaseVerticalSpacerFactory? __baseVerticalSpacerFactory;
-
-  BaseKeyActionFactory? __baseKeyActionFactory;
-  BaseHotkeyActionFactory? __baseHotkeyActionFactory;
-  BaseButtonActionFactory? __baseMouseButtonActionFactory;
-  BaseMouseMoveActionFactory? __baseMouseMoveActionFactory;
-  BaseToggleActionFactory? __baseToggleActionFactory;
 
   ColorFactory? __colorFactory;
   BaseSwitchFactory? __baseSwitchFactory;
@@ -121,46 +114,6 @@ class KeyboardElementFactory {
     return __baseVerticalSpacerFactory!;
   }
 
-  BaseKeyActionFactory get _baseKeyActionFactory {
-    if (__baseKeyActionFactory == null) {
-      throw Exception('BaseKeyActionFactory is not registered');
-    }
-
-    return __baseKeyActionFactory!;
-  }
-
-  BaseHotkeyActionFactory get _baseHotkeyActionFactory {
-    if (__baseHotkeyActionFactory == null) {
-      throw Exception('BaseHotkeyActionFactory is not registered');
-    }
-
-    return __baseHotkeyActionFactory!;
-  }
-
-  BaseButtonActionFactory get _baseMouseButtonActionFactory {
-    if (__baseMouseButtonActionFactory == null) {
-      throw Exception('BaseMouseButtonActionFactory is not registered');
-    }
-
-    return __baseMouseButtonActionFactory!;
-  }
-
-  BaseMouseMoveActionFactory get _baseMouseMoveActionFactory {
-    if (__baseMouseMoveActionFactory == null) {
-      throw Exception('BaseMouseMoveActionFactory is not registered');
-    }
-
-    return __baseMouseMoveActionFactory!;
-  }
-
-  BaseToggleActionFactory get _baseToggleActionFactory {
-    if (__baseToggleActionFactory == null) {
-      throw Exception('BaseToggleActionFactory is not registered');
-    }
-
-    return __baseToggleActionFactory!;
-  }
-
   ColorFactory get _colorFactory {
     if (__colorFactory == null) {
       throw Exception('ColorFactory is not registered');
@@ -218,21 +171,6 @@ class KeyboardElementFactory {
       __baseVerticalSpacerFactory = Get.find<BaseVerticalSpacerFactory>();
     }
 
-    if (Get.isRegistered<BaseKeyActionFactory>()) {
-      __baseKeyActionFactory = Get.find<BaseKeyActionFactory>();
-    }
-    if (Get.isRegistered<BaseHotkeyActionFactory>()) {
-      __baseHotkeyActionFactory = Get.find<BaseHotkeyActionFactory>();
-    }
-    if (Get.isRegistered<BaseButtonActionFactory>()) {
-      __baseMouseButtonActionFactory = Get.find<BaseButtonActionFactory>();
-    }
-    if (Get.isRegistered<BaseMouseMoveActionFactory>()) {
-      __baseMouseMoveActionFactory = Get.find<BaseMouseMoveActionFactory>();
-    }
-    if (Get.isRegistered<BaseToggleActionFactory>()) {
-      __baseToggleActionFactory = Get.find<BaseToggleActionFactory>();
-    }
     if (Get.isRegistered<ColorFactory>()) {
       __colorFactory = Get.find<ColorFactory>();
     }
@@ -266,28 +204,6 @@ class KeyboardElementFactory {
   }
   /* endregion Misc Builders */
 
-  /* region Action Builders */
-  BaseKeyAction buildKeyAction(String keyCode) {
-    return _baseKeyActionFactory.build(keyCode);
-  }
-
-  BaseHotkeyAction buildHotkeyAction(String hotkey) {
-    return _baseHotkeyActionFactory.build(hotkey);
-  }
-
-  BaseMouseButtonAction buildMouseButtonAction(MouseButtonType button) {
-    return _baseMouseButtonActionFactory.build(button);
-  }
-
-  BaseMouseMoveAction buildMouseMoveAction() {
-    return _baseMouseMoveActionFactory.build();
-  }
-
-  BaseToggleAction buildToggleAction(String switchId) {
-    return _baseToggleActionFactory.build(switchId);
-  }
-  /* endregion Action Builders */
-
   /* region Element Builders */
   BaseKeyElement buildKeyElement(
     XmlElement node,
@@ -306,21 +222,12 @@ class KeyboardElementFactory {
     );
   }
 
-  BaseKeyElement buildKeyElementWithKeyCode(
-    XmlElement node,
-    String keyCode, {
-    String label = 'key',
-  }) {
-    final action = buildKeyAction(keyCode);
-    return buildKeyElement(node, action, label: label);
-  }
-
   BaseHotkeyElement buildHotkeyElement(
     XmlElement node,
-    String hotkey, {
+    String hotkey,
+    covariant BaseHotkeyAction action, {
     required String label,
   }) {
-    final action = buildHotkeyAction(hotkey);
     return _baseHotkeyElementFactory.build(
       action,
       label: label,
@@ -333,10 +240,10 @@ class KeyboardElementFactory {
 
   BaseToggleElement buildToggleElememt(
     XmlElement node,
-    String switchId, {
+    String switchId,
+    covariant BaseToggleAction action, {
     String label = 'toggle',
   }) {
-    final action = buildToggleAction(switchId);
     return _baseToggleElememtFactory.build(
       action,
       switchId,
@@ -362,15 +269,6 @@ class KeyboardElementFactory {
         ));
   }
 
-  BaseButtonElement buildMouseButtonElementWithButtonType(
-    XmlElement node,
-    MouseButtonType button, {
-    String label = 'mouseButton',
-  }) {
-    final action = buildMouseButtonAction(button);
-    return buildMouseButtonElement(node, action, label: label);
-  }
-
   BaseTextElement buildTextElement(XmlElement node, String label) {
     return _baseTextElementFactory.build(
       label,
@@ -381,11 +279,17 @@ class KeyboardElementFactory {
     );
   }
 
-  BaseTouchpadElement buildTouchpadElement(XmlElement node, {String label = 'touchpad'}) {
+  BaseTouchpadElement buildTouchpadElement(
+    XmlElement node, {
+    String label = 'touchpad',
+    required BaseMouseMoveAction touchpadMoveAction,
+    required BaseMouseButtonAction tapAction,
+    required BaseMouseButtonAction rightTapAction,
+  }) {
     var actions = TouchpadActions(
-      touchpadMove: buildMouseMoveAction(),
-      tap: buildMouseButtonAction(MouseButtonType.LEFT),
-      rightTap: buildMouseButtonAction(MouseButtonType.RIGHT),
+      touchpadMove: touchpadMoveAction,
+      tap: tapAction,
+      rightTap: rightTapAction,
     );
 
     return _baseTouchpadElementFactory.build(
