@@ -19,6 +19,7 @@ import 'input.pb.dart' as $0;
 
 export 'input.pb.dart';
 
+@$pb.GrpcServiceName('InputMethods')
 class InputMethodsClient extends $grpc.Client {
   static final _$pressKey = $grpc.ClientMethod<$0.Key, $0.Response>(
       '/InputMethods/PressKey',
@@ -46,21 +47,20 @@ class InputMethodsClient extends $grpc.Client {
       ($core.List<$core.int> value) => $0.Config.fromBuffer(value));
 
   InputMethodsClient($grpc.ClientChannel channel,
-      {$grpc.CallOptions? options, $core.Iterable<$grpc.ClientInterceptor>? interceptors})
-      : super(channel, options: options, interceptors: interceptors);
+      {$grpc.CallOptions? options,
+      $core.Iterable<$grpc.ClientInterceptor>? interceptors})
+      : super(channel, options: options,
+        interceptors: interceptors);
 
-  $grpc.ResponseFuture<$0.Response> pressKey($0.Key request,
-      {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.Response> pressKey($0.Key request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$pressKey, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Response> pressMouseKey($0.MouseKey request,
-      {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.Response> pressMouseKey($0.MouseKey request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$pressMouseKey, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Response> moveMouse($0.MouseMove request,
-      {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.Response> moveMouse($0.MouseMove request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$moveMouse, request, options: options);
   }
 
@@ -68,17 +68,16 @@ class InputMethodsClient extends $grpc.Client {
     return $createUnaryCall(_$ping, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Config> setConfig($0.Config request,
-      {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.Config> setConfig($0.Config request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$setConfig, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.Config> getConfig($0.Empty request,
-      {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$0.Config> getConfig($0.Empty request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getConfig, request, options: options);
   }
 }
 
+@$pb.GrpcServiceName('InputMethods')
 abstract class InputMethodsServiceBase extends $grpc.Service {
   $core.String get $name => 'InputMethods';
 
@@ -127,33 +126,27 @@ abstract class InputMethodsServiceBase extends $grpc.Service {
         ($0.Config value) => value.writeToBuffer()));
   }
 
-  $async.Future<$0.Response> pressKey_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.Key> request) async {
+  $async.Future<$0.Response> pressKey_Pre($grpc.ServiceCall call, $async.Future<$0.Key> request) async {
     return pressKey(call, await request);
   }
 
-  $async.Future<$0.Response> pressMouseKey_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.MouseKey> request) async {
+  $async.Future<$0.Response> pressMouseKey_Pre($grpc.ServiceCall call, $async.Future<$0.MouseKey> request) async {
     return pressMouseKey(call, await request);
   }
 
-  $async.Future<$0.Response> moveMouse_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.MouseMove> request) async {
+  $async.Future<$0.Response> moveMouse_Pre($grpc.ServiceCall call, $async.Future<$0.MouseMove> request) async {
     return moveMouse(call, await request);
   }
 
-  $async.Future<$0.Response> ping_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+  $async.Future<$0.Response> ping_Pre($grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
     return ping(call, await request);
   }
 
-  $async.Future<$0.Config> setConfig_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.Config> request) async {
+  $async.Future<$0.Config> setConfig_Pre($grpc.ServiceCall call, $async.Future<$0.Config> request) async {
     return setConfig(call, await request);
   }
 
-  $async.Future<$0.Config> getConfig_Pre(
-      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+  $async.Future<$0.Config> getConfig_Pre($grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
     return getConfig(call, await request);
   }
 

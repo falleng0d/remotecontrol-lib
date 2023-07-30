@@ -20,10 +20,31 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
   KeyElementProps load(XmlElement node, {KeyElementProps? defaults}) {
     final initial = (defaults ?? const KeyElementProps());
 
-    final actuationTypeName = node.getIfAttributeValue<String>('type');
-    final actuationType = actuationTypeName != null
-        ? KeyActuationType.values.firstWhere((e) => e.toString() == actuationTypeName)
-        : null;
+    return initial.copyWith(
+      label: node.getIfAttributeValue('label'),
+      geometry: initial.geometry != null
+          ? initial.geometry!.withAttributes(node)
+          : GeometryPropsFactory().load(node),
+      toggle: node.getIfAttributeValue('toggle'),
+      keyRep: node.getIfAttributeValue('keyRep'),
+      keyRepeatDelay: node.getIfAttributeValue('keyRepeatDelay'),
+      modifierId: node.getIfAttributeValue('mid'),
+      switchId: node.getIfAttributeValue('switchId'),
+      disableOnNonModifierPressed:
+          node.getIfAttributeValue('disableOnNonModifierPressed'),
+      disableOnSwitchPressed: node.getIfAttributeValue('disableOnSwitchPressed'),
+      shiftModifierLabel: node.getIfAttributeValue('shiftLabel'),
+      unshiftOnRelease: node.getIfAttributeValue('unshift'),
+      lockOnDoubleTap: node.getIfAttributeValue('lockOnDoubleTap'),
+      lockOnHold: node.getIfAttributeValue('lockOnHold'),
+    );
+  }
+}
+
+class TapElementPropsFactory extends XmlNodeToObjectFactory<TapElementProps> {
+  @override
+  TapElementProps load(XmlElement node, {TapElementProps? defaults}) {
+    final initial = (defaults ?? const TapElementProps());
 
     return initial.copyWith(
       label: node.getIfAttributeValue('label'),
@@ -31,9 +52,6 @@ class KeyElementPropsFactory extends XmlNodeToObjectFactory<KeyElementProps> {
           ? initial.geometry!.withAttributes(node)
           : GeometryPropsFactory().load(node),
       toggle: node.getIfAttributeValue('toggle'),
-      actuationType: actuationType,
-      keyRep: node.getIfAttributeValue('keyRep'),
-      keyRepeatDelay: node.getIfAttributeValue('keyRepeatDelay'),
       modifierId: node.getIfAttributeValue('mid'),
       switchId: node.getIfAttributeValue('switchId'),
       disableOnNonModifierPressed:

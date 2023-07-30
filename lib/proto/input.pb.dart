@@ -25,6 +25,7 @@ class KeyOptions extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeyOptions', createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'noRepeat')
+    ..p<$core.int>(2, _omitFieldNames ? '' : 'modifiers', $pb.PbFieldType.K3)
     ..hasRequiredFields = false
   ;
 
@@ -57,6 +58,9 @@ class KeyOptions extends $pb.GeneratedMessage {
   $core.bool hasNoRepeat() => $_has(0);
   @$pb.TagNumber(1)
   void clearNoRepeat() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.List<$core.int> get modifiers => $_getList(1);
 }
 
 class Key extends $pb.GeneratedMessage {

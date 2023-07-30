@@ -18,6 +18,7 @@ const KeyOptions$json = {
   '1': 'KeyOptions',
   '2': [
     {'1': 'no_repeat', '3': 1, '4': 1, '5': 8, '9': 0, '10': 'noRepeat', '17': true},
+    {'1': 'modifiers', '3': 2, '4': 3, '5': 5, '10': 'modifiers'},
   ],
   '8': [
     {'1': '_no_repeat'},
@@ -26,8 +27,8 @@ const KeyOptions$json = {
 
 /// Descriptor for `KeyOptions`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List keyOptionsDescriptor = $convert.base64Decode(
-    'CgpLZXlPcHRpb25zEiAKCW5vX3JlcGVhdBgBIAEoCEgAUghub1JlcGVhdIgBAUIMCgpfbm9fcm'
-    'VwZWF0');
+    'CgpLZXlPcHRpb25zEiAKCW5vX3JlcGVhdBgBIAEoCEgAUghub1JlcGVhdIgBARIcCgltb2RpZm'
+    'llcnMYAiADKAVSCW1vZGlmaWVyc0IMCgpfbm9fcmVwZWF0');
 
 @$core.Deprecated('Use keyDescriptor instead')
 const Key$json = {

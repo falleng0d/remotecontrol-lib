@@ -19,6 +19,8 @@ import '../values/props.dart';
 /// the appearance of the layout.
 class FlexLayout extends BaseLayout {
   @override
+  final String label;
+  @override
   final Geometry geometry;
   @override
   final List<BaseElement> children;
@@ -30,14 +32,14 @@ class FlexLayout extends BaseLayout {
   final bool expandChildren;
 
   FlexLayout({
-    String label = '',
+    this.label = '',
     this.geometry = const Geometry(),
     this.direction = Direction.Row,
     this.columnGap = 0,
     this.rowGap = 0,
     this.expandChildren = false,
     required this.children,
-  }) : super(label);
+  });
 
   FlexLayout.fromProps(FlexLayoutProps props, List<BaseElement> children)
       : this(
@@ -139,12 +141,12 @@ class RowLayout extends FlexLayout {
     bool expandChildren = false,
     required List<BaseElement> children,
   }) : super(
+            label: label,
             geometry: geometry,
             direction: Direction.Row,
             columnGap: columnGap,
             rowGap: 0,
             expandChildren: expandChildren,
-            label: label,
             children: children);
 
   RowLayout.fromProps(RowLayoutProps props, List<BaseElement> children)
@@ -165,12 +167,12 @@ class ColumnLayout extends FlexLayout {
     bool expandChildren = false,
     required List<BaseElement> children,
   }) : super(
+            label: label,
             geometry: geometry,
             direction: Direction.Column,
             columnGap: 0,
             rowGap: rowGap,
             expandChildren: expandChildren,
-            label: label,
             children: children);
 
   ColumnLayout.fromProps(ColumnLayoutProps props, List<BaseElement> children)
@@ -185,14 +187,17 @@ class ColumnLayout extends FlexLayout {
 
 class HorizontalSpacer extends BaseElement {
   @override
+  final String label;
+  @override
   final Geometry geometry;
+
   @override
   bool isVisible = true;
 
   HorizontalSpacer({
-    String label = '',
+    this.label = '',
     this.geometry = const Geometry(),
-  }) : super(label);
+  });
 
   HorizontalSpacer.fromProps(HorizontalSpacerProps props)
       : this(
@@ -214,14 +219,17 @@ class HorizontalSpacer extends BaseElement {
 
 class VerticalSpacer extends BaseElement {
   @override
+  final String label;
+  @override
   final Geometry geometry;
+
   @override
   bool isVisible = true;
 
   VerticalSpacer({
-    String label = '',
+    this.label = '',
     this.geometry = const Geometry(),
-  }) : super(label);
+  });
 
   VerticalSpacer.fromProps(VerticalSpacerProps props)
       : this(
@@ -247,14 +255,17 @@ class VerticalSpacer extends BaseElement {
 /// Its display property is controlled by a [Switch]
 class VisibilityElement extends BaseElement {
   @override
+  final String label;
+  @override
   final Geometry geometry = const Geometry();
+
   final BaseElement child;
 
   VisibilityElement({
-    String label = '',
+    this.label = '',
     bool display = true,
     required this.child,
-  }) : super(label) {
+  }) {
     this.display = display;
   }
 

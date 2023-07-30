@@ -22,10 +22,7 @@ abstract class AbstractElement {
 /// A [BaseElement] is a displayable control that can be added to a [BaseLayout]
 abstract class BaseElement extends AbstractElement
     with Sizeable, Labeled, Visible, Displayable {
-  @override
-  final String label;
-
-  BaseElement(this.label);
+  BaseElement();
 
   Widget build(BuildContext context);
 }
@@ -39,8 +36,6 @@ abstract class BaseElement extends AbstractElement
 /// and desired layout characteristics.
 abstract class BaseLayout extends BaseElement {
   List<BaseElement> get children;
-
-  BaseLayout(String label) : super(label);
 
   @override
   void dispose() {

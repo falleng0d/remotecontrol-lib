@@ -31,7 +31,6 @@ abstract class BaseElementProps<T> {
 class KeyElementProps extends BaseElementProps<KeyElementProps> {
   @required
   final BaseAction<BaseKeyActionContext>? action;
-  final KeyActuationType? actuationType;
 
   final bool? toggle;
 
@@ -63,7 +62,6 @@ class KeyElementProps extends BaseElementProps<KeyElementProps> {
   @override
   bool get isFilled {
     return super.isFilled &&
-        actuationType != null &&
         keyRep != null &&
         keyRepeatDelay != null &&
         shiftModifierLabel != null &&
@@ -80,7 +78,6 @@ class KeyElementProps extends BaseElementProps<KeyElementProps> {
     String? label,
     Geometry? geometry,
     this.action,
-    this.actuationType,
     this.toggle,
     this.keyRep,
     this.keyRepeatDelay,
@@ -101,7 +98,6 @@ class KeyElementProps extends BaseElementProps<KeyElementProps> {
     String label = '',
     Geometry geometry = const Geometry(),
     this.action,
-    this.actuationType = KeyActuationType.PRESS,
     this.toggle = false,
     this.keyRep = 0.0,
     this.keyRepeatDelay = 0.0,
@@ -123,7 +119,6 @@ class KeyElementProps extends BaseElementProps<KeyElementProps> {
     String? label,
     Geometry? geometry,
     BaseAction<BaseKeyActionContext>? action,
-    KeyActuationType? actuationType,
     bool? toggle,
     double? keyRep,
     double? keyRepeatDelay,
@@ -143,7 +138,6 @@ class KeyElementProps extends BaseElementProps<KeyElementProps> {
       label: label ?? this.label,
       geometry: geometry ?? this.geometry,
       action: action ?? this.action,
-      actuationType: actuationType ?? this.actuationType,
       toggle: toggle ?? this.toggle,
       keyRep: keyRep ?? this.keyRep,
       keyRepeatDelay: keyRepeatDelay ?? this.keyRepeatDelay,
@@ -168,7 +162,6 @@ class KeyElementProps extends BaseElementProps<KeyElementProps> {
       label: other.label,
       geometry: geometryFrom(other),
       action: other.action,
-      actuationType: other.actuationType,
       toggle: other.toggle,
       keyRep: other.keyRep,
       keyRepeatDelay: other.keyRepeatDelay,
@@ -187,6 +180,143 @@ class KeyElementProps extends BaseElementProps<KeyElementProps> {
   }
 
   //T copyFrom<T extends BaseElementProps>(T other);
+}
+
+class TapElementProps extends BaseElementProps<TapElementProps> {
+  @required
+  final BaseAction<BaseKeyActionContext>? action;
+
+  final bool? toggle;
+
+  // optional
+  final BaseAction<BaseKeyActionContext>? doubleTapAction;
+  // optional
+  final BaseAction<BaseKeyActionContext>? holdAction;
+
+  final String? shiftModifierLabel;
+  final bool? unshiftOnRelease;
+
+  /// The id of the modifier class that this key will activate if this key is a modifier
+  final String? modifierId;
+  final String? switchId;
+
+  /// If true and this key is pressed, it will be released on a non-modifier key press
+  final bool? disableOnNonModifierPressed;
+  final bool? disableOnSwitchPressed;
+
+  /// If true, the modifier will be locked on double tap. Uses [doubleTapThershold]
+  final bool? lockOnDoubleTap;
+  final bool? lockOnHold;
+
+  final KeyColor? color;
+
+  @override
+  bool get isFilled {
+    return super.isFilled &&
+        shiftModifierLabel != null &&
+        modifierId != null &&
+        switchId != null &&
+        disableOnNonModifierPressed != null &&
+        disableOnSwitchPressed != null &&
+        lockOnDoubleTap != null &&
+        lockOnHold != null &&
+        action != null;
+  }
+
+  const TapElementProps({
+    String? label,
+    Geometry? geometry,
+    this.action,
+    this.toggle,
+    this.doubleTapAction,
+    this.holdAction,
+    this.shiftModifierLabel,
+    this.unshiftOnRelease,
+    this.modifierId,
+    this.switchId,
+    this.disableOnNonModifierPressed,
+    this.disableOnSwitchPressed,
+    this.lockOnDoubleTap,
+    this.lockOnHold,
+    this.color,
+  }) : super(label: label, geometry: geometry);
+
+  const TapElementProps.filled({
+    String label = '',
+    Geometry geometry = const Geometry(),
+    this.action,
+    this.toggle = false,
+    this.doubleTapAction,
+    this.holdAction,
+    this.shiftModifierLabel = '',
+    this.unshiftOnRelease = false,
+    this.modifierId = '',
+    this.switchId = '',
+    this.disableOnNonModifierPressed = false,
+    this.disableOnSwitchPressed = false,
+    this.lockOnDoubleTap = false,
+    this.lockOnHold = false,
+    this.color,
+  }) : super(label: label, geometry: geometry);
+
+  @override
+  TapElementProps copyWith({
+    String? label,
+    Geometry? geometry,
+    BaseAction<BaseKeyActionContext>? action,
+    bool? toggle,
+    BaseAction<BaseKeyActionContext>? doubleTapAction,
+    BaseAction<BaseKeyActionContext>? holdAction,
+    String? shiftModifierLabel,
+    bool? unshiftOnRelease,
+    String? modifierId,
+    String? switchId,
+    bool? disableOnNonModifierPressed,
+    bool? disableOnSwitchPressed,
+    bool? lockOnDoubleTap,
+    bool? lockOnHold,
+    KeyColor? color,
+  }) {
+    return TapElementProps(
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+      action: action ?? this.action,
+      toggle: toggle ?? this.toggle,
+      doubleTapAction: doubleTapAction ?? this.doubleTapAction,
+      holdAction: holdAction ?? this.holdAction,
+      shiftModifierLabel: shiftModifierLabel ?? this.shiftModifierLabel,
+      unshiftOnRelease: unshiftOnRelease ?? this.unshiftOnRelease,
+      modifierId: modifierId ?? this.modifierId,
+      switchId: switchId ?? this.switchId,
+      disableOnNonModifierPressed:
+          disableOnNonModifierPressed ?? this.disableOnNonModifierPressed,
+      disableOnSwitchPressed: disableOnSwitchPressed ?? this.disableOnSwitchPressed,
+      lockOnDoubleTap: lockOnDoubleTap ?? this.lockOnDoubleTap,
+      lockOnHold: lockOnHold ?? this.lockOnHold,
+      color: color ?? this.color,
+    );
+  }
+
+  @override
+  TapElementProps copyFrom(TapElementProps other) {
+    return copyWith(
+      label: other.label,
+      geometry: geometryFrom(other),
+      action: other.action,
+      toggle: other.toggle,
+      doubleTapAction: other.doubleTapAction,
+      holdAction: other.holdAction,
+      shiftModifierLabel: other.shiftModifierLabel,
+      unshiftOnRelease: other.unshiftOnRelease,
+      modifierId: other.modifierId,
+      switchId: other.switchId,
+      disableOnNonModifierPressed: other.disableOnNonModifierPressed,
+      disableOnSwitchPressed: other.disableOnSwitchPressed,
+      lockOnDoubleTap: other.lockOnDoubleTap,
+      lockOnHold: other.lockOnHold,
+      color: other.color,
+    );
+  }
 }
 
 class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {

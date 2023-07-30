@@ -14,6 +14,7 @@ service InputMethods {
 
 message KeyOptions {
     optional bool no_repeat = 1;
+    repeated int32 modifiers = 2;
 }
 
 // The key message containing a key code and a state

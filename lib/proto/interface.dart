@@ -18,6 +18,7 @@ class KeyOptions {
   // disables all modifiers except the ones specified in the modifiers list,
   // then enable them back when the key is released
   final bool? disableUnwantedModifiers;
+  final bool isVirtual;
 
   const KeyOptions({
     this.noRepeat,
@@ -25,6 +26,7 @@ class KeyOptions {
     this.keyRepeatDelay,
     this.modifiers,
     this.disableUnwantedModifiers,
+    this.isVirtual = false,
   });
 
   factory KeyOptions.fromPb(pb.KeyOptions options) {
