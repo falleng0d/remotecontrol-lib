@@ -12,8 +12,6 @@ mixin Labeled {
 }
 
 abstract class AbstractElement {
-  const AbstractElement();
-
   void dispose() {}
 
   void init() {}
@@ -22,8 +20,6 @@ abstract class AbstractElement {
 /// A [BaseElement] is a displayable control that can be added to a [BaseLayout]
 abstract class BaseElement extends AbstractElement
     with Sizeable, Labeled, Visible, Displayable {
-  BaseElement();
-
   Widget build(BuildContext context);
 }
 
