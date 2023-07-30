@@ -1,12 +1,12 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:remotecontrol_lib/elements/element.dart';
-import 'package:remotecontrol_lib/keyboard.dart';
 import 'package:remotecontrol_lib/values/color.dart';
 import 'package:xml/xml.dart';
 
 import '../factory.dart';
 
-class KeyboardElementFactory {
+abstract class BaseKeyboardElementFactory {
   /* region Fields */
   BaseKeyElementFactory? __baseKeyElementFactory;
   BaseHotkeyElementFactory? __baseHotkeyElementFactory;
@@ -26,7 +26,8 @@ class KeyboardElementFactory {
   /* endregion Fields */
 
   /* region Getters */
-  BaseKeyElementFactory get _baseKeyElementFactory {
+  @protected
+  BaseKeyElementFactory get baseKeyElementFactory {
     if (__baseKeyElementFactory == null) {
       throw Exception('BaseKeyElementFactory is not registered');
     }
@@ -34,7 +35,8 @@ class KeyboardElementFactory {
     return __baseKeyElementFactory!;
   }
 
-  BaseHotkeyElementFactory get _baseHotkeyElementFactory {
+  @protected
+  BaseHotkeyElementFactory get baseHotkeyElementFactory {
     if (__baseHotkeyElementFactory == null) {
       throw Exception('BaseHotkeyElementFactory is not registered');
     }
@@ -42,7 +44,8 @@ class KeyboardElementFactory {
     return __baseHotkeyElementFactory!;
   }
 
-  BaseToggleElementFactory get _baseToggleElememtFactory {
+  @protected
+  BaseToggleElementFactory get baseToggleElementFactory {
     if (__baseToggleElementFactory == null) {
       throw Exception('BaseToggleElementFactory is not registered');
     }
@@ -50,7 +53,8 @@ class KeyboardElementFactory {
     return __baseToggleElementFactory!;
   }
 
-  BaseMouseButtonElementFactory get _baseMouseButtonElementFactory {
+  @protected
+  BaseMouseButtonElementFactory get baseMouseButtonElementFactory {
     if (__baseMouseButtonElementFactory == null) {
       throw Exception('BaseMouseButtonElementFactory is not registered');
     }
@@ -58,7 +62,8 @@ class KeyboardElementFactory {
     return __baseMouseButtonElementFactory!;
   }
 
-  BaseTextElementFactory get _baseTextElementFactory {
+  @protected
+  BaseTextElementFactory get baseTextElementFactory {
     if (__baseTextElementFactory == null) {
       throw Exception('BaseTextElementFactory is not registered');
     }
@@ -66,7 +71,8 @@ class KeyboardElementFactory {
     return __baseTextElementFactory!;
   }
 
-  BaseTouchpadElementFactory get _baseTouchpadElementFactory {
+  @protected
+  BaseTouchpadElementFactory get baseTouchpadElementFactory {
     if (__baseTouchpadElementFactory == null) {
       throw Exception('BaseTouchpadElementFactory is not registered');
     }
@@ -74,7 +80,8 @@ class KeyboardElementFactory {
     return __baseTouchpadElementFactory!;
   }
 
-  BaseFlexLayoutFactory get _baseFlexLayoutFactory {
+  @protected
+  BaseFlexLayoutFactory get baseFlexLayoutFactory {
     if (__baseFlexLayoutFactory == null) {
       throw Exception('BaseFlexLayoutFactory is not registered');
     }
@@ -82,7 +89,8 @@ class KeyboardElementFactory {
     return __baseFlexLayoutFactory!;
   }
 
-  BaseRowLayoutFactory get _baseRowLayoutFactory {
+  @protected
+  BaseRowLayoutFactory get baseRowLayoutFactory {
     if (__baseRowLayoutFactory == null) {
       throw Exception('BaseRowLayoutFactory is not registered');
     }
@@ -90,7 +98,8 @@ class KeyboardElementFactory {
     return __baseRowLayoutFactory!;
   }
 
-  BaseColumnLayoutFactory get _baseColumnLayoutFactory {
+  @protected
+  BaseColumnLayoutFactory get baseColumnLayoutFactory {
     if (__baseColumnLayoutFactory == null) {
       throw Exception('BaseColumnLayoutFactory is not registered');
     }
@@ -98,7 +107,8 @@ class KeyboardElementFactory {
     return __baseColumnLayoutFactory!;
   }
 
-  BaseHorizontalSpacerFactory get _baseHorizontalSpacerFactory {
+  @protected
+  BaseHorizontalSpacerFactory get baseHorizontalSpacerFactory {
     if (__baseHorizontalSpacerFactory == null) {
       throw Exception('BaseHorizontalSpacerFactory is not registered');
     }
@@ -106,7 +116,8 @@ class KeyboardElementFactory {
     return __baseHorizontalSpacerFactory!;
   }
 
-  BaseVerticalSpacerFactory get _baseVerticalSpacerFactory {
+  @protected
+  BaseVerticalSpacerFactory get baseVerticalSpacerFactory {
     if (__baseVerticalSpacerFactory == null) {
       throw Exception('BaseVerticalSpacerFactory is not registered');
     }
@@ -114,7 +125,8 @@ class KeyboardElementFactory {
     return __baseVerticalSpacerFactory!;
   }
 
-  ColorFactory get _colorFactory {
+  @protected
+  ColorFactory get colorFactory {
     if (__colorFactory == null) {
       throw Exception('ColorFactory is not registered');
     }
@@ -122,7 +134,8 @@ class KeyboardElementFactory {
     return __colorFactory!;
   }
 
-  BaseSwitchFactory get _baseSwitchFactory {
+  @protected
+  BaseSwitchFactory get baseSwitchFactory {
     if (__baseSwitchFactory == null) {
       throw Exception('BaseSwitchFactory is not registered');
     }
@@ -131,7 +144,7 @@ class KeyboardElementFactory {
   }
   /* endregion Getters */
 
-  KeyboardElementFactory() {
+  BaseKeyboardElementFactory() {
     resolveDependencies();
   }
 
@@ -180,11 +193,11 @@ class KeyboardElementFactory {
   }
 
   /* region Misc Builders */
-  KeyColor? _buildColor(XmlElement node) {
+  KeyColor? buildColor(XmlElement node) {
     final colorName = node.getAttribute('color');
     if (colorName == null) return null;
 
-    return _colorFactory.build(colorName);
+    return colorFactory.build(colorName);
   }
 
   Switch buildSwitch(
@@ -194,7 +207,7 @@ class KeyboardElementFactory {
     required bool initiaState,
     required List<BaseElement> children,
   }) {
-    return _baseSwitchFactory.build(
+    return baseSwitchFactory.build(
       node,
       label: label,
       switchId: switchId,
@@ -205,172 +218,10 @@ class KeyboardElementFactory {
   /* endregion Misc Builders */
 
   /* region Element Builders */
-  BaseKeyElement buildKeyElement(
-    XmlElement node,
-    covariant BaseKeyAction action, {
-    String label = 'key',
-  }) {
-    // Load color
-    return _baseKeyElementFactory.build(
-      action,
-      label: label,
-      overrides: _baseKeyElementFactory.propsLoader.merge(
-        _baseKeyElementFactory.props,
-        node: node,
-        color: _buildColor(node),
-      ),
-    );
-  }
-
-  BaseHotkeyElement buildHotkeyElement(
-    XmlElement node,
-    String hotkey,
-    covariant BaseHotkeyAction action, {
-    required String label,
-  }) {
-    return _baseHotkeyElementFactory.build(
-      action,
-      label: label,
-      overrides: _baseHotkeyElementFactory.propsLoader.merge(
-        _baseHotkeyElementFactory.props,
-        node: node,
-      ),
-    );
-  }
-
-  BaseToggleElement buildToggleElememt(
-    XmlElement node,
-    String switchId,
-    covariant BaseToggleAction action, {
-    String label = 'toggle',
-  }) {
-    return _baseToggleElememtFactory.build(
-      action,
-      switchId,
-      label: label,
-      overrides: _baseToggleElememtFactory.propsLoader.merge(
-        _baseToggleElememtFactory.props,
-        node: node,
-        color: _buildColor(node),
-      ),
-    );
-  }
-
-  BaseButtonElement buildMouseButtonElement(
-    XmlElement node,
-    covariant BaseAction<BaseButtonActionContext> action, {
-    String label = 'mouseButton',
-  }) {
-    return _baseMouseButtonElementFactory.build(action,
-        label: label,
-        overrides: _baseMouseButtonElementFactory.propsLoader.merge(
-          _baseMouseButtonElementFactory.props,
-          node: node,
-        ));
-  }
-
-  BaseTextElement buildTextElement(XmlElement node, String label) {
-    return _baseTextElementFactory.build(
-      label,
-      overrides: _baseTextElementFactory.propsLoader.merge(
-        _baseTextElementFactory.props,
-        node: node,
-      ),
-    );
-  }
-
-  BaseTouchpadElement buildTouchpadElement(
-    XmlElement node, {
-    String label = 'touchpad',
-    required BaseMouseMoveAction touchpadMoveAction,
-    required BaseMouseButtonAction tapAction,
-    required BaseMouseButtonAction rightTapAction,
-  }) {
-    var actions = TouchpadActions(
-      touchpadMove: touchpadMoveAction,
-      tap: tapAction,
-      rightTap: rightTapAction,
-    );
-
-    return _baseTouchpadElementFactory.build(
-      actions,
-      label: label,
-      overrides: _baseTouchpadElementFactory.propsLoader.merge(
-        _baseTouchpadElementFactory.props,
-        node: node,
-      ),
-    );
-  }
+  BaseKeyElement buildKeyElement(XmlElement node);
+  BaseHotkeyElement buildHotkeyElement(XmlElement node);
+  BaseToggleElement buildToggleElememt(XmlElement node);
+  BaseButtonElement buildMouseButtonElement(XmlElement node);
+  BaseTextElement buildTextElement(XmlElement node);
   /* endregion Element Builders */
-
-  /* region Layout Builders */
-  FlexLayout buildFlexLayout(
-    XmlElement node, {
-    String label = 'flexLayout',
-    List<BaseElement> children = const [],
-  }) {
-    return _baseFlexLayoutFactory.build(
-      label: label,
-      children: children,
-      overrides: _baseFlexLayoutFactory.propsLoader
-          .merge(_baseFlexLayoutFactory.props, node: node),
-    );
-  }
-
-  RowLayout buildRowLayout(
-    XmlElement node, {
-    String label = 'rowLayout',
-    List<BaseElement> children = const [],
-  }) {
-    return _baseRowLayoutFactory.build(
-      label: label,
-      children: children,
-      overrides: _baseRowLayoutFactory.propsLoader.merge(
-        _baseRowLayoutFactory.props,
-        node: node,
-      ),
-    );
-  }
-
-  ColumnLayout buildColumnLayout(
-    XmlElement node, {
-    String label = 'columnLayout',
-    List<BaseElement> children = const [],
-  }) {
-    return _baseColumnLayoutFactory.build(
-      label: label,
-      children: children,
-      overrides: _baseColumnLayoutFactory.propsLoader.merge(
-        _baseColumnLayoutFactory.props,
-        node: node,
-      ),
-    );
-  }
-
-  HorizontalSpacer buildHorizontalSpacer(
-    XmlElement node, {
-    String label = 'horizontalSpacer',
-  }) {
-    return _baseHorizontalSpacerFactory.build(
-      label: label,
-      overrides: _baseHorizontalSpacerFactory.propsLoader.merge(
-        _baseHorizontalSpacerFactory.props,
-        node: node,
-      ),
-    );
-  }
-
-  VerticalSpacer buildVerticalSpacer(
-    XmlElement node, {
-    String label = 'verticalSpacer',
-  }) {
-    return _baseVerticalSpacerFactory.build(
-      label: label,
-      overrides: _baseVerticalSpacerFactory.propsLoader.merge(
-        _baseVerticalSpacerFactory.props,
-        node: node,
-      ),
-    );
-  }
-  /* endregion Layout Builders */
 }

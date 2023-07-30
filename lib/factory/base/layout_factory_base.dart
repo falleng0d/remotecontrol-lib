@@ -1,47 +1,27 @@
+import 'package:xml/xml.dart';
+
 import '../../elements/element_base.dart';
 import '../../elements/layouts.dart';
 import '../../values/props.dart';
 import '../factory.dart';
 
-abstract class BaseLayoutFactory<T extends BaseElementProps,
-    E extends XmlNodeToObjectFactory<T>> extends BaseElementFactory<T, E> {
+abstract class BaseLayoutFactory<E extends BaseElement, T extends BaseElementProps,
+    F extends XmlNodeToObjectFactory<T>> extends BaseElementFactory<E, T, F> {
   BaseLayoutFactory(props, propsLoader) : super(props, propsLoader);
+
+  @override
+
+  /// Builds element using [props] as default parameters and optionally loading properties
+  /// from a [XmlElement] node. Additionallt accepts [overrides] to override default
+  /// properties. [overrides] will replace properties found in [node].
+  E build({XmlElement? node, T? overrides, List<BaseElement>? children});
 }
 
-abstract class BaseFlexLayoutFactory
-    extends BaseLayoutFactory<FlexLayoutProps, FlexLayoutPropsFactory> {
-  BaseFlexLayoutFactory(props, propsLoader) : super(props, propsLoader);
+typedef BaseFlexLayoutFactory
+    = BaseLayoutFactory<FlexLayout, FlexLayoutProps, FlexLayoutPropsFactory>;
 
-  FlexLayout build(
-      {String? label, FlexLayoutProps? overrides, List<BaseElement>? children});
-}
+typedef BaseRowLayoutFactory
+    = BaseLayoutFactory<RowLayout, RowLayoutProps, RowLayoutPropsFactory>;
 
-abstract class BaseRowLayoutFactory
-    extends BaseLayoutFactory<RowLayoutProps, RowLayoutPropsFactory> {
-  BaseRowLayoutFactory(props, propsLoader) : super(props, propsLoader);
-
-  RowLayout build(
-      {String? label, RowLayoutProps? overrides, List<BaseElement>? children});
-}
-
-abstract class BaseColumnLayoutFactory
-    extends BaseLayoutFactory<ColumnLayoutProps, ColumnLayoutPropsFactory> {
-  BaseColumnLayoutFactory(props, propsLoader) : super(props, propsLoader);
-
-  ColumnLayout build(
-      {String? label, ColumnLayoutProps? overrides, List<BaseElement>? children});
-}
-
-abstract class BaseHorizontalSpacerFactory
-    extends BaseLayoutFactory<HorizontalSpacerProps, HorizontalSpacerPropsFactory> {
-  BaseHorizontalSpacerFactory(props, propsLoader) : super(props, propsLoader);
-
-  HorizontalSpacer build({String? label, HorizontalSpacerProps? overrides});
-}
-
-abstract class BaseVerticalSpacerFactory
-    extends BaseLayoutFactory<VerticalSpacerProps, VerticalSpacerPropsFactory> {
-  BaseVerticalSpacerFactory(props, propsLoader) : super(props, propsLoader);
-
-  VerticalSpacer build({String? label, VerticalSpacerProps? overrides});
-}
+typedef BaseColumnLayoutFactory
+    = BaseLayoutFactory<ColumnLayout, ColumnLayoutProps, ColumnLayoutPropsFactory>;

@@ -5,6 +5,7 @@ import 'package:remotecontrol_lib/widgets.dart' as widget;
 import '../components/cross_expanded.dart';
 import '../values/direction.dart';
 import '../values/geometry.dart';
+import '../values/props.dart';
 
 /// [FlexLayout] is a customizable, flexible layout for displaying child elements,
 /// child elements in can be either in a row or column direction.
@@ -37,6 +38,17 @@ class FlexLayout extends BaseLayout {
     this.expandChildren = false,
     required this.children,
   }) : super(label);
+
+  FlexLayout.fromProps(FlexLayoutProps props, List<BaseElement> children)
+      : this(
+          label: props.label!,
+          geometry: props.geometry!,
+          direction: props.direction!,
+          columnGap: props.columnGap!,
+          rowGap: props.rowGap!,
+          expandChildren: props.expandChildren!,
+          children: children,
+        );
 
   Widget _addWrapper(List<Widget> children) {
     if (direction == Direction.Row) {
@@ -134,6 +146,15 @@ class RowLayout extends FlexLayout {
             expandChildren: expandChildren,
             label: label,
             children: children);
+
+  RowLayout.fromProps(RowLayoutProps props, List<BaseElement> children)
+      : this(
+          label: props.label!,
+          geometry: props.geometry!,
+          columnGap: props.columnGap!,
+          expandChildren: props.expandChildren!,
+          children: children,
+        );
 }
 
 class ColumnLayout extends FlexLayout {
@@ -151,6 +172,15 @@ class ColumnLayout extends FlexLayout {
             expandChildren: expandChildren,
             label: label,
             children: children);
+
+  ColumnLayout.fromProps(ColumnLayoutProps props, List<BaseElement> children)
+      : this(
+          label: props.label!,
+          geometry: props.geometry!,
+          rowGap: props.rowGap!,
+          expandChildren: props.expandChildren!,
+          children: children,
+        );
 }
 
 class HorizontalSpacer extends BaseElement {
@@ -163,6 +193,12 @@ class HorizontalSpacer extends BaseElement {
     String label = '',
     this.geometry = const Geometry(),
   }) : super(label);
+
+  HorizontalSpacer.fromProps(HorizontalSpacerProps props)
+      : this(
+          label: props.label!,
+          geometry: props.geometry!,
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +222,12 @@ class VerticalSpacer extends BaseElement {
     String label = '',
     this.geometry = const Geometry(),
   }) : super(label);
+
+  VerticalSpacer.fromProps(VerticalSpacerProps props)
+      : this(
+          label: props.label!,
+          geometry: props.geometry!,
+        );
 
   @override
   Widget build(BuildContext context) {

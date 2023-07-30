@@ -1,76 +1,61 @@
 import 'package:remotecontrol_lib/factory/props_factory.dart';
 import 'package:remotecontrol_lib/mixin/sizeable.dart';
+import 'package:xml/xml.dart';
 
 import '../../keyboard.dart';
 
-class BaseElementFactory<T extends BaseElementProps, E extends XmlNodeToObjectFactory<T>>
-    with SizeableFactory {
+abstract class BaseElementFactory<E extends BaseElement, T extends BaseElementProps,
+    F extends XmlNodeToObjectFactory<T>> with SizeableFactory {
   covariant T props;
-  covariant E propsLoader;
+  covariant F propsFactory;
 
-  BaseElementFactory(this.props, this.propsLoader) {
-    assert(props.isFilled);
+  BaseElementFactory(this.props, this.propsFactory);
+
+  /// Builds final props using [props] as default parameters and optionally loading
+  /// properties from a [XmlElement] node. Additionallt accepts [overrides] to override
+  /// default properties. [overrides] will replace properties found in [node].
+  T buildProps({XmlElement? node, T? overrides}) {
+    late T result;
+    if (node != null && overrides != null) {
+      final nodeProps = propsFactory.load(node, defaults: props);
+      result = nodeProps.copyFrom(overrides);
+    } else if (node != null) {
+      result = propsFactory.load(node, defaults: props);
+    } else {
+      result = overrides != null ? props.copyFrom(overrides) : props;
+    }
+
+    assert(result.isFilled, 'ElementProps for $runtimeType is not filled');
+
+    return result;
   }
+
+  /// Builds element using [props] as default parameters and optionally loading properties
+  /// from a [XmlElement] node. Additionallt accepts [overrides] to override default
+  /// properties. [overrides] will replace properties found in [node].
+  E build({XmlElement? node, T? overrides});
 }
 
-abstract class BaseKeyElementFactory
-    extends BaseElementFactory<KeyElementProps, KeyElementPropsFactory> {
-  BaseKeyElementFactory(KeyElementProps props, propsLoader) : super(props, propsLoader);
+typedef BaseKeyElementFactory
+    = BaseElementFactory<BaseKeyElement, KeyElementProps, KeyElementPropsFactory>;
 
-  BaseKeyElement build(
-    covariant BaseAction<BaseKeyActionContext> action, {
-    String? label,
-    KeyElementProps? overrides,
-  });
-}
+typedef BaseHotkeyElementFactory = BaseElementFactory<BaseHotkeyElement,
+    HotkeyElementProps, HotkeyElementPropsFactory>;
 
-abstract class BaseHotkeyElementFactory
-    extends BaseElementFactory<HotkeyElementProps, HotkeyElementPropsFactory> {
-  BaseHotkeyElementFactory(HotkeyElementProps props, propsLoader)
-      : super(props, propsLoader);
+typedef BaseToggleElementFactory = BaseElementFactory<BaseToggleElement,
+    ToggleElementProps, ToggleElementPropsFactory>;
 
-  BaseHotkeyElement build(
-    covariant BaseAction<BaseHotkeyActionContext> action, {
-    String? label,
-    HotkeyElementProps? overrides,
-  });
-}
+typedef BaseMouseButtonElementFactory = BaseElementFactory<BaseButtonElement,
+    ButtonElementProps, ButtonElementPropsFactory>;
 
-abstract class BaseToggleElementFactory
-    extends BaseElementFactory<ToggleElementProps, ToggleElementPropsFactory> {
-  BaseToggleElementFactory(ToggleElementProps props, propsLoader)
-      : super(props, propsLoader);
+typedef BaseTextElementFactory
+    = BaseElementFactory<BaseTextElement, TextElementProps, TextElementPropsFactory>;
 
-  BaseToggleElement build(
-    covariant BaseAction<BaseToggleActionContext> action,
-    String switchId, {
-    String? label,
-    ToggleElementProps? overrides,
-  });
-}
+typedef BaseTouchpadElementFactory = BaseElementFactory<BaseTouchpadElement,
+    TouchpadElementProps, TouchpadElementPropsFactory>;
 
-abstract class BaseMouseButtonElementFactory
-    extends BaseElementFactory<MouseElementProps, MouseElementPropsFactory> {
-  BaseMouseButtonElementFactory(props, propsLoader) : super(props, propsLoader);
+typedef BaseHorizontalSpacerFactory = BaseElementFactory<HorizontalSpacer,
+    HorizontalSpacerProps, HorizontalSpacerPropsFactory>;
 
-  BaseButtonElement build(
-    covariant BaseAction<BaseButtonActionContext> action, {
-    String? label,
-    MouseElementProps? overrides,
-  });
-}
-
-abstract class BaseTextElementFactory
-    extends BaseElementFactory<TextElementProps, TextElementPropsFactory> {
-  BaseTextElementFactory(props, propsLoader) : super(props, propsLoader);
-
-  BaseTextElement build(String label, {TextElementProps? overrides});
-}
-
-abstract class BaseTouchpadElementFactory
-    extends BaseElementFactory<TouchpadElementProps, TouchpadElementPropsFactory> {
-  BaseTouchpadElementFactory(props, propsLoader) : super(props, propsLoader);
-
-  BaseTouchpadElement build(TouchpadActions actions,
-      {String? label, TouchpadElementProps? overrides});
-}
+typedef BaseVerticalSpacerFactory
+    = BaseElementFactory<VerticalSpacer, VerticalSpacerProps, VerticalSpacerPropsFactory>;

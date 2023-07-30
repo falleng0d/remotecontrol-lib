@@ -48,4 +48,24 @@ extension KeyboardXmlElementHelpers on XmlElement {
     }
     return defaultValue;
   }
+
+  T? getIfAttributeValue<T>(String name) {
+    final attribute = getAttribute(name);
+    if (attribute == null) return null;
+
+    if (T == double || T == double_opt) {
+      if (attribute == 'infinity') {
+        return double.infinity as T;
+      }
+      return double.parse(attribute) as T;
+    } else if (T == bool || T == bool_opt) {
+      return (attribute.toLowerCase() == 'true') as T;
+    } else if (T == int || T == int_opt) {
+      return int.parse(attribute) as T;
+    } else if (T == String || T == String_opt) {
+      return attribute as T;
+    }
+
+    return null;
+  }
 }

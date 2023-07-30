@@ -1,14 +1,15 @@
+import 'package:flutter/widgets.dart';
 import 'package:remotecontrol_lib/values/color.dart';
 
 import '../keyboard.dart';
 
-abstract class BaseElementProps {
+abstract class BaseElementProps<T> {
   final String? label;
   final Geometry? geometry;
 
   bool get isFilled => label != null && geometry != null;
 
-  Geometry? geometryFrom<T extends BaseElementProps>(T other) {
+  Geometry? geometryFrom<E extends BaseElementProps>(E other) {
     if (other.geometry != null) {
       return (geometry ?? const Geometry()).copyFrom(other.geometry!);
     } else {
@@ -17,9 +18,19 @@ abstract class BaseElementProps {
   }
 
   const BaseElementProps({this.label, this.geometry});
+
+  T copyWith({
+    String? label,
+    Geometry? geometry,
+  });
+
+  /// Creates a copy of this object but with the given fields replaced with the new values.
+  T copyFrom(T other);
 }
 
-class KeyElementProps extends BaseElementProps {
+class KeyElementProps extends BaseElementProps<KeyElementProps> {
+  @required
+  final BaseAction<BaseKeyActionContext>? action;
   final KeyActuationType? actuationType;
 
   final bool? toggle;
@@ -61,14 +72,16 @@ class KeyElementProps extends BaseElementProps {
         disableOnNonModifierPressed != null &&
         disableOnSwitchPressed != null &&
         lockOnDoubleTap != null &&
-        lockOnHold != null;
+        lockOnHold != null &&
+        action != null;
   }
 
   const KeyElementProps({
     String? label,
     Geometry? geometry,
+    this.action,
     this.actuationType,
-    this.toggle = false,
+    this.toggle,
     this.keyRep,
     this.keyRepeatDelay,
     this.doubleTapAction,
@@ -87,6 +100,7 @@ class KeyElementProps extends BaseElementProps {
   const KeyElementProps.filled({
     String label = '',
     Geometry geometry = const Geometry(),
+    this.action,
     this.actuationType = KeyActuationType.PRESS,
     this.toggle = false,
     this.keyRep = 0.0,
@@ -104,32 +118,84 @@ class KeyElementProps extends BaseElementProps {
     this.color,
   }) : super(label: label, geometry: geometry);
 
-  KeyElementProps copyFrom(KeyElementProps other) {
+  @override
+  KeyElementProps copyWith({
+    String? label,
+    Geometry? geometry,
+    BaseAction<BaseKeyActionContext>? action,
+    KeyActuationType? actuationType,
+    bool? toggle,
+    double? keyRep,
+    double? keyRepeatDelay,
+    BaseAction<BaseKeyActionContext>? doubleTapAction,
+    BaseAction<BaseKeyActionContext>? holdAction,
+    String? shiftModifierLabel,
+    bool? unshiftOnRelease,
+    String? modifierId,
+    String? switchId,
+    bool? disableOnNonModifierPressed,
+    bool? disableOnSwitchPressed,
+    bool? lockOnDoubleTap,
+    bool? lockOnHold,
+    KeyColor? color,
+  }) {
     return KeyElementProps(
-      label: other.label ?? label,
-      geometry: geometryFrom(other),
-      actuationType: other.actuationType ?? actuationType,
-      toggle: other.toggle ?? toggle,
-      keyRep: other.keyRep ?? keyRep,
-      keyRepeatDelay: other.keyRepeatDelay ?? keyRepeatDelay,
-      doubleTapAction: other.doubleTapAction ?? doubleTapAction,
-      holdAction: other.holdAction ?? holdAction,
-      shiftModifierLabel: other.shiftModifierLabel ?? shiftModifierLabel,
-      unshiftOnRelease: other.unshiftOnRelease ?? unshiftOnRelease,
-      modifierId: other.modifierId ?? modifierId,
-      switchId: other.switchId ?? switchId,
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+      action: action ?? this.action,
+      actuationType: actuationType ?? this.actuationType,
+      toggle: toggle ?? this.toggle,
+      keyRep: keyRep ?? this.keyRep,
+      keyRepeatDelay: keyRepeatDelay ?? this.keyRepeatDelay,
+      doubleTapAction: doubleTapAction ?? this.doubleTapAction,
+      holdAction: holdAction ?? this.holdAction,
+      shiftModifierLabel: shiftModifierLabel ?? this.shiftModifierLabel,
+      unshiftOnRelease: unshiftOnRelease ?? this.unshiftOnRelease,
+      modifierId: modifierId ?? this.modifierId,
+      switchId: switchId ?? this.switchId,
       disableOnNonModifierPressed:
-          other.disableOnNonModifierPressed ?? disableOnNonModifierPressed,
-      disableOnSwitchPressed: other.disableOnSwitchPressed ?? disableOnSwitchPressed,
-      lockOnDoubleTap: other.lockOnDoubleTap ?? lockOnDoubleTap,
-      lockOnHold: other.lockOnHold ?? lockOnHold,
-      color: other.color ?? color,
+          disableOnNonModifierPressed ?? this.disableOnNonModifierPressed,
+      disableOnSwitchPressed: disableOnSwitchPressed ?? this.disableOnSwitchPressed,
+      lockOnDoubleTap: lockOnDoubleTap ?? this.lockOnDoubleTap,
+      lockOnHold: lockOnHold ?? this.lockOnHold,
+      color: color ?? this.color,
     );
   }
+
+  @override
+  KeyElementProps copyFrom(KeyElementProps other) {
+    return copyWith(
+      label: other.label,
+      geometry: geometryFrom(other),
+      action: other.action,
+      actuationType: other.actuationType,
+      toggle: other.toggle,
+      keyRep: other.keyRep,
+      keyRepeatDelay: other.keyRepeatDelay,
+      doubleTapAction: other.doubleTapAction,
+      holdAction: other.holdAction,
+      shiftModifierLabel: other.shiftModifierLabel,
+      unshiftOnRelease: other.unshiftOnRelease,
+      modifierId: other.modifierId,
+      switchId: other.switchId,
+      disableOnNonModifierPressed: other.disableOnNonModifierPressed,
+      disableOnSwitchPressed: other.disableOnSwitchPressed,
+      lockOnDoubleTap: other.lockOnDoubleTap,
+      lockOnHold: other.lockOnHold,
+      color: other.color,
+    );
+  }
+
+  //T copyFrom<T extends BaseElementProps>(T other);
 }
 
-class HotkeyElementProps extends BaseElementProps {
+class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
+  @required
+  final BaseAction<BaseHotkeyActionContext>? action;
+
   final KeyActuationType? actuationType;
+
+  final bool? toggle;
 
   final double? keyRep;
   final double? keyRepeatDelay;
@@ -142,15 +208,19 @@ class HotkeyElementProps extends BaseElementProps {
   bool get isFilled {
     return super.isFilled &&
         actuationType != null &&
+        toggle != null &&
         keyRep != null &&
         keyRepeatDelay != null &&
-        shiftModifierLabel != null;
+        shiftModifierLabel != null &&
+        action != null;
   }
 
   const HotkeyElementProps({
     String? label,
     Geometry? geometry,
+    this.action,
     this.actuationType,
+    this.toggle,
     this.keyRep,
     this.keyRepeatDelay,
     this.shiftModifierLabel,
@@ -160,27 +230,62 @@ class HotkeyElementProps extends BaseElementProps {
   const HotkeyElementProps.filled({
     String label = '',
     Geometry geometry = const Geometry(),
+    this.action,
     this.actuationType = KeyActuationType.PRESS,
+    this.toggle = false,
     this.keyRep = 0.0,
     this.keyRepeatDelay = 0.0,
     this.shiftModifierLabel = '',
     this.color,
   }) : super(label: label, geometry: geometry);
 
-  HotkeyElementProps copyFrom(HotkeyElementProps other) {
+  @override
+  HotkeyElementProps copyWith({
+    String? label,
+    Geometry? geometry,
+    BaseAction<BaseHotkeyActionContext>? action,
+    KeyActuationType? actuationType,
+    bool? toggle,
+    double? keyRep,
+    double? keyRepeatDelay,
+    String? shiftModifierLabel,
+    KeyColor? color,
+  }) {
     return HotkeyElementProps(
-      label: other.label ?? label,
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+      action: action ?? this.action,
+      actuationType: actuationType ?? this.actuationType,
+      toggle: toggle ?? this.toggle,
+      keyRep: keyRep ?? this.keyRep,
+      keyRepeatDelay: keyRepeatDelay ?? this.keyRepeatDelay,
+      shiftModifierLabel: shiftModifierLabel ?? this.shiftModifierLabel,
+      color: color ?? this.color,
+    );
+  }
+
+  @override
+  HotkeyElementProps copyFrom(HotkeyElementProps other) {
+    return copyWith(
+      label: other.label,
       geometry: geometryFrom(other),
-      actuationType: other.actuationType ?? actuationType,
-      keyRep: other.keyRep ?? keyRep,
-      keyRepeatDelay: other.keyRepeatDelay ?? keyRepeatDelay,
-      shiftModifierLabel: other.shiftModifierLabel ?? shiftModifierLabel,
-      color: other.color ?? color,
+      action: other.action,
+      actuationType: other.actuationType,
+      toggle: other.toggle,
+      keyRep: other.keyRep,
+      keyRepeatDelay: other.keyRepeatDelay,
+      shiftModifierLabel: other.shiftModifierLabel,
+      color: other.color,
     );
   }
 }
 
-class ToggleElementProps extends BaseElementProps {
+class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
+  @required
+  final String? switchId;
+  @required
+  final BaseAction<BaseToggleActionContext>? action;
+
   final KeyActuationType? actuationType;
 
   final bool? toggle;
@@ -199,29 +304,35 @@ class ToggleElementProps extends BaseElementProps {
   @override
   bool get isFilled {
     return super.isFilled &&
+        switchId != null &&
         actuationType != null &&
         toggle != null &&
         shiftModifierLabel != null &&
         untoggleOnNonModifierKeyPressed != null &&
         lockOnDoubleTap != null &&
-        lockOnHold != null;
+        lockOnHold != null &&
+        action != null;
   }
 
   const ToggleElementProps({
     String? label,
     Geometry? geometry,
+    this.switchId,
+    this.action,
     this.actuationType,
-    this.toggle = false,
+    this.toggle,
     this.shiftModifierLabel,
-    this.untoggleOnNonModifierKeyPressed = false,
-    this.lockOnDoubleTap = false,
-    this.lockOnHold = false,
+    this.untoggleOnNonModifierKeyPressed,
+    this.lockOnDoubleTap,
+    this.lockOnHold,
     this.color,
   }) : super(label: label, geometry: geometry);
 
   const ToggleElementProps.filled({
     String label = '',
     Geometry geometry = const Geometry(),
+    this.switchId,
+    this.action,
     this.actuationType = KeyActuationType.PRESS,
     this.toggle = false,
     this.shiftModifierLabel = '',
@@ -231,57 +342,128 @@ class ToggleElementProps extends BaseElementProps {
     this.color,
   }) : super(label: label, geometry: geometry);
 
-  ToggleElementProps copyFrom(ToggleElementProps other) {
+  @override
+  ToggleElementProps copyWith({
+    String? label,
+    Geometry? geometry,
+    String? switchId,
+    BaseAction<BaseToggleActionContext>? action,
+    KeyActuationType? actuationType,
+    bool? toggle,
+    String? shiftModifierLabel,
+    bool? untoggleOnNonModifierKeyPressed,
+    bool? lockOnDoubleTap,
+    bool? lockOnHold,
+    KeyColor? color,
+  }) {
     return ToggleElementProps(
-      label: other.label ?? label,
-      geometry: geometryFrom(other),
-      actuationType: other.actuationType ?? actuationType,
-      toggle: other.toggle ?? toggle,
-      shiftModifierLabel: other.shiftModifierLabel ?? shiftModifierLabel,
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+      switchId: switchId ?? this.switchId,
+      action: action ?? this.action,
+      actuationType: actuationType ?? this.actuationType,
+      toggle: toggle ?? this.toggle,
+      shiftModifierLabel: shiftModifierLabel ?? this.shiftModifierLabel,
       untoggleOnNonModifierKeyPressed:
-          other.untoggleOnNonModifierKeyPressed ?? untoggleOnNonModifierKeyPressed,
-      lockOnDoubleTap: other.lockOnDoubleTap ?? lockOnDoubleTap,
-      lockOnHold: other.lockOnHold ?? lockOnHold,
-      color: other.color ?? color,
+          untoggleOnNonModifierKeyPressed ?? this.untoggleOnNonModifierKeyPressed,
+      lockOnDoubleTap: lockOnDoubleTap ?? this.lockOnDoubleTap,
+      lockOnHold: lockOnHold ?? this.lockOnHold,
+      color: color ?? this.color,
+    );
+  }
+
+  @override
+  ToggleElementProps copyFrom(ToggleElementProps other) {
+    return copyWith(
+      label: other.label,
+      geometry: geometryFrom(other),
+      switchId: other.switchId,
+      action: other.action,
+      actuationType: other.actuationType,
+      toggle: other.toggle,
+      shiftModifierLabel: other.shiftModifierLabel,
+      untoggleOnNonModifierKeyPressed: other.untoggleOnNonModifierKeyPressed,
+      lockOnDoubleTap: other.lockOnDoubleTap,
+      lockOnHold: other.lockOnHold,
+      color: other.color,
     );
   }
 }
 
-class MouseElementProps extends BaseElementProps {
-  const MouseElementProps({String? label, Geometry? geometry})
+class ButtonElementProps extends BaseElementProps<ButtonElementProps> {
+  final BaseAction<BaseButtonActionContext>? action;
+
+  final KeyColor? color;
+
+  const ButtonElementProps({String? label, Geometry? geometry, this.action, this.color})
       : super(label: label, geometry: geometry);
 
-  const MouseElementProps.filled({
+  const ButtonElementProps.filled({
     String label = '',
     Geometry geometry = const Geometry(),
+    this.action,
+    this.color,
   }) : super(label: label, geometry: geometry);
 
-  MouseElementProps copyFrom(MouseElementProps other) {
-    return MouseElementProps(
-      label: other.label ?? label,
+  @override
+  ButtonElementProps copyWith({
+    String? label,
+    Geometry? geometry,
+    BaseAction<BaseButtonActionContext>? action,
+    KeyColor? color,
+  }) {
+    return ButtonElementProps(
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+      action: action ?? this.action,
+      color: color ?? this.color,
+    );
+  }
+
+  @override
+  ButtonElementProps copyFrom(ButtonElementProps other) {
+    return copyWith(
+      label: other.label,
       geometry: geometryFrom(other),
+      action: other.action,
+      color: other.color,
     );
   }
 }
 
-class TextElementProps extends BaseElementProps {
+class TextElementProps extends BaseElementProps<TextElementProps> {
   const TextElementProps({String? label, Geometry? geometry})
       : super(label: label, geometry: geometry);
 
   const TextElementProps.filled({
-    String label = '',
+    required String label,
     Geometry geometry = const Geometry(),
   }) : super(label: label, geometry: geometry);
 
-  TextElementProps copyFrom(TextElementProps other) {
+  @override
+  TextElementProps copyWith({
+    String? label,
+    Geometry? geometry,
+  }) {
     return TextElementProps(
-      label: other.label ?? label,
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+    );
+  }
+
+  @override
+  TextElementProps copyFrom(TextElementProps other) {
+    return copyWith(
+      label: other.label,
       geometry: geometryFrom(other),
     );
   }
 }
 
-class TouchpadElementProps extends BaseElementProps {
+class TouchpadElementProps extends BaseElementProps<TouchpadElementProps> {
+  @required
+  final TouchpadActions? actions;
+
   final bool? scrollbar;
   final bool? mouseButtons;
   final bool? tapToClick;
@@ -299,6 +481,7 @@ class TouchpadElementProps extends BaseElementProps {
   const TouchpadElementProps({
     String? label,
     Geometry? geometry,
+    this.actions,
     this.scrollbar,
     this.mouseButtons,
     this.tapToClick,
@@ -308,25 +491,49 @@ class TouchpadElementProps extends BaseElementProps {
   const TouchpadElementProps.filled({
     String label = '',
     Geometry geometry = const Geometry(),
+    this.actions,
     this.scrollbar = false,
     this.mouseButtons = false,
     this.tapToClick = false,
     this.doubleTapAndHold = false,
   }) : super(label: label, geometry: geometry);
 
-  TouchpadElementProps copyFrom(TouchpadElementProps other) {
+  @override
+  TouchpadElementProps copyWith({
+    String? label,
+    Geometry? geometry,
+    TouchpadActions? actions,
+    bool? scrollbar,
+    bool? mouseButtons,
+    bool? tapToClick,
+    bool? doubleTapAndHold,
+  }) {
     return TouchpadElementProps(
-      label: other.label ?? label,
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+      actions: actions ?? this.actions,
+      scrollbar: scrollbar ?? this.scrollbar,
+      mouseButtons: mouseButtons ?? this.mouseButtons,
+      tapToClick: tapToClick ?? this.tapToClick,
+      doubleTapAndHold: doubleTapAndHold ?? this.doubleTapAndHold,
+    );
+  }
+
+  @override
+  TouchpadElementProps copyFrom(TouchpadElementProps other) {
+    return copyWith(
+      label: other.label,
       geometry: geometryFrom(other),
-      scrollbar: other.scrollbar ?? scrollbar,
-      mouseButtons: other.mouseButtons ?? mouseButtons,
-      tapToClick: other.tapToClick ?? tapToClick,
-      doubleTapAndHold: other.doubleTapAndHold ?? doubleTapAndHold,
+      actions: other.actions,
+      scrollbar: other.scrollbar,
+      mouseButtons: other.mouseButtons,
+      tapToClick: other.tapToClick,
+      doubleTapAndHold: other.doubleTapAndHold,
     );
   }
 }
 
-class FlexLayoutProps extends BaseElementProps {
+class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
   final Direction? direction;
   final double? columnGap;
   final double? rowGap;
@@ -359,19 +566,39 @@ class FlexLayoutProps extends BaseElementProps {
     this.expandChildren = false,
   }) : super(label: label, geometry: geometry);
 
-  FlexLayoutProps copyFrom(FlexLayoutProps other) {
+  @override
+  FlexLayoutProps copyWith({
+    String? label,
+    Geometry? geometry,
+    Direction? direction,
+    double? columnGap,
+    double? rowGap,
+    bool? expandChildren,
+  }) {
     return FlexLayoutProps(
-      label: other.label ?? label,
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+      direction: direction ?? this.direction,
+      columnGap: columnGap ?? this.columnGap,
+      rowGap: rowGap ?? this.rowGap,
+      expandChildren: expandChildren ?? this.expandChildren,
+    );
+  }
+
+  @override
+  FlexLayoutProps copyFrom(FlexLayoutProps other) {
+    return copyWith(
+      label: other.label,
       geometry: geometryFrom(other),
-      direction: other.direction ?? direction,
-      columnGap: other.columnGap ?? columnGap,
-      rowGap: other.rowGap ?? rowGap,
-      expandChildren: other.expandChildren ?? expandChildren,
+      direction: other.direction,
+      columnGap: other.columnGap,
+      rowGap: other.rowGap,
+      expandChildren: other.expandChildren,
     );
   }
 }
 
-class RowLayoutProps extends BaseElementProps {
+class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
   final double? columnGap;
   final bool? expandChildren;
 
@@ -394,17 +621,33 @@ class RowLayoutProps extends BaseElementProps {
     this.expandChildren = false,
   }) : super(label: label, geometry: geometry);
 
-  RowLayoutProps copyFrom(RowLayoutProps other) {
+  @override
+  RowLayoutProps copyWith({
+    String? label,
+    Geometry? geometry,
+    double? columnGap,
+    bool? expandChildren,
+  }) {
     return RowLayoutProps(
-      label: other.label ?? label,
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+      columnGap: columnGap ?? this.columnGap,
+      expandChildren: expandChildren ?? this.expandChildren,
+    );
+  }
+
+  @override
+  RowLayoutProps copyFrom(RowLayoutProps other) {
+    return copyWith(
+      label: other.label,
       geometry: geometryFrom(other),
-      columnGap: other.columnGap ?? columnGap,
-      expandChildren: other.expandChildren ?? expandChildren,
+      columnGap: other.columnGap,
+      expandChildren: other.expandChildren,
     );
   }
 }
 
-class ColumnLayoutProps extends BaseElementProps {
+class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
   final double? rowGap;
   final bool? expandChildren;
 
@@ -427,17 +670,33 @@ class ColumnLayoutProps extends BaseElementProps {
     this.expandChildren = false,
   }) : super(label: label, geometry: geometry);
 
-  ColumnLayoutProps copyFrom(ColumnLayoutProps other) {
+  @override
+  ColumnLayoutProps copyWith({
+    String? label,
+    Geometry? geometry,
+    double? rowGap,
+    bool? expandChildren,
+  }) {
     return ColumnLayoutProps(
-      label: other.label ?? label,
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+      rowGap: rowGap ?? this.rowGap,
+      expandChildren: expandChildren ?? this.expandChildren,
+    );
+  }
+
+  @override
+  ColumnLayoutProps copyFrom(ColumnLayoutProps other) {
+    return copyWith(
+      label: other.label,
       geometry: geometryFrom(other),
-      rowGap: other.rowGap ?? rowGap,
-      expandChildren: other.expandChildren ?? expandChildren,
+      rowGap: other.rowGap,
+      expandChildren: other.expandChildren,
     );
   }
 }
 
-class HorizontalSpacerProps extends BaseElementProps {
+class HorizontalSpacerProps extends BaseElementProps<HorizontalSpacerProps> {
   const HorizontalSpacerProps({String? label, Geometry? geometry})
       : super(label: label, geometry: geometry);
 
@@ -446,15 +705,27 @@ class HorizontalSpacerProps extends BaseElementProps {
     Geometry geometry = const Geometry(),
   }) : super(label: label, geometry: geometry);
 
-  HorizontalSpacerProps copyFrom(HorizontalSpacerProps other) {
+  @override
+  HorizontalSpacerProps copyWith({
+    String? label,
+    Geometry? geometry,
+  }) {
     return HorizontalSpacerProps(
-      label: other.label ?? label,
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+    );
+  }
+
+  @override
+  HorizontalSpacerProps copyFrom(HorizontalSpacerProps other) {
+    return copyWith(
+      label: other.label,
       geometry: geometryFrom(other),
     );
   }
 }
 
-class VerticalSpacerProps extends BaseElementProps {
+class VerticalSpacerProps extends BaseElementProps<VerticalSpacerProps> {
   const VerticalSpacerProps({String? label, Geometry? geometry})
       : super(label: label, geometry: geometry);
 
@@ -463,9 +734,21 @@ class VerticalSpacerProps extends BaseElementProps {
     Geometry geometry = const Geometry(),
   }) : super(label: label, geometry: geometry);
 
-  VerticalSpacerProps copyFrom(VerticalSpacerProps other) {
+  @override
+  VerticalSpacerProps copyWith({
+    String? label,
+    Geometry? geometry,
+  }) {
     return VerticalSpacerProps(
-      label: other.label ?? label,
+      label: label ?? this.label,
+      geometry: geometry ?? this.geometry,
+    );
+  }
+
+  @override
+  VerticalSpacerProps copyFrom(VerticalSpacerProps other) {
+    return copyWith(
+      label: other.label,
       geometry: geometryFrom(other),
     );
   }
