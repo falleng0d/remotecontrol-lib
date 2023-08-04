@@ -25,6 +25,10 @@ class InputMethodsClient extends $grpc.Client {
       '/InputMethods/PressKey',
       ($0.Key value) => value.writeToBuffer(),
       ($core.List<$core.int> value) => $0.Response.fromBuffer(value));
+  static final _$pressHotkey = $grpc.ClientMethod<$0.Hotkey, $0.Response>(
+      '/InputMethods/PressHotkey',
+      ($0.Hotkey value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.Response.fromBuffer(value));
   static final _$pressMouseKey = $grpc.ClientMethod<$0.MouseKey, $0.Response>(
       '/InputMethods/PressMouseKey',
       ($0.MouseKey value) => value.writeToBuffer(),
@@ -54,6 +58,10 @@ class InputMethodsClient extends $grpc.Client {
 
   $grpc.ResponseFuture<$0.Response> pressKey($0.Key request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$pressKey, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.Response> pressHotkey($0.Hotkey request, {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$pressHotkey, request, options: options);
   }
 
   $grpc.ResponseFuture<$0.Response> pressMouseKey($0.MouseKey request, {$grpc.CallOptions? options}) {
@@ -88,6 +96,13 @@ abstract class InputMethodsServiceBase extends $grpc.Service {
         false,
         false,
         ($core.List<$core.int> value) => $0.Key.fromBuffer(value),
+        ($0.Response value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Hotkey, $0.Response>(
+        'PressHotkey',
+        pressHotkey_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Hotkey.fromBuffer(value),
         ($0.Response value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.MouseKey, $0.Response>(
         'PressMouseKey',
@@ -130,6 +145,10 @@ abstract class InputMethodsServiceBase extends $grpc.Service {
     return pressKey(call, await request);
   }
 
+  $async.Future<$0.Response> pressHotkey_Pre($grpc.ServiceCall call, $async.Future<$0.Hotkey> request) async {
+    return pressHotkey(call, await request);
+  }
+
   $async.Future<$0.Response> pressMouseKey_Pre($grpc.ServiceCall call, $async.Future<$0.MouseKey> request) async {
     return pressMouseKey(call, await request);
   }
@@ -151,6 +170,7 @@ abstract class InputMethodsServiceBase extends $grpc.Service {
   }
 
   $async.Future<$0.Response> pressKey($grpc.ServiceCall call, $0.Key request);
+  $async.Future<$0.Response> pressHotkey($grpc.ServiceCall call, $0.Hotkey request);
   $async.Future<$0.Response> pressMouseKey($grpc.ServiceCall call, $0.MouseKey request);
   $async.Future<$0.Response> moveMouse($grpc.ServiceCall call, $0.MouseMove request);
   $async.Future<$0.Response> ping($grpc.ServiceCall call, $0.Empty request);

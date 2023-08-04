@@ -25,7 +25,8 @@ class KeyOptions extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'KeyOptions', createEmptyInstance: create)
     ..aOB(1, _omitFieldNames ? '' : 'noRepeat')
-    ..p<$core.int>(2, _omitFieldNames ? '' : 'modifiers', $pb.PbFieldType.K3)
+    ..aOB(2, _omitFieldNames ? '' : 'noModifiers')
+    ..p<$core.int>(3, _omitFieldNames ? '' : 'modifiers', $pb.PbFieldType.K3)
     ..hasRequiredFields = false
   ;
 
@@ -60,7 +61,16 @@ class KeyOptions extends $pb.GeneratedMessage {
   void clearNoRepeat() => clearField(1);
 
   @$pb.TagNumber(2)
-  $core.List<$core.int> get modifiers => $_getList(1);
+  $core.bool get noModifiers => $_getBF(1);
+  @$pb.TagNumber(2)
+  set noModifiers($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasNoModifiers() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearNoModifiers() => clearField(2);
+
+  @$pb.TagNumber(3)
+  $core.List<$core.int> get modifiers => $_getList(2);
 }
 
 class Key extends $pb.GeneratedMessage {
@@ -71,7 +81,7 @@ class Key extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Key', createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.O3)
-    ..e<Key_KeyActionType>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: Key_KeyActionType.UP, valueOf: Key_KeyActionType.valueOf, enumValues: Key_KeyActionType.values)
+    ..e<KeyActionType>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: KeyActionType.UP, valueOf: KeyActionType.valueOf, enumValues: KeyActionType.values)
     ..aOM<KeyOptions>(3, _omitFieldNames ? '' : 'options', subBuilder: KeyOptions.create)
     ..hasRequiredFields = false
   ;
@@ -107,9 +117,9 @@ class Key extends $pb.GeneratedMessage {
   void clearId() => clearField(1);
 
   @$pb.TagNumber(2)
-  Key_KeyActionType get type => $_getN(1);
+  KeyActionType get type => $_getN(1);
   @$pb.TagNumber(2)
-  set type(Key_KeyActionType v) { setField(2, v); }
+  set type(KeyActionType v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasType() => $_has(1);
   @$pb.TagNumber(2)
@@ -125,6 +135,122 @@ class Key extends $pb.GeneratedMessage {
   void clearOptions() => clearField(3);
   @$pb.TagNumber(3)
   KeyOptions ensureOptions() => $_ensure(2);
+}
+
+class HotkeyOptions extends $pb.GeneratedMessage {
+  factory HotkeyOptions() => create();
+  HotkeyOptions._() : super();
+  factory HotkeyOptions.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory HotkeyOptions.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'HotkeyOptions', createEmptyInstance: create)
+    ..a<$core.int>(1, _omitFieldNames ? '' : 'speed', $pb.PbFieldType.O3)
+    ..aOB(2, _omitFieldNames ? '' : 'noModifiers')
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  HotkeyOptions clone() => HotkeyOptions()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  HotkeyOptions copyWith(void Function(HotkeyOptions) updates) => super.copyWith((message) => updates(message as HotkeyOptions)) as HotkeyOptions;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static HotkeyOptions create() => HotkeyOptions._();
+  HotkeyOptions createEmptyInstance() => create();
+  static $pb.PbList<HotkeyOptions> createRepeated() => $pb.PbList<HotkeyOptions>();
+  @$core.pragma('dart2js:noInline')
+  static HotkeyOptions getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<HotkeyOptions>(create);
+  static HotkeyOptions? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.int get speed => $_getIZ(0);
+  @$pb.TagNumber(1)
+  set speed($core.int v) { $_setSignedInt32(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasSpeed() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearSpeed() => clearField(1);
+
+  @$pb.TagNumber(2)
+  $core.bool get noModifiers => $_getBF(1);
+  @$pb.TagNumber(2)
+  set noModifiers($core.bool v) { $_setBool(1, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasNoModifiers() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearNoModifiers() => clearField(2);
+}
+
+class Hotkey extends $pb.GeneratedMessage {
+  factory Hotkey() => create();
+  Hotkey._() : super();
+  factory Hotkey.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory Hotkey.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Hotkey', createEmptyInstance: create)
+    ..aOS(1, _omitFieldNames ? '' : 'hotkey')
+    ..e<KeyActionType>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE, defaultOrMaker: KeyActionType.UP, valueOf: KeyActionType.valueOf, enumValues: KeyActionType.values)
+    ..aOM<HotkeyOptions>(3, _omitFieldNames ? '' : 'options', subBuilder: HotkeyOptions.create)
+    ..hasRequiredFields = false
+  ;
+
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
+  Hotkey clone() => Hotkey()..mergeFromMessage(this);
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
+  Hotkey copyWith(void Function(Hotkey) updates) => super.copyWith((message) => updates(message as Hotkey)) as Hotkey;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static Hotkey create() => Hotkey._();
+  Hotkey createEmptyInstance() => create();
+  static $pb.PbList<Hotkey> createRepeated() => $pb.PbList<Hotkey>();
+  @$core.pragma('dart2js:noInline')
+  static Hotkey getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Hotkey>(create);
+  static Hotkey? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get hotkey => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set hotkey($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasHotkey() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearHotkey() => clearField(1);
+
+  @$pb.TagNumber(2)
+  KeyActionType get type => $_getN(1);
+  @$pb.TagNumber(2)
+  set type(KeyActionType v) { setField(2, v); }
+  @$pb.TagNumber(2)
+  $core.bool hasType() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearType() => clearField(2);
+
+  @$pb.TagNumber(3)
+  HotkeyOptions get options => $_getN(2);
+  @$pb.TagNumber(3)
+  set options(HotkeyOptions v) { setField(3, v); }
+  @$pb.TagNumber(3)
+  $core.bool hasOptions() => $_has(2);
+  @$pb.TagNumber(3)
+  void clearOptions() => clearField(3);
+  @$pb.TagNumber(3)
+  HotkeyOptions ensureOptions() => $_ensure(2);
 }
 
 class MouseKey extends $pb.GeneratedMessage {

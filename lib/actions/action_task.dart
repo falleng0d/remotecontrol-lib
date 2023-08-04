@@ -19,7 +19,9 @@ class ActionTask {
     // abort if timeout is reached
     if (timeout != null) {
       final now = DateTime.now();
-      final result = await action.doAction(ctx).timeout(Duration(milliseconds: timeout!));
+      final result = timeout! > 0
+          ? await action.doAction(ctx).timeout(Duration(milliseconds: timeout!))
+          : await action.doAction(ctx);
       final elapsed = DateTime.now().difference(now).inMilliseconds;
       if (ctx.description != null && !ctx.description!.contains("Touchpad moved")) {
         logger.trace('[ActionTask]: ${ctx.description} took $elapsed ms');

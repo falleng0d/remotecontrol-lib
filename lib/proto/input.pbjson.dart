@@ -13,39 +13,8 @@ import 'dart:convert' as $convert;
 import 'dart:core' as $core;
 import 'dart:typed_data' as $typed_data;
 
-@$core.Deprecated('Use keyOptionsDescriptor instead')
-const KeyOptions$json = {
-  '1': 'KeyOptions',
-  '2': [
-    {'1': 'no_repeat', '3': 1, '4': 1, '5': 8, '9': 0, '10': 'noRepeat', '17': true},
-    {'1': 'modifiers', '3': 2, '4': 3, '5': 5, '10': 'modifiers'},
-  ],
-  '8': [
-    {'1': '_no_repeat'},
-  ],
-};
-
-/// Descriptor for `KeyOptions`. Decode as a `google.protobuf.DescriptorProto`.
-final $typed_data.Uint8List keyOptionsDescriptor = $convert.base64Decode(
-    'CgpLZXlPcHRpb25zEiAKCW5vX3JlcGVhdBgBIAEoCEgAUghub1JlcGVhdIgBARIcCgltb2RpZm'
-    'llcnMYAiADKAVSCW1vZGlmaWVyc0IMCgpfbm9fcmVwZWF0');
-
-@$core.Deprecated('Use keyDescriptor instead')
-const Key$json = {
-  '1': 'Key',
-  '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 5, '10': 'id'},
-    {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.Key.KeyActionType', '10': 'type'},
-    {'1': 'options', '3': 3, '4': 1, '5': 11, '6': '.KeyOptions', '9': 0, '10': 'options', '17': true},
-  ],
-  '4': [Key_KeyActionType$json],
-  '8': [
-    {'1': '_options'},
-  ],
-};
-
-@$core.Deprecated('Use keyDescriptor instead')
-const Key_KeyActionType$json = {
+@$core.Deprecated('Use keyActionTypeDescriptor instead')
+const KeyActionType$json = {
   '1': 'KeyActionType',
   '2': [
     {'1': 'UP', '2': 0},
@@ -54,11 +23,85 @@ const Key_KeyActionType$json = {
   ],
 };
 
+/// Descriptor for `KeyActionType`. Decode as a `google.protobuf.EnumDescriptorProto`.
+final $typed_data.Uint8List keyActionTypeDescriptor = $convert.base64Decode(
+    'Cg1LZXlBY3Rpb25UeXBlEgYKAlVQEAASCAoERE9XThABEgkKBVBSRVNTEAM=');
+
+@$core.Deprecated('Use keyOptionsDescriptor instead')
+const KeyOptions$json = {
+  '1': 'KeyOptions',
+  '2': [
+    {'1': 'no_repeat', '3': 1, '4': 1, '5': 8, '9': 0, '10': 'noRepeat', '17': true},
+    {'1': 'no_modifiers', '3': 2, '4': 1, '5': 8, '9': 1, '10': 'noModifiers', '17': true},
+    {'1': 'modifiers', '3': 3, '4': 3, '5': 5, '10': 'modifiers'},
+  ],
+  '8': [
+    {'1': '_no_repeat'},
+    {'1': '_no_modifiers'},
+  ],
+};
+
+/// Descriptor for `KeyOptions`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List keyOptionsDescriptor = $convert.base64Decode(
+    'CgpLZXlPcHRpb25zEiAKCW5vX3JlcGVhdBgBIAEoCEgAUghub1JlcGVhdIgBARImCgxub19tb2'
+    'RpZmllcnMYAiABKAhIAVILbm9Nb2RpZmllcnOIAQESHAoJbW9kaWZpZXJzGAMgAygFUgltb2Rp'
+    'ZmllcnNCDAoKX25vX3JlcGVhdEIPCg1fbm9fbW9kaWZpZXJz');
+
+@$core.Deprecated('Use keyDescriptor instead')
+const Key$json = {
+  '1': 'Key',
+  '2': [
+    {'1': 'id', '3': 1, '4': 1, '5': 5, '10': 'id'},
+    {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.KeyActionType', '10': 'type'},
+    {'1': 'options', '3': 3, '4': 1, '5': 11, '6': '.KeyOptions', '9': 0, '10': 'options', '17': true},
+  ],
+  '8': [
+    {'1': '_options'},
+  ],
+};
+
 /// Descriptor for `Key`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List keyDescriptor = $convert.base64Decode(
-    'CgNLZXkSDgoCaWQYASABKAVSAmlkEiYKBHR5cGUYAiABKA4yEi5LZXkuS2V5QWN0aW9uVHlwZV'
-    'IEdHlwZRIqCgdvcHRpb25zGAMgASgLMgsuS2V5T3B0aW9uc0gAUgdvcHRpb25ziAEBIiwKDUtl'
-    'eUFjdGlvblR5cGUSBgoCVVAQABIICgRET1dOEAESCQoFUFJFU1MQA0IKCghfb3B0aW9ucw==');
+    'CgNLZXkSDgoCaWQYASABKAVSAmlkEiIKBHR5cGUYAiABKA4yDi5LZXlBY3Rpb25UeXBlUgR0eX'
+    'BlEioKB29wdGlvbnMYAyABKAsyCy5LZXlPcHRpb25zSABSB29wdGlvbnOIAQFCCgoIX29wdGlv'
+    'bnM=');
+
+@$core.Deprecated('Use hotkeyOptionsDescriptor instead')
+const HotkeyOptions$json = {
+  '1': 'HotkeyOptions',
+  '2': [
+    {'1': 'speed', '3': 1, '4': 1, '5': 5, '9': 0, '10': 'speed', '17': true},
+    {'1': 'no_modifiers', '3': 2, '4': 1, '5': 8, '9': 1, '10': 'noModifiers', '17': true},
+  ],
+  '8': [
+    {'1': '_speed'},
+    {'1': '_no_modifiers'},
+  ],
+};
+
+/// Descriptor for `HotkeyOptions`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List hotkeyOptionsDescriptor = $convert.base64Decode(
+    'Cg1Ib3RrZXlPcHRpb25zEhkKBXNwZWVkGAEgASgFSABSBXNwZWVkiAEBEiYKDG5vX21vZGlmaW'
+    'VycxgCIAEoCEgBUgtub01vZGlmaWVyc4gBAUIICgZfc3BlZWRCDwoNX25vX21vZGlmaWVycw==');
+
+@$core.Deprecated('Use hotkeyDescriptor instead')
+const Hotkey$json = {
+  '1': 'Hotkey',
+  '2': [
+    {'1': 'hotkey', '3': 1, '4': 1, '5': 9, '10': 'hotkey'},
+    {'1': 'type', '3': 2, '4': 1, '5': 14, '6': '.KeyActionType', '10': 'type'},
+    {'1': 'options', '3': 3, '4': 1, '5': 11, '6': '.HotkeyOptions', '9': 0, '10': 'options', '17': true},
+  ],
+  '8': [
+    {'1': '_options'},
+  ],
+};
+
+/// Descriptor for `Hotkey`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List hotkeyDescriptor = $convert.base64Decode(
+    'CgZIb3RrZXkSFgoGaG90a2V5GAEgASgJUgZob3RrZXkSIgoEdHlwZRgCIAEoDjIOLktleUFjdG'
+    'lvblR5cGVSBHR5cGUSLQoHb3B0aW9ucxgDIAEoCzIOLkhvdGtleU9wdGlvbnNIAFIHb3B0aW9u'
+    'c4gBAUIKCghfb3B0aW9ucw==');
 
 @$core.Deprecated('Use mouseKeyDescriptor instead')
 const MouseKey$json = {

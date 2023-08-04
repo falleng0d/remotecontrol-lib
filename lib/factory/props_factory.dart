@@ -94,11 +94,6 @@ class ToggleElementPropsFactory extends XmlNodeToObjectFactory<ToggleElementProp
   ToggleElementProps load(XmlElement node, {ToggleElementProps? defaults}) {
     final initial = (defaults ?? const ToggleElementProps());
 
-    final actuationTypeName = node.getAttributeValue<String?>('type', null);
-    final actuationType = actuationTypeName != null
-        ? KeyActuationType.values.firstWhere((e) => e.toString() == actuationTypeName)
-        : initial.actuationType;
-
     return initial.copyWith(
       label: node.getIfAttributeValue('label'),
       geometry: initial.geometry != null
@@ -106,7 +101,6 @@ class ToggleElementPropsFactory extends XmlNodeToObjectFactory<ToggleElementProp
           : GeometryPropsFactory().load(node),
       switchId: node.getIfAttributeValue('switchId'),
       toggle: node.getIfAttributeValue('toggle'),
-      actuationType: actuationType,
       shiftModifierLabel: node.getIfAttributeValue('shiftLabel'),
       untoggleOnNonModifierKeyPressed:
           node.getIfAttributeValue('untoggleOnNonModifierKeyPressed'),

@@ -51,6 +51,19 @@ enum KeyState { UP, DOWN }
 
 enum ButtonState { UP, DOWN }
 
+KeyActionType keyActionTypeFromName(String actionName) {
+  final name = actionName.toUpperCase();
+  if (name == 'UP') {
+    return KeyActionType.UP;
+  } else {
+    if (name == 'DOWN') {
+      return KeyActionType.DOWN;
+    } else {
+      return KeyActionType.PRESS;
+    }
+  }
+}
+
 KeyState keyActionTypeToKeyState(KeyActionType action) {
   switch (action) {
     case KeyActionType.UP:
@@ -87,12 +100,12 @@ MouseButtonType vkToMouseButton(int vk) {
   return _vkToMouseButton[vk]!;
 }
 
-Map<KeyActionType, pb.Key_KeyActionType> _keyActionTypeToPb = {
-  KeyActionType.UP: pb.Key_KeyActionType.UP,
-  KeyActionType.DOWN: pb.Key_KeyActionType.DOWN,
-  KeyActionType.PRESS: pb.Key_KeyActionType.PRESS
+Map<KeyActionType, pb.KeyActionType> _keyActionTypeToPb = {
+  KeyActionType.UP: pb.KeyActionType.UP,
+  KeyActionType.DOWN: pb.KeyActionType.DOWN,
+  KeyActionType.PRESS: pb.KeyActionType.PRESS
 };
-Map<pb.Key_KeyActionType, KeyActionType> _pbToKeyActionType =
+Map<pb.KeyActionType, KeyActionType> _pbToKeyActionType =
     _keyActionTypeToPb.map((k, v) => MapEntry(v, k));
 
 Map<ButtonActionType, pb.MouseKey_KeyActionType> _buttonActionTypeStateToPb = {
@@ -103,7 +116,7 @@ Map<ButtonActionType, pb.MouseKey_KeyActionType> _buttonActionTypeStateToPb = {
 Map<pb.MouseKey_KeyActionType, ButtonActionType> _pbToButtonActionType =
     _buttonActionTypeStateToPb.map((k, v) => MapEntry(v, k));
 
-pb.Key_KeyActionType keyActionTypeToPb(KeyActionType state) {
+pb.KeyActionType keyActionTypeToPb(KeyActionType state) {
   if (!_keyActionTypeToPb.containsKey(state)) {
     throw ArgumentError('Invalid key state');
   }
@@ -111,7 +124,7 @@ pb.Key_KeyActionType keyActionTypeToPb(KeyActionType state) {
   return _keyActionTypeToPb[state]!;
 }
 
-KeyActionType pbToKeyActionType(pb.Key_KeyActionType state) {
+KeyActionType pbToKeyActionType(pb.KeyActionType state) {
   if (!_pbToKeyActionType.containsKey(state)) {
     throw ArgumentError('Invalid key state');
   }
@@ -332,19 +345,23 @@ String vkToKey(int vk) {
   throw Exception('Invalid VK: $vk');
 }
 
-bool isModifierKey(int vk) {
-  return vk == VK_SHIFT ||
-      vk == VK_LSHIFT ||
-      vk == VK_RSHIFT ||
-      vk == VK_CONTROL ||
-      vk == VK_LCONTROL ||
-      vk == VK_RCONTROL ||
-      vk == VK_MENU ||
-      vk == VK_LMENU ||
-      vk == VK_RMENU ||
-      vk == VK_LWIN ||
-      vk == VK_RWIN;
-}
+const List<int> _modifiers = [
+  VK_SHIFT,
+  VK_LSHIFT,
+  VK_RSHIFT,
+  VK_CONTROL,
+  VK_LCONTROL,
+  VK_RCONTROL,
+  VK_MENU,
+  VK_LMENU,
+  VK_RMENU,
+  VK_LWIN,
+  VK_RWIN,
+];
+
+bool isModifierKey(int vk) => _modifiers.contains(vk);
+
+List<int> getModifiers() => _modifiers;
 
 String keyNameToShiftName(String keyName) {
   switch (keyName) {

@@ -9,5 +9,6 @@ export 'elements/elements.dart';
 export 'elements/layouts.dart';
 export 'values/direction.dart';
 export 'values/geometry.dart';
+export 'values/hotkey_steps.dart';
 export 'values/props.dart';
 export 'values/touchpad_actions.dart';

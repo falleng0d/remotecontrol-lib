@@ -3,6 +3,7 @@ syntax = "proto3";
 // InputMethods service
 service InputMethods {
     rpc PressKey(Key) returns (Response);
+    rpc PressHotkey(Hotkey) returns (Response);
     rpc PressMouseKey(MouseKey) returns (Response);
     rpc MoveMouse(MouseMove) returns (Response);
     rpc Ping(Empty) returns (Response);
@@ -12,21 +13,36 @@ service InputMethods {
     rpc GetConfig(Empty) returns (Config);
 }
 
+enum KeyActionType {
+  UP = 0;
+  DOWN = 1;
+  PRESS = 3;
+}
+
 message KeyOptions {
     optional bool no_repeat = 1;
-    repeated int32 modifiers = 2;
+    optional bool no_modifiers = 2;
+    repeated int32 modifiers = 3;
 }
 
 // The key message containing a key code and a state
 message Key {
     int32 id = 1;
-    enum KeyActionType {
-        UP = 0;
-        DOWN = 1;
-        PRESS = 3;
-    }
+
     KeyActionType type = 2;
     optional KeyOptions options = 3;
+}
+
+message HotkeyOptions {
+    optional int32 speed = 1;
+    optional bool no_modifiers = 2;
+}
+
+message Hotkey {
+  string hotkey = 1;
+
+  KeyActionType type = 2;
+  optional HotkeyOptions options = 3;
 }
 
 message MouseKey {

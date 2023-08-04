@@ -416,8 +416,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
   @required
   final BaseAction<BaseToggleActionContext>? action;
 
-  final KeyActuationType? actuationType;
-
   final bool? toggle;
 
   final String? shiftModifierLabel;
@@ -435,7 +433,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
   bool get isFilled {
     return super.isFilled &&
         switchId != null &&
-        actuationType != null &&
         toggle != null &&
         shiftModifierLabel != null &&
         untoggleOnNonModifierKeyPressed != null &&
@@ -449,7 +446,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
     Geometry? geometry,
     this.switchId,
     this.action,
-    this.actuationType,
     this.toggle,
     this.shiftModifierLabel,
     this.untoggleOnNonModifierKeyPressed,
@@ -463,7 +459,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
     Geometry geometry = const Geometry(),
     this.switchId,
     this.action,
-    this.actuationType = KeyActuationType.PRESS,
     this.toggle = false,
     this.shiftModifierLabel = '',
     this.untoggleOnNonModifierKeyPressed = false,
@@ -478,7 +473,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
     Geometry? geometry,
     String? switchId,
     BaseAction<BaseToggleActionContext>? action,
-    KeyActuationType? actuationType,
     bool? toggle,
     String? shiftModifierLabel,
     bool? untoggleOnNonModifierKeyPressed,
@@ -491,7 +485,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
       geometry: geometry ?? this.geometry,
       switchId: switchId ?? this.switchId,
       action: action ?? this.action,
-      actuationType: actuationType ?? this.actuationType,
       toggle: toggle ?? this.toggle,
       shiftModifierLabel: shiftModifierLabel ?? this.shiftModifierLabel,
       untoggleOnNonModifierKeyPressed:
@@ -509,7 +502,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
       geometry: geometryFrom(other),
       switchId: other.switchId,
       action: other.action,
-      actuationType: other.actuationType,
       toggle: other.toggle,
       shiftModifierLabel: other.shiftModifierLabel,
       untoggleOnNonModifierKeyPressed: other.untoggleOnNonModifierKeyPressed,

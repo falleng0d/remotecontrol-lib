@@ -13,21 +13,21 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-class Key_KeyActionType extends $pb.ProtobufEnum {
-  static const Key_KeyActionType UP = Key_KeyActionType._(0, _omitEnumNames ? '' : 'UP');
-  static const Key_KeyActionType DOWN = Key_KeyActionType._(1, _omitEnumNames ? '' : 'DOWN');
-  static const Key_KeyActionType PRESS = Key_KeyActionType._(3, _omitEnumNames ? '' : 'PRESS');
+class KeyActionType extends $pb.ProtobufEnum {
+  static const KeyActionType UP = KeyActionType._(0, _omitEnumNames ? '' : 'UP');
+  static const KeyActionType DOWN = KeyActionType._(1, _omitEnumNames ? '' : 'DOWN');
+  static const KeyActionType PRESS = KeyActionType._(3, _omitEnumNames ? '' : 'PRESS');
 
-  static const $core.List<Key_KeyActionType> values = <Key_KeyActionType> [
+  static const $core.List<KeyActionType> values = <KeyActionType> [
     UP,
     DOWN,
     PRESS,
   ];
 
-  static final $core.Map<$core.int, Key_KeyActionType> _byValue = $pb.ProtobufEnum.initByValue(values);
-  static Key_KeyActionType? valueOf($core.int value) => _byValue[value];
+  static final $core.Map<$core.int, KeyActionType> _byValue = $pb.ProtobufEnum.initByValue(values);
+  static KeyActionType? valueOf($core.int value) => _byValue[value];
 
-  const Key_KeyActionType._($core.int v, $core.String n) : super(v, n);
+  const KeyActionType._($core.int v, $core.String n) : super(v, n);
 }
 
 class MouseKey_KeyActionType extends $pb.ProtobufEnum {
