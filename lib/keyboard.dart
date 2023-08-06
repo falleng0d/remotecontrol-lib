@@ -4,6 +4,7 @@ export 'actions/action_base.dart';
 export 'actions/action_contexts.dart';
 export 'actions/action_task.dart';
 export 'actions/callback.dart';
+export 'components/geometry.dart';
 export 'elements/element_base.dart';
 export 'elements/elements.dart';
 export 'elements/layouts.dart';

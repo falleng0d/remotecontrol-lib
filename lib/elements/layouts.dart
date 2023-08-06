@@ -29,6 +29,9 @@ class FlexLayout extends BaseLayout {
   final double columnGap;
   final double rowGap;
 
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
+
   final bool expandChildren;
 
   FlexLayout({
@@ -38,6 +41,8 @@ class FlexLayout extends BaseLayout {
     this.columnGap = 0,
     this.rowGap = 0,
     this.expandChildren = false,
+    this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
     required this.children,
   });
 
@@ -49,24 +54,10 @@ class FlexLayout extends BaseLayout {
           columnGap: props.columnGap!,
           rowGap: props.rowGap!,
           expandChildren: props.expandChildren!,
+          mainAxisAlignment: props.mainAxisAlignment!,
+          crossAxisAlignment: props.crossAxisAlignment!,
           children: children,
         );
-
-  Widget _addWrapper(List<Widget> children) {
-    if (direction == Direction.Row) {
-      return Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: children,
-      );
-    } else {
-      return Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: children,
-      );
-    }
-  }
 
   Widget _addExpand(Widget widget) {
     if (geometry.expand == true) {
@@ -109,26 +100,24 @@ class FlexLayout extends BaseLayout {
     }
   }
 
-  Widget _transformChildren(Widget widget) {
-    widget = _addExpandToChildren(widget);
-    return widget;
-  }
-
   @override
   Widget build(BuildContext context) {
-    assemble(List<Widget> children) {
-      Widget widget;
-      widget = children.length > 1 ? _addWrapper(children) : children[0];
-      widget = _addExpand(_addContainer(widget));
-      return widget;
-    }
-
     final visibleChildren = children.where((element) => element.isVisible == true);
+    final assembledChildren =
+        visibleChildren.map((e) => _addExpandToChildren(e.build(context))).toList();
+
+    // Geometry geometry = this.geometry;
+    // if (geometry.expand == true) {
+    //   geometry = geometry.copyWith(expand: false);
+    // }
 
     return widget.FlexLayout(
-      children: assemble(
-        visibleChildren.map((e) => _transformChildren(e.build(context))).toList(),
-      ),
+      label: label,
+      direction: direction,
+      geometry: geometry,
+      mainAxisAlignment: mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment,
+      children: assembledChildren,
     );
   }
 }
@@ -139,6 +128,8 @@ class RowLayout extends FlexLayout {
     Geometry geometry = const Geometry(),
     double columnGap = 0,
     bool expandChildren = false,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
     required List<BaseElement> children,
   }) : super(
             label: label,
@@ -147,6 +138,8 @@ class RowLayout extends FlexLayout {
             columnGap: columnGap,
             rowGap: 0,
             expandChildren: expandChildren,
+            mainAxisAlignment: mainAxisAlignment,
+            crossAxisAlignment: crossAxisAlignment,
             children: children);
 
   RowLayout.fromProps(RowLayoutProps props, List<BaseElement> children)
@@ -155,6 +148,8 @@ class RowLayout extends FlexLayout {
           geometry: props.geometry!,
           columnGap: props.columnGap!,
           expandChildren: props.expandChildren!,
+          mainAxisAlignment: props.mainAxisAlignment!,
+          crossAxisAlignment: props.crossAxisAlignment!,
           children: children,
         );
 }
@@ -165,6 +160,8 @@ class ColumnLayout extends FlexLayout {
     Geometry geometry = const Geometry(),
     double rowGap = 0,
     bool expandChildren = false,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
     required List<BaseElement> children,
   }) : super(
             label: label,
@@ -173,6 +170,8 @@ class ColumnLayout extends FlexLayout {
             columnGap: 0,
             rowGap: rowGap,
             expandChildren: expandChildren,
+            mainAxisAlignment: mainAxisAlignment,
+            crossAxisAlignment: crossAxisAlignment,
             children: children);
 
   ColumnLayout.fromProps(ColumnLayoutProps props, List<BaseElement> children)
@@ -181,6 +180,8 @@ class ColumnLayout extends FlexLayout {
           geometry: props.geometry!,
           rowGap: props.rowGap!,
           expandChildren: props.expandChildren!,
+          mainAxisAlignment: props.mainAxisAlignment!,
+          crossAxisAlignment: props.crossAxisAlignment!,
           children: children,
         );
 }

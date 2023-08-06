@@ -660,6 +660,8 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
   final double? columnGap;
   final double? rowGap;
   final bool? expandChildren;
+  final MainAxisAlignment? mainAxisAlignment;
+  final CrossAxisAlignment? crossAxisAlignment;
 
   @override
   bool get isFilled {
@@ -667,7 +669,9 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
         direction != null &&
         columnGap != null &&
         rowGap != null &&
-        expandChildren != null;
+        expandChildren != null &&
+        mainAxisAlignment != null &&
+        crossAxisAlignment != null;
   }
 
   const FlexLayoutProps({
@@ -677,6 +681,8 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
     this.columnGap,
     this.rowGap,
     this.expandChildren,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : super(label: label, geometry: geometry);
 
   const FlexLayoutProps.filled({
@@ -686,6 +692,8 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
     this.columnGap = 0.0,
     this.rowGap = 0.0,
     this.expandChildren = false,
+    this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
   }) : super(label: label, geometry: geometry);
 
   @override
@@ -696,6 +704,8 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
     double? columnGap,
     double? rowGap,
     bool? expandChildren,
+    MainAxisAlignment? mainAxisAlignment,
+    CrossAxisAlignment? crossAxisAlignment,
   }) {
     return FlexLayoutProps(
       label: label ?? this.label,
@@ -704,6 +714,8 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
       columnGap: columnGap ?? this.columnGap,
       rowGap: rowGap ?? this.rowGap,
       expandChildren: expandChildren ?? this.expandChildren,
+      mainAxisAlignment: mainAxisAlignment ?? this.mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment ?? this.crossAxisAlignment,
     );
   }
 
@@ -716,6 +728,8 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
       columnGap: other.columnGap,
       rowGap: other.rowGap,
       expandChildren: other.expandChildren,
+      mainAxisAlignment: other.mainAxisAlignment,
+      crossAxisAlignment: other.crossAxisAlignment,
     );
   }
 }
@@ -723,10 +737,16 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
 class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
   final double? columnGap;
   final bool? expandChildren;
+  final MainAxisAlignment? mainAxisAlignment;
+  final CrossAxisAlignment? crossAxisAlignment;
 
   @override
   bool get isFilled {
-    return super.isFilled && columnGap != null && expandChildren != null;
+    return super.isFilled &&
+        columnGap != null &&
+        expandChildren != null &&
+        mainAxisAlignment != null &&
+        crossAxisAlignment != null;
   }
 
   const RowLayoutProps({
@@ -734,6 +754,8 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
     Geometry? geometry,
     this.columnGap,
     this.expandChildren,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : super(label: label, geometry: geometry);
 
   const RowLayoutProps.filled({
@@ -741,6 +763,8 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
     Geometry geometry = const Geometry(),
     this.columnGap = 0.0,
     this.expandChildren = false,
+    this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
   }) : super(label: label, geometry: geometry);
 
   @override
@@ -749,12 +773,16 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
     Geometry? geometry,
     double? columnGap,
     bool? expandChildren,
+    MainAxisAlignment? mainAxisAlignment,
+    CrossAxisAlignment? crossAxisAlignment,
   }) {
     return RowLayoutProps(
       label: label ?? this.label,
       geometry: geometry ?? this.geometry,
       columnGap: columnGap ?? this.columnGap,
       expandChildren: expandChildren ?? this.expandChildren,
+      mainAxisAlignment: mainAxisAlignment ?? this.mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment ?? this.crossAxisAlignment,
     );
   }
 
@@ -765,6 +793,8 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
       geometry: geometryFrom(other),
       columnGap: other.columnGap,
       expandChildren: other.expandChildren,
+      mainAxisAlignment: other.mainAxisAlignment,
+      crossAxisAlignment: other.crossAxisAlignment,
     );
   }
 }
@@ -772,10 +802,16 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
 class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
   final double? rowGap;
   final bool? expandChildren;
+  final MainAxisAlignment? mainAxisAlignment;
+  final CrossAxisAlignment? crossAxisAlignment;
 
   @override
   bool get isFilled {
-    return super.isFilled && rowGap != null && expandChildren != null;
+    return super.isFilled &&
+        rowGap != null &&
+        expandChildren != null &&
+        mainAxisAlignment != null &&
+        crossAxisAlignment != null;
   }
 
   const ColumnLayoutProps({
@@ -783,6 +819,8 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
     Geometry? geometry,
     this.rowGap,
     this.expandChildren,
+    this.mainAxisAlignment,
+    this.crossAxisAlignment,
   }) : super(label: label, geometry: geometry);
 
   const ColumnLayoutProps.filled({
@@ -790,6 +828,8 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
     Geometry geometry = const Geometry(),
     this.rowGap = 0.0,
     this.expandChildren = false,
+    this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
   }) : super(label: label, geometry: geometry);
 
   @override
@@ -798,12 +838,16 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
     Geometry? geometry,
     double? rowGap,
     bool? expandChildren,
+    MainAxisAlignment? mainAxisAlignment,
+    CrossAxisAlignment? crossAxisAlignment,
   }) {
     return ColumnLayoutProps(
       label: label ?? this.label,
       geometry: geometry ?? this.geometry,
       rowGap: rowGap ?? this.rowGap,
       expandChildren: expandChildren ?? this.expandChildren,
+      mainAxisAlignment: mainAxisAlignment ?? this.mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment ?? this.crossAxisAlignment,
     );
   }
 
@@ -814,6 +858,8 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
       geometry: geometryFrom(other),
       rowGap: other.rowGap,
       expandChildren: other.expandChildren,
+      mainAxisAlignment: other.mainAxisAlignment,
+      crossAxisAlignment: other.crossAxisAlignment,
     );
   }
 }

@@ -13,17 +13,25 @@ class Geometry {
   final EdgeInsets? padding;
   final EdgeInsets? margin;
 
-  bool isEmpty() {
+  bool isEmpty({bool includeExpand = true, bool includeFlex = true}) {
     return width == null &&
         height == null &&
         minWidth == null &&
         maxWidth == null &&
         minHeight == null &&
         maxHeight == null &&
-        expand == null &&
-        flex == null &&
-        padding == null &&
-        margin == null;
+        (includeExpand ? expand == null : true) &&
+        (includeFlex ? flex == null : true) &&
+        (padding == null ||
+            (padding!.bottom == 0 &&
+                padding!.top == 0 &&
+                padding!.left == 0 &&
+                padding!.right == 0)) &&
+        (margin == null ||
+            (margin!.bottom == 0 &&
+                margin!.top == 0 &&
+                margin!.left == 0 &&
+                margin!.right == 0));
   }
 
   const Geometry({

@@ -9,6 +9,11 @@ import '../keyboard.dart';
 /// [Geometry] instance with those attributes.
 extension GeometryXMLNodeDeserializer on Geometry {
   Geometry withAttributes(XmlElement node) {
+    final double? px = node.getIfAttributeValue('px');
+    final double? py = node.getIfAttributeValue('py');
+    final double? mx = node.getIfAttributeValue('mx');
+    final double? my = node.getIfAttributeValue('my');
+
     return Geometry(
       width: node.getAttributeValue('width', width),
       height: node.getAttributeValue('height', height),
@@ -19,16 +24,16 @@ extension GeometryXMLNodeDeserializer on Geometry {
       expand: node.getAttributeValue('expand', expand),
       flex: node.getAttributeValue('flex', flex),
       padding: EdgeInsets.fromLTRB(
-        node.getAttributeValue('pl', padding?.left) ?? 0,
-        node.getAttributeValue('pt', padding?.top) ?? 0,
-        node.getAttributeValue('pr', padding?.right) ?? 0,
-        node.getAttributeValue('pb', padding?.bottom) ?? 0,
+        node.getAttributeValue('pl', px ?? padding?.left) ?? 0,
+        node.getAttributeValue('pt', py ?? padding?.top) ?? 0,
+        node.getAttributeValue('pr', px ?? padding?.right) ?? 0,
+        node.getAttributeValue('pb', py ?? padding?.bottom) ?? 0,
       ),
       margin: EdgeInsets.fromLTRB(
-        node.getAttributeValue('ml', margin?.left) ?? 0,
-        node.getAttributeValue('mt', margin?.top) ?? 0,
-        node.getAttributeValue('mr', margin?.right) ?? 0,
-        node.getAttributeValue('mb', margin?.bottom) ?? 0,
+        node.getAttributeValue('ml', mx ?? margin?.left) ?? 0,
+        node.getAttributeValue('mt', my ?? margin?.top) ?? 0,
+        node.getAttributeValue('mr', mx ?? margin?.right) ?? 0,
+        node.getAttributeValue('mb', my ?? margin?.bottom) ?? 0,
       ),
     );
   }

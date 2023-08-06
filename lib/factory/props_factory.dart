@@ -1,3 +1,5 @@
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:get/get.dart';
 import 'package:remotecontrol_lib/extension/geometry.dart';
 import 'package:remotecontrol_lib/extension/xml_element.dart';
 import 'package:xml/xml.dart';
@@ -161,6 +163,14 @@ class FlexLayoutPropsFactory extends XmlNodeToObjectFactory<FlexLayoutProps> {
   FlexLayoutProps load(XmlElement node, {FlexLayoutProps? defaults}) {
     final initial = (defaults ?? const FlexLayoutProps());
 
+    final crossAxisAlignmentName = node.getIfAttributeValue<String>('cross');
+    final crossAxisAlignment = CrossAxisAlignment.values.firstWhereOrNull(
+        (n) => n.toString() == 'CrossAxisAlignment.$crossAxisAlignmentName');
+
+    final mainAxisAlignmentName = node.getIfAttributeValue<String>('align');
+    final mainAxisAlignment = MainAxisAlignment.values.firstWhereOrNull(
+        (n) => n.toString() == 'MainAxisAlignment.$mainAxisAlignmentName');
+
     return initial.copyWith(
       label: node.getIfAttributeValue('label'),
       geometry: initial.geometry != null
@@ -170,6 +180,8 @@ class FlexLayoutPropsFactory extends XmlNodeToObjectFactory<FlexLayoutProps> {
       columnGap: node.getIfAttributeValue('columnGap'),
       rowGap: node.getIfAttributeValue('rowGap'),
       expandChildren: node.getIfAttributeValue('expandChildren'),
+      mainAxisAlignment: mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment,
     );
   }
 }
@@ -179,6 +191,17 @@ class RowLayoutPropsFactory extends XmlNodeToObjectFactory<RowLayoutProps> {
   RowLayoutProps load(XmlElement node, {RowLayoutProps? defaults}) {
     final initial = (defaults ?? const RowLayoutProps());
 
+    final crossAxisAlignmentName = node.getIfAttributeValue<String>('cross');
+    final crossAxisAlignment = CrossAxisAlignment.values.firstWhereOrNull(
+        (n) => n.toString() == 'CrossAxisAlignment.$crossAxisAlignmentName');
+
+    final mainAxisAlignmentName = node.getIfAttributeValue<String>('align');
+    final mainAxisAlignment = MainAxisAlignment.values.firstWhereOrNull(
+        (n) => n.toString() == 'MainAxisAlignment.$mainAxisAlignmentName');
+
+    print('crossAxisAlignmentName: $crossAxisAlignmentName');
+    print('crossAxisAlignment: $crossAxisAlignment');
+
     return initial.copyWith(
       label: node.getIfAttributeValue('label'),
       geometry: initial.geometry != null
@@ -186,6 +209,8 @@ class RowLayoutPropsFactory extends XmlNodeToObjectFactory<RowLayoutProps> {
           : GeometryPropsFactory().load(node),
       columnGap: node.getIfAttributeValue('columnGap'),
       expandChildren: node.getIfAttributeValue('expandChildren'),
+      mainAxisAlignment: mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment,
     );
   }
 }
@@ -195,6 +220,17 @@ class ColumnLayoutPropsFactory extends XmlNodeToObjectFactory<ColumnLayoutProps>
   ColumnLayoutProps load(XmlElement node, {ColumnLayoutProps? defaults}) {
     final initial = (defaults ?? const ColumnLayoutProps());
 
+    final crossAxisAlignmentName = node.getIfAttributeValue<String>('cross');
+    final crossAxisAlignment = CrossAxisAlignment.values.firstWhereOrNull(
+        (n) => n.toString() == 'CrossAxisAlignment.$crossAxisAlignmentName');
+
+    final mainAxisAlignmentName = node.getIfAttributeValue<String>('align');
+    final mainAxisAlignment = MainAxisAlignment.values.firstWhereOrNull(
+        (n) => n.toString() == 'MainAxisAlignment.$mainAxisAlignmentName');
+
+    print('mainAxisAlignmentName: $mainAxisAlignmentName');
+    print('mainAxisAlignment: $mainAxisAlignment');
+
     return initial.copyWith(
       label: node.getIfAttributeValue('label'),
       geometry: initial.geometry != null
@@ -202,6 +238,8 @@ class ColumnLayoutPropsFactory extends XmlNodeToObjectFactory<ColumnLayoutProps>
           : GeometryPropsFactory().load(node),
       rowGap: node.getIfAttributeValue('rowGap'),
       expandChildren: node.getIfAttributeValue('expandChildren'),
+      mainAxisAlignment: mainAxisAlignment,
+      crossAxisAlignment: crossAxisAlignment,
     );
   }
 }
