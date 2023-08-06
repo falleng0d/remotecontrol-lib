@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 
 class GroupContainer extends StatelessWidget {
   final Widget child;
-  final String title;
+  final String? title;
   final EdgeInsets? margin;
   final Color? backgroundColor;
 
-  const GroupContainer(
-      {Key? key,
-      this.margin,
-      this.backgroundColor,
-      required this.title,
-      required this.child})
-      : super(key: key);
+  const GroupContainer({
+    Key? key,
+    this.margin,
+    this.backgroundColor,
+    this.title,
+    required this.child,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +25,17 @@ class GroupContainer extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(5),
       margin: margin,
-      child: Column(
-        children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.bodyMedium?.apply(color: Colors.black54),
-          ),
-          child
-        ],
-      ),
+      child: title != null
+          ? Column(
+              children: [
+                Text(
+                  title!,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                child
+              ],
+            )
+          : child,
     );
   }
 
