@@ -9,10 +9,12 @@ import '../keyboard.dart';
 /// [Geometry] instance with those attributes.
 extension GeometryXMLNodeDeserializer on Geometry {
   Geometry withAttributes(XmlElement node) {
-    final double? px = node.getIfAttributeValue('px');
-    final double? py = node.getIfAttributeValue('py');
-    final double? mx = node.getIfAttributeValue('mx');
-    final double? my = node.getIfAttributeValue('my');
+    final double? p = node.getIfAttributeValue('p');
+    final double? m = node.getIfAttributeValue('m');
+    final double? px = p ?? node.getIfAttributeValue('px');
+    final double? py = p ?? node.getIfAttributeValue('py');
+    final double? mx = m ?? node.getIfAttributeValue('mx');
+    final double? my = m ?? node.getIfAttributeValue('my');
 
     return Geometry(
       width: node.getAttributeValue('width', width),
