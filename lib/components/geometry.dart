@@ -237,7 +237,10 @@ class GeometricGestureDetector extends StatelessWidget {
     }
 
     if (geometry?.expand == true) {
-      return Expanded(child: widget);
+      return Expanded(
+        flex: geometry?.flex != null ? geometry!.flex! : 1,
+        child: widget,
+      );
     } else {
       if (geometry?.flex != null) {
         return Flexible(

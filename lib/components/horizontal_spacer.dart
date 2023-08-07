@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../values/geometry.dart';
+import 'geometry.dart';
 
 class HorizontalSpacer extends StatelessWidget {
   const HorizontalSpacer({
@@ -12,9 +13,9 @@ class HorizontalSpacer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: geometry.flex ?? 1,
-      child: const SizedBox(),
+    return GeometryWidget(
+      geometry: geometry,
+      child: const Center(),
     );
   }
 }
