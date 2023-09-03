@@ -18,10 +18,22 @@ class GeometryWidget extends StatelessWidget {
   Widget buildGeometry(BuildContext context, Geometry geometry) {
     Widget widget = child;
 
-    if (geometry.padding!.top > 0 ||
-        geometry.padding!.left > 0 ||
-        geometry.padding!.right > 0 ||
-        geometry.padding!.bottom > 0) {
+    if (geometry.borderRadius != null &&
+        (geometry.borderRadius!.topLeft != Radius.zero ||
+            geometry.borderRadius!.topRight != Radius.zero ||
+            geometry.borderRadius!.bottomLeft != Radius.zero ||
+            geometry.borderRadius!.bottomRight != Radius.zero)) {
+      widget = ClipRRect(
+        borderRadius: geometry.borderRadius!,
+        child: widget,
+      );
+    }
+
+    if (geometry.padding != null &&
+        (geometry.padding!.top > 0 ||
+            geometry.padding!.left > 0 ||
+            geometry.padding!.right > 0 ||
+            geometry.padding!.bottom > 0)) {
       widget = Padding(
         padding: geometry.padding!,
         child: widget,
@@ -51,10 +63,11 @@ class GeometryWidget extends StatelessWidget {
       );
     }
 
-    if (geometry.margin!.top > 0 ||
-        geometry.margin!.left > 0 ||
-        geometry.margin!.right > 0 ||
-        geometry.margin!.bottom > 0) {
+    if (geometry.margin != null &&
+        (geometry.margin!.top > 0 ||
+            geometry.margin!.left > 0 ||
+            geometry.margin!.right > 0 ||
+            geometry.margin!.bottom > 0)) {
       widget = Padding(
         padding: geometry.margin!,
         child: widget,
@@ -174,10 +187,22 @@ class GeometricGestureDetector extends StatelessWidget {
   Widget buildGeometry(BuildContext context, Geometry geometry) {
     Widget widget = child;
 
-    if (geometry.padding!.top > 0 ||
-        geometry.padding!.left > 0 ||
-        geometry.padding!.right > 0 ||
-        geometry.padding!.bottom > 0) {
+    if (geometry.borderRadius != null &&
+        (geometry.borderRadius!.topLeft != Radius.zero ||
+            geometry.borderRadius!.topRight != Radius.zero ||
+            geometry.borderRadius!.bottomLeft != Radius.zero ||
+            geometry.borderRadius!.bottomRight != Radius.zero)) {
+      widget = ClipRRect(
+        borderRadius: geometry.borderRadius!,
+        child: widget,
+      );
+    }
+
+    if (geometry.padding != null &&
+        (geometry.padding!.top > 0 ||
+            geometry.padding!.left > 0 ||
+            geometry.padding!.right > 0 ||
+            geometry.padding!.bottom > 0)) {
       widget = Padding(
         padding: geometry.padding!,
         child: widget,
@@ -207,10 +232,11 @@ class GeometricGestureDetector extends StatelessWidget {
       );
     }
 
-    if (geometry.margin!.top > 0 ||
-        geometry.margin!.left > 0 ||
-        geometry.margin!.right > 0 ||
-        geometry.margin!.bottom > 0) {
+    if (geometry.margin != null &&
+        (geometry.margin!.top > 0 ||
+            geometry.margin!.left > 0 ||
+            geometry.margin!.right > 0 ||
+            geometry.margin!.bottom > 0)) {
       widget = Padding(
         padding: geometry.margin!,
         child: widget,

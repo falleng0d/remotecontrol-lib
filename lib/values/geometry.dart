@@ -13,6 +13,9 @@ class Geometry {
   final EdgeInsets? padding;
   final EdgeInsets? margin;
 
+  /// border corner radius for each corner
+  final BorderRadius? borderRadius;
+
   bool isEmpty({bool includeExpand = true, bool includeFlex = true}) {
     return width == null &&
         height == null &&
@@ -31,7 +34,12 @@ class Geometry {
             (margin!.bottom == 0 &&
                 margin!.top == 0 &&
                 margin!.left == 0 &&
-                margin!.right == 0));
+                margin!.right == 0)) &&
+        (borderRadius == null ||
+            (borderRadius!.bottomLeft == Radius.zero &&
+                borderRadius!.bottomRight == Radius.zero &&
+                borderRadius!.topLeft == Radius.zero &&
+                borderRadius!.topRight == Radius.zero));
   }
 
   const Geometry({
@@ -45,31 +53,36 @@ class Geometry {
     this.flex,
     this.padding,
     this.margin,
+    this.borderRadius,
   });
 
-  Geometry copyWith(
-      {double? width,
-      double? height,
-      double? minWidth,
-      double? maxWidth,
-      double? minHeight,
-      double? maxHeight,
-      bool? expand,
-      int? flex,
-      EdgeInsets? padding,
-      EdgeInsets? margin}) {
+  Geometry copyWith({
+    double? width,
+    double? height,
+    double? minWidth,
+    double? maxWidth,
+    double? minHeight,
+    double? maxHeight,
+    bool? expand,
+    int? flex,
+    EdgeInsets? padding,
+    EdgeInsets? margin,
+    BorderRadius? borderRadius,
+  }) {
     assert(!(expand == false && flex != null));
     return Geometry(
-        width: width ?? this.width,
-        height: height ?? this.height,
-        minWidth: minWidth ?? this.minWidth,
-        maxWidth: maxWidth ?? this.maxWidth,
-        minHeight: minHeight ?? this.minHeight,
-        maxHeight: maxHeight ?? this.maxHeight,
-        expand: expand ?? this.expand,
-        flex: flex ?? this.flex,
-        padding: padding ?? this.padding,
-        margin: margin ?? this.margin);
+      width: width ?? this.width,
+      height: height ?? this.height,
+      minWidth: minWidth ?? this.minWidth,
+      maxWidth: maxWidth ?? this.maxWidth,
+      minHeight: minHeight ?? this.minHeight,
+      maxHeight: maxHeight ?? this.maxHeight,
+      expand: expand ?? this.expand,
+      flex: flex ?? this.flex,
+      padding: padding ?? this.padding,
+      margin: margin ?? this.margin,
+      borderRadius: borderRadius ?? this.borderRadius,
+    );
   }
 
   Geometry copyFrom(Geometry other) {
@@ -84,6 +97,7 @@ class Geometry {
       flex: other.flex ?? flex,
       padding: other.padding ?? padding,
       margin: other.margin ?? margin,
+      borderRadius: other.borderRadius ?? borderRadius,
     );
   }
 
@@ -99,6 +113,22 @@ class Geometry {
       flex: flex,
       padding: padding,
       margin: margin,
+      borderRadius: borderRadius,
     );
+  }
+
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(DoubleProperty('width', width));
+    properties.add(DoubleProperty('width', width));
+    properties.add(DoubleProperty('height', height));
+    properties.add(DoubleProperty('minWidth', minWidth));
+    properties.add(DoubleProperty('maxWidth', maxWidth));
+    properties.add(DoubleProperty('minHeight', minHeight));
+    properties.add(DoubleProperty('maxHeight', maxHeight));
+    properties.add(FlagProperty('expand', value: expand, ifTrue: 'expand'));
+    properties.add(IntProperty('flex', flex));
+    properties.add(DiagnosticsProperty<EdgeInsets>('padding', padding));
+    properties.add(DiagnosticsProperty<EdgeInsets>('margin', margin));
+    properties.add(DiagnosticsProperty<BorderRadius>('borderRadius', borderRadius));
   }
 }

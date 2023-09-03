@@ -59,39 +59,6 @@ class FlexLayout extends BaseLayout {
           children: children,
         );
 
-  Widget _addExpand(Widget widget) {
-    if (geometry.expand == true) {
-      return Expanded(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(child: widget),
-          ],
-        ),
-      );
-    } else {
-      return widget;
-    }
-  }
-
-  Widget _addContainer(Widget widget) {
-    return !geometry.isEmpty()
-        ? Container(
-            padding: geometry.padding ?? const EdgeInsets.all(0),
-            margin: geometry.margin ?? const EdgeInsets.all(0),
-            width: geometry.width,
-            height: geometry.height,
-            constraints: BoxConstraints(
-              maxWidth: geometry.maxWidth ?? double.infinity,
-              maxHeight: geometry.maxHeight ?? double.infinity,
-              minHeight: geometry.minHeight ?? 0,
-              minWidth: geometry.minWidth ?? 0,
-            ),
-            child: widget,
-          )
-        : widget;
-  }
-
   Widget _addExpandToChildren(Widget widget) {
     if (expandChildren == true) {
       return CrossExpanded(child: widget);
