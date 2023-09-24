@@ -5,6 +5,7 @@ import '../values/geometry.dart';
 
 mixin Sizeable {
   Geometry get geometry;
+  set geometry(Geometry value);
 }
 
 mixin Labeled {

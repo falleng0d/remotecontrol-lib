@@ -21,7 +21,7 @@ class FlexLayout extends BaseLayout {
   @override
   final String label;
   @override
-  final Geometry geometry;
+  Geometry geometry;
   @override
   final List<BaseElement> children;
 
@@ -77,6 +77,25 @@ class FlexLayout extends BaseLayout {
     // if (geometry.expand == true) {
     //   geometry = geometry.copyWith(expand: false);
     // }
+
+    // First children's left margin should be 0
+    // Last children's right margin should be 0
+    if (direction == Direction.Row && children.isNotEmpty) {
+      final firstChild = children.first;
+      final lastChild = children.last;
+
+      if (firstChild.geometry.margin != null && firstChild.geometry.margin!.left > 0) {
+        firstChild.geometry = firstChild.geometry.copyWith(
+          margin: firstChild.geometry.margin!.copyWith(left: 0),
+        );
+      }
+
+      if (lastChild.geometry.margin != null && lastChild.geometry.margin!.right > 0) {
+        lastChild.geometry = lastChild.geometry.copyWith(
+          margin: lastChild.geometry.margin!.copyWith(right: 0),
+        );
+      }
+    }
 
     return widget.FlexLayout(
       label: label,
@@ -157,7 +176,7 @@ class HorizontalSpacer extends BaseElement {
   @override
   final String label;
   @override
-  final Geometry geometry;
+  Geometry geometry;
 
   @override
   bool isVisible = true;
@@ -189,7 +208,7 @@ class VerticalSpacer extends BaseElement {
   @override
   final String label;
   @override
-  final Geometry geometry;
+  Geometry geometry;
 
   @override
   bool isVisible = true;
@@ -225,7 +244,7 @@ class VisibilityElement extends BaseElement {
   @override
   final String label;
   @override
-  final Geometry geometry = const Geometry();
+  Geometry geometry = const Geometry();
 
   final BaseElement child;
 
