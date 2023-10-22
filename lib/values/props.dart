@@ -114,6 +114,28 @@ class KeyElementProps extends BaseElementProps<KeyElementProps> {
     this.color,
   }) : super(label: label, geometry: geometry);
 
+  factory KeyElementProps.fromMap(Map<String, dynamic> props) {
+    return KeyElementProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+      action: props['action'],
+      toggle: props['toggle'],
+      keyRep: props['keyRep'],
+      keyRepeatDelay: props['keyRepeatDelay'],
+      doubleTapAction: props['doubleTapAction'],
+      holdAction: props['holdAction'],
+      shiftModifierLabel: props['shiftModifierLabel'],
+      unshiftOnRelease: props['unshiftOnRelease'],
+      modifierId: props['modifierId'],
+      switchId: props['switchId'],
+      disableOnNonModifierPressed: props['disableOnNonModifierPressed'],
+      disableOnSwitchPressed: props['disableOnSwitchPressed'],
+      lockOnDoubleTap: props['lockOnDoubleTap'],
+      lockOnHold: props['lockOnHold'],
+      color: props['color'],
+    );
+  }
+
   @override
   KeyElementProps copyWith({
     String? label,
@@ -259,6 +281,26 @@ class TapElementProps extends BaseElementProps<TapElementProps> {
     this.color,
   }) : super(label: label, geometry: geometry);
 
+  factory TapElementProps.fromMap(Map<String, dynamic> props) {
+    return TapElementProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+      action: props['action'],
+      toggle: props['toggle'],
+      doubleTapAction: props['doubleTapAction'],
+      holdAction: props['holdAction'],
+      shiftModifierLabel: props['shiftModifierLabel'],
+      unshiftOnRelease: props['unshiftOnRelease'],
+      modifierId: props['modifierId'],
+      switchId: props['switchId'],
+      disableOnNonModifierPressed: props['disableOnNonModifierPressed'],
+      disableOnSwitchPressed: props['disableOnSwitchPressed'],
+      lockOnDoubleTap: props['lockOnDoubleTap'],
+      lockOnHold: props['lockOnHold'],
+      color: props['color'],
+    );
+  }
+
   @override
   TapElementProps copyWith({
     String? label,
@@ -369,6 +411,20 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
     this.color,
   }) : super(label: label, geometry: geometry);
 
+  factory HotkeyElementProps.fromMap(Map<String, dynamic> props) {
+    return HotkeyElementProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+      action: props['action'],
+      actuationType: props['actuationType'],
+      toggle: props['toggle'],
+      keyRep: props['keyRep'],
+      keyRepeatDelay: props['keyRepeatDelay'],
+      shiftModifierLabel: props['shiftModifierLabel'],
+      color: props['color'],
+    );
+  }
+
   @override
   HotkeyElementProps copyWith({
     String? label,
@@ -467,6 +523,21 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
     this.color,
   }) : super(label: label, geometry: geometry);
 
+  factory ToggleElementProps.fromMap(Map<String, dynamic> props) {
+    return ToggleElementProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+      switchId: props['switchId'],
+      action: props['action'],
+      toggle: props['toggle'],
+      shiftModifierLabel: props['shiftModifierLabel'],
+      untoggleOnNonModifierKeyPressed: props['untoggleOnNonModifierKeyPressed'],
+      lockOnDoubleTap: props['lockOnDoubleTap'],
+      lockOnHold: props['lockOnHold'],
+      color: props['color'],
+    );
+  }
+
   @override
   ToggleElementProps copyWith({
     String? label,
@@ -527,6 +598,15 @@ class ButtonElementProps extends BaseElementProps<ButtonElementProps> {
     this.color,
   }) : super(label: label, geometry: geometry);
 
+  factory ButtonElementProps.fromMap(Map<String, dynamic> props) {
+    return ButtonElementProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+      action: props['action'],
+      color: props['color'],
+    );
+  }
+
   @override
   ButtonElementProps copyWith({
     String? label,
@@ -561,6 +641,13 @@ class TextElementProps extends BaseElementProps<TextElementProps> {
     required String label,
     Geometry geometry = const Geometry(),
   }) : super(label: label, geometry: geometry);
+
+  factory TextElementProps.fromMap(Map<String, dynamic> props) {
+    return TextElementProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+    );
+  }
 
   @override
   TextElementProps copyWith({
@@ -619,6 +706,18 @@ class TouchpadElementProps extends BaseElementProps<TouchpadElementProps> {
     this.tapToClick = false,
     this.doubleTapAndHold = false,
   }) : super(label: label, geometry: geometry);
+
+  factory TouchpadElementProps.fromMap(Map<String, dynamic> props) {
+    return TouchpadElementProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+      actions: props['actions'],
+      scrollbar: props['scrollbar'],
+      mouseButtons: props['mouseButtons'],
+      tapToClick: props['tapToClick'],
+      doubleTapAndHold: props['doubleTapAndHold'],
+    );
+  }
 
   @override
   TouchpadElementProps copyWith({
@@ -696,6 +795,19 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
     this.crossAxisAlignment = CrossAxisAlignment.center,
   }) : super(label: label, geometry: geometry);
 
+  factory FlexLayoutProps.fromMap(Map<String, dynamic> props) {
+    return FlexLayoutProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+      direction: props['direction'],
+      columnGap: props['columnGap'],
+      rowGap: props['rowGap'],
+      expandChildren: props['expandChildren'],
+      mainAxisAlignment: props['mainAxisAlignment'],
+      crossAxisAlignment: props['crossAxisAlignment'],
+    );
+  }
+
   @override
   FlexLayoutProps copyWith({
     String? label,
@@ -767,6 +879,17 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
     this.crossAxisAlignment = CrossAxisAlignment.center,
   }) : super(label: label, geometry: geometry);
 
+  factory RowLayoutProps.fromMap(Map<String, dynamic> props) {
+    return RowLayoutProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+      columnGap: props['columnGap'],
+      expandChildren: props['expandChildren'],
+      mainAxisAlignment: props['mainAxisAlignment'],
+      crossAxisAlignment: props['crossAxisAlignment'],
+    );
+  }
+
   @override
   RowLayoutProps copyWith({
     String? label,
@@ -832,6 +955,17 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
     this.crossAxisAlignment = CrossAxisAlignment.center,
   }) : super(label: label, geometry: geometry);
 
+  factory ColumnLayoutProps.fromMap(Map<String, dynamic> props) {
+    return ColumnLayoutProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+      rowGap: props['rowGap'],
+      expandChildren: props['expandChildren'],
+      mainAxisAlignment: props['mainAxisAlignment'],
+      crossAxisAlignment: props['crossAxisAlignment'],
+    );
+  }
+
   @override
   ColumnLayoutProps copyWith({
     String? label,
@@ -873,6 +1007,13 @@ class HorizontalSpacerProps extends BaseElementProps<HorizontalSpacerProps> {
     Geometry geometry = const Geometry(),
   }) : super(label: label, geometry: geometry);
 
+  factory HorizontalSpacerProps.fromMap(Map<String, dynamic> props) {
+    return HorizontalSpacerProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+    );
+  }
+
   @override
   HorizontalSpacerProps copyWith({
     String? label,
@@ -901,6 +1042,13 @@ class VerticalSpacerProps extends BaseElementProps<VerticalSpacerProps> {
     String label = '',
     Geometry geometry = const Geometry(),
   }) : super(label: label, geometry: geometry);
+
+  factory VerticalSpacerProps.fromMap(Map<String, dynamic> props) {
+    return VerticalSpacerProps(
+      label: props['label'],
+      geometry: Geometry.fromMap(props),
+    );
+  }
 
   @override
   VerticalSpacerProps copyWith({

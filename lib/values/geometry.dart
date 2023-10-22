@@ -56,6 +56,22 @@ class Geometry {
     this.borderRadius,
   });
 
+  factory Geometry.fromMap(Map<String, dynamic> map) {
+    return Geometry(
+      width: map['width'],
+      height: map['height'],
+      minWidth: map['minWidth'],
+      maxWidth: map['maxWidth'],
+      minHeight: map['minHeight'],
+      maxHeight: map['maxHeight'],
+      expand: map['expand'],
+      flex: map['flex'],
+      padding: map['padding'],
+      margin: map['margin'],
+      borderRadius: map['borderRadius'],
+    );
+  }
+
   Geometry copyWith({
     double? width,
     double? height,
