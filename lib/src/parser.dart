@@ -79,10 +79,18 @@ class VirtualKeyboardXMLParser {
   /* region Defs */
 
   /// /keyboard/defs
-  XmlElement getDefsRoot() => _root.findElements('defs').first;
+  XmlElement getDefsRoot() {
+    try {
+      return _root.findElements('defs').first;
+    } on StateError catch (e) {
+      throw Exception('No defs found: $e');
+    }
+  }
 
   /// /keyboard/presets
-  XmlElement getPresetsRoot() => _root.findElements('presets').first;
+  XmlElement? getPresetsRoot() {
+    return _root.findElements('presets').firstOrNull;
+  }
 
   /// /keyboard/defs/[*]
   Iterable<XmlElement> getDefs() => getDefsRoot().childElements;
@@ -113,8 +121,16 @@ class VirtualKeyboardXMLParser {
     final presetsRoot = getPresetsRoot();
     final keysRoot = getKeyboardRoot();
 
+    if (presetsRoot == null) {
+      return;
+    }
+
     final presets = presetsRoot.findElements('preset');
     final presetInstances = keysRoot.findAllElements('preset');
+
+    if (presets.isEmpty || presetInstances.isEmpty) {
+      return;
+    }
 
     final Map<String, List<XmlNode>> presetsMap = {};
 
@@ -140,6 +156,7 @@ class VirtualKeyboardXMLParser {
 
     for (final instance in presetInstances) {
       final presetName = instance.getAttribute('name');
+
       if (presetName == null || presetName.isEmpty) {
         logger.warning('Preset instance must have a name');
         continue;
@@ -154,7 +171,87 @@ class VirtualKeyboardXMLParser {
       // deep copy
       final presetNodesCopy =
           presetNodes.map((node) => recursiveDeepCopyNode(node)).toList();
+
+      final Map<String, String> presetVariables = getPresetVariables(instance);
+      substituteVariables(presetNodesCopy, presetVariables);
+
       replaceNode(instance, presetNodesCopy);
+    }
+  }
+
+  /// Get the variables defined in the preset instance
+  /// A variable is any attribute except name
+  Map<String, String> getPresetVariables(XmlElement instance) {
+    final variables = <String, String>{};
+    final attributes = instance.attributes;
+
+    for (final attr in attributes) {
+      if (attr.name.local == 'name') {
+        continue;
+      }
+
+      variables[attr.name.local] = attr.value;
+    }
+
+    return variables;
+  }
+
+  /// Recursively traverse the tree starting from the given node and replace
+  /// the variables by their values in the given map
+  /// The subistitution is done in place on all attributes and text nodes
+  /// with the following format: ${variableName}
+  void substituteVariables(List<XmlNode> nodes, Map<String, String> variables) {
+    for (var node in nodes) {
+      if (node is XmlElement && node.name.local != 'preset') {
+        final attributes = node.attributes;
+        for (final attr in attributes) {
+          final value = attr.value;
+          if (value.contains('\${')) {
+            final newValue = value.replaceAllMapped(
+              RegExp(r'\${(\w+)}'),
+              (match) {
+                final variableName = match.group(1);
+                if (variableName == null) {
+                  return '';
+                }
+
+                if (!variables.containsKey(variableName)) {
+                  logger.warning('Variable $variableName not found');
+                  return '';
+                }
+
+                return variables[variableName]!;
+              },
+            );
+
+            attr.value = newValue;
+          }
+        }
+      } else if (node is XmlText) {
+        final text = node.value;
+        if (text.contains('\${')) {
+          final newText = text.replaceAllMapped(
+            RegExp(r'\${(\w+)}'),
+            (match) {
+              final variableName = match.group(1);
+              if (variableName == null) {
+                return '';
+              }
+
+              if (!variables.containsKey(variableName)) {
+                logger.warning('Variable $variableName not found');
+                return '';
+              }
+
+              return variables[variableName]!;
+            },
+          );
+
+          node.value = newText;
+        }
+      }
+
+      substituteVariables(node.children, variables);
     }
   }
 }
