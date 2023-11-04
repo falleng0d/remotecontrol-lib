@@ -16,23 +16,31 @@ void main() {
   const String xmlContent = '''<?xml version="1.0" encoding="UTF-8" ?>
 <keyboard name="Split Keyboard">
     <defs>
-        <key minWidth="90" maxWidth="40" maxHeight="30" ml="3" mr="3" mt="2" mb="2" />
+        <key width="36" minWidth="90" maxWidth="40" maxHeight="30" ml="3" mr="3" mt="2" mb="2" />
         <button maxWidth="40" maxHeight="30" ml="3" mr="3" mt="2" mb="2" />
         <horizontal-spacer expand="true" />
         <touchpad />
     </defs>
     <presets>
+        <preset name="preset0">
+          <key label="preset0-key">\${param0}-\${param1}</key>
+        </preset>
         <preset name="preset1">
           <row label="preset1-instance">
               <key width="\${param}">q</key>
               <key label="\${param}-\${param2}">w</key>
               <key maxHeight="\${param}" width="\${param2}">e</key>
           </row>
+          <preset name="preset0" param0="0" param1="\${param}" />
+        </preset>
+        <preset name="preset2">
+          <key label="preset2-key" width="\${width}">P2</key>
         </preset>
     </presets>
     <root>
         <column label="root" align="end">
             <preset name="preset1" param="40" param2="50" />
+            <preset name="preset2" width="null" />
             <column label="touchpad" expand="true">
                 <touchpad scrollbar="true">
                     <button>LButton</button>
@@ -79,6 +87,18 @@ void main() {
       final key3 = preset1Instance.findElements('key').last;
       expect(key3.getAttribute('maxHeight'), '40');
       expect(key3.getAttribute('width'), '50');
+
+      final preset0Key = keyboardRoot.findAllElements('key').firstWhere(
+            (element) => element.getAttribute('label') == 'preset0-key',
+          );
+      expect(preset0Key, isNotNull);
+      expect(preset0Key.innerText, '0-40');
+
+      final preset2Key = keyboardRoot.findAllElements('key').firstWhere(
+            (element) => element.getAttribute('label') == 'preset2-key',
+          );
+      expect(preset2Key, isNotNull);
+      expect(preset2Key.getAttribute('width'), null);
     });
   });
 
@@ -117,7 +137,6 @@ void main() {
     });
 
     test('Geometry withAttributes', () {
-      // <key maxWidth="40" maxHeight="30" ml="3" mr="3" mt="2" mb="2" />
       final def = parser.getDefItem('key');
       if (def == null) {
         fail('def is null');

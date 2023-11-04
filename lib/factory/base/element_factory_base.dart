@@ -39,6 +39,9 @@ abstract class BaseElementFactory<E extends BaseElement, T extends BaseElementPr
 typedef BaseKeyElementFactory
     = BaseElementFactory<BaseKeyElement, KeyElementProps, KeyElementPropsFactory>;
 
+typedef BaseTapElementFactory
+    = BaseElementFactory<BaseTapElement, TapElementProps, TapElementPropsFactory>;
+
 typedef BaseHotkeyElementFactory = BaseElementFactory<BaseHotkeyElement,
     HotkeyElementProps, HotkeyElementPropsFactory>;
 

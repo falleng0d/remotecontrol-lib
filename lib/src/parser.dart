@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:xml/xml.dart';
 
@@ -11,6 +12,10 @@ XmlNode recursiveDeepCopyNode(XmlNode node) {
   }
 
   final copy = node.copy();
+  copy.attributes.clear();
+  for (var attr in node.attributes) {
+    copy.attributes.add(attr.copy());
+  }
   final children = node.children.map((child) => recursiveDeepCopyNode(child)).toList();
   copy.children.clear();
   copy.children.addAll(children);
@@ -125,19 +130,8 @@ class VirtualKeyboardXMLParser {
       return;
     }
 
-    final presets = presetsRoot.findElements('preset');
-    final presetInstances = keysRoot.findAllElements('preset');
-
-    if (presets.isEmpty || presetInstances.isEmpty) {
-      return;
-    }
-
     final Map<String, List<XmlNode>> presetsMap = {};
-
-    if (presets.isEmpty && presetInstances.isNotEmpty) {
-      logger.error('Preset called but no presets defined');
-      throw Exception('Preset called but no presets defined');
-    }
+    final presets = presetsRoot.findElements('preset');
 
     for (final preset in presetsRoot.childElements) {
       final presetName = preset.getAttribute('name');
@@ -154,28 +148,38 @@ class VirtualKeyboardXMLParser {
       presetsMap[presetName] = preset.children.toList();
     }
 
-    for (final instance in presetInstances) {
-      final presetName = instance.getAttribute('name');
+    if (presetsMap.isEmpty) {
+      return;
+    }
 
-      if (presetName == null || presetName.isEmpty) {
-        logger.warning('Preset instance must have a name');
-        continue;
+    var presetInstances = keysRoot.findAllElements('preset');
+
+    while (presetInstances.isNotEmpty) {
+      for (final instance in presetInstances) {
+        final presetName = instance.getAttribute('name');
+
+        if (presetName == null || presetName.isEmpty) {
+          logger.warning('Preset instance must have a name');
+          continue;
+        }
+
+        if (!presetsMap.containsKey(presetName)) {
+          logger.warning('Preset for instance $presetName does not exist');
+          continue;
+        }
+
+        final presetNodes = presetsMap[presetName]!;
+        // deep copy
+        final presetNodesCopy =
+            presetNodes.map((node) => recursiveDeepCopyNode(node)).toList();
+
+        final Map<String, String> presetVariables = getPresetVariables(instance);
+        substituteVariables(presetNodesCopy, presetVariables);
+
+        replaceNode(instance, presetNodesCopy);
       }
 
-      if (!presetsMap.containsKey(presetName)) {
-        logger.warning('Preset for instance $presetName does not exist');
-        continue;
-      }
-
-      final presetNodes = presetsMap[presetName]!;
-      // deep copy
-      final presetNodesCopy =
-          presetNodes.map((node) => recursiveDeepCopyNode(node)).toList();
-
-      final Map<String, String> presetVariables = getPresetVariables(instance);
-      substituteVariables(presetNodesCopy, presetVariables);
-
-      replaceNode(instance, presetNodesCopy);
+      presetInstances = keysRoot.findAllElements('preset');
     }
   }
 
@@ -201,11 +205,34 @@ class VirtualKeyboardXMLParser {
   /// The subistitution is done in place on all attributes and text nodes
   /// with the following format: ${variableName}
   void substituteVariables(List<XmlNode> nodes, Map<String, String> variables) {
+    final List<VoidCallback> deferred = [];
+    processDeferred() => deferred.forEach((e) => e());
+
     for (var node in nodes) {
-      if (node is XmlElement && node.name.local != 'preset') {
+      if (node is XmlElement) {
         final attributes = node.attributes;
         for (final attr in attributes) {
           final value = attr.value;
+
+          final maybeExactVariable = RegExp(r'^\${(\w+)}$').firstMatch(value)?.group(1);
+          if (maybeExactVariable != null) {
+            final variableName = maybeExactVariable;
+
+            if (!variables.containsKey(variableName)) {
+              logger.warning('Variable $variableName not found');
+              continue;
+            }
+
+            final variableValue = variables[variableName]!;
+            if (variableValue == 'null') {
+              deferred.add(() => node.attributes.remove(attr));
+              continue;
+            }
+
+            attr.value = variables[variableName]!;
+            continue;
+          }
+
           if (value.contains('\${')) {
             final newValue = value.replaceAllMapped(
               RegExp(r'\${(\w+)}'),
@@ -253,5 +280,9 @@ class VirtualKeyboardXMLParser {
 
       substituteVariables(node.children, variables);
     }
+
+    processDeferred();
   }
+
+  void subistituteAttributeVariables(XmlElement node, Map<String, String> variables) {}
 }

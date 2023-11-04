@@ -327,6 +327,17 @@ const Map<String, int> _keyToVK = {
 
 Map<int, String> _vKToKey = _keyToVK.map((k, v) => MapEntry(v, k));
 
+class InvalidKeyException implements Exception {
+  final String message;
+
+  InvalidKeyException(this.message);
+
+  @override
+  String toString() {
+    return 'InvalidKeyException: $message';
+  }
+}
+
 int keyToVK(String key) {
   key = key.toUpperCase();
 
@@ -334,7 +345,7 @@ int keyToVK(String key) {
     return _keyToVK[key]!;
   }
 
-  throw Exception('Invalid key: $key');
+  throw InvalidKeyException('No VK for key: $key');
 }
 
 String vkToKey(int vk) {

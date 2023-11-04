@@ -9,6 +9,7 @@ import '../factory.dart';
 abstract class BaseKeyboardElementFactory {
   /* region Fields */
   BaseKeyElementFactory? __baseKeyElementFactory;
+  BaseTapElementFactory? __baseTapElementFactory;
   BaseHotkeyElementFactory? __baseHotkeyElementFactory;
   BaseToggleElementFactory? __baseToggleElementFactory;
   BaseMouseButtonElementFactory? __baseMouseButtonElementFactory;
@@ -33,6 +34,15 @@ abstract class BaseKeyboardElementFactory {
     }
 
     return __baseKeyElementFactory!;
+  }
+
+  @protected
+  BaseTapElementFactory get baseTapElementFactory {
+    if (__baseTapElementFactory == null) {
+      throw Exception('BaseTapElementFactory is not registered');
+    }
+
+    return __baseTapElementFactory!;
   }
 
   @protected
@@ -152,6 +162,9 @@ abstract class BaseKeyboardElementFactory {
     if (Get.isRegistered<BaseKeyElementFactory>()) {
       __baseKeyElementFactory = Get.find<BaseKeyElementFactory>();
     }
+    if (Get.isRegistered<BaseTapElementFactory>()) {
+      __baseTapElementFactory = Get.find<BaseTapElementFactory>();
+    }
     if (Get.isRegistered<BaseHotkeyElementFactory>()) {
       __baseHotkeyElementFactory = Get.find<BaseHotkeyElementFactory>();
     }
@@ -219,6 +232,7 @@ abstract class BaseKeyboardElementFactory {
 
   /* region Element Builders */
   BaseKeyElement buildKeyElement(XmlElement node);
+  BaseTapElement buildTapElement(XmlElement node);
   BaseHotkeyElement buildHotkeyElement(XmlElement node);
   BaseToggleElement buildToggleElememt(XmlElement node);
   BaseButtonElement buildMouseButtonElement(XmlElement node);

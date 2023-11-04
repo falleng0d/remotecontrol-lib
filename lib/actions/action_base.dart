@@ -18,6 +18,8 @@ abstract class BaseAction<T extends BaseActionContext> {
 
 typedef BaseKeyAction = BaseAction<BaseKeyActionContext>;
 
+typedef BaseTapAction = BaseKeyAction;
+
 typedef BaseHotkeyAction = BaseAction<BaseHotkeyActionContext>;
 
 typedef BaseMouseButtonAction = BaseAction<BaseButtonActionContext>;

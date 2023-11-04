@@ -1,6 +1,3 @@
-import 'package:fluent_ui/fluent_ui.dart'
-    show ScaleUpdateDetails, TapDownDetails, TapUpDetails;
-
 import '../elements/element_base.dart';
 import '../proto/interface.dart';
 import '../src/virtualkeys.dart';
@@ -29,6 +26,9 @@ class BaseKeyActionContext extends BaseActionContext {
       : super(target, description: description);
 }
 
+/// [BaseTapActionContext] is the context in which a keyboard tap action is executed.
+typedef BaseTapActionContext = BaseKeyActionContext;
+
 /// [BaseHotkeyActionContext] is the context in which a keyboard hotkey action is executed.
 class BaseHotkeyActionContext extends BaseActionContext {
   final KeyActionType actionType;
@@ -55,20 +55,6 @@ class BaseMouseMoveActionContext extends BaseActionContext {
 
   const BaseMouseMoveActionContext(BaseElement target, this.deltaX, this.deltaY,
       {String? description})
-      : super(target, description: description);
-}
-
-/// [BaseTapActionContext] is the context in which a touchpad tap action is executed.
-class BaseTapActionContext extends BaseActionContext {
-  final TapUpDetails? tapUpDetails;
-  final TapDownDetails? tapDownDetails;
-  final ScaleUpdateDetails? scaleUpdateDetails;
-
-  const BaseTapActionContext(BaseElement target,
-      {String? description,
-      this.tapUpDetails,
-      this.tapDownDetails,
-      this.scaleUpdateDetails})
       : super(target, description: description);
 }
 
