@@ -29,13 +29,9 @@ class GeometryWidget extends StatelessWidget {
       );
     }
 
-    if (geometry.padding != null &&
-        (geometry.padding!.top > 0 ||
-            geometry.padding!.left > 0 ||
-            geometry.padding!.right > 0 ||
-            geometry.padding!.bottom > 0)) {
+    if (geometry.padding != null && !geometry.padding!.isEmpty()) {
       widget = Padding(
-        padding: geometry.padding!,
+        padding: geometry.padding!.toEdgeInsets(),
         child: widget,
       );
     }
@@ -63,13 +59,9 @@ class GeometryWidget extends StatelessWidget {
       );
     }
 
-    if (geometry.margin != null &&
-        (geometry.margin!.top > 0 ||
-            geometry.margin!.left > 0 ||
-            geometry.margin!.right > 0 ||
-            geometry.margin!.bottom > 0)) {
+    if (geometry.margin != null && !geometry.margin!.isEmpty()) {
       widget = Padding(
-        padding: geometry.margin!,
+        padding: geometry.margin!.toEdgeInsets(),
         child: widget,
       );
     }
@@ -198,13 +190,9 @@ class GeometricGestureDetector extends StatelessWidget {
       );
     }
 
-    if (geometry.padding != null &&
-        (geometry.padding!.top > 0 ||
-            geometry.padding!.left > 0 ||
-            geometry.padding!.right > 0 ||
-            geometry.padding!.bottom > 0)) {
+    if (geometry.padding != null && !geometry.padding!.isEmpty()) {
       widget = Padding(
-        padding: geometry.padding!,
+        padding: geometry.padding!.toEdgeInsets(),
         child: widget,
       );
     }
@@ -232,13 +220,9 @@ class GeometricGestureDetector extends StatelessWidget {
       );
     }
 
-    if (geometry.margin != null &&
-        (geometry.margin!.top > 0 ||
-            geometry.margin!.left > 0 ||
-            geometry.margin!.right > 0 ||
-            geometry.margin!.bottom > 0)) {
+    if (geometry.margin != null && !geometry.margin!.isEmpty()) {
       widget = Padding(
-        padding: geometry.margin!,
+        padding: geometry.margin!.toEdgeInsets(),
         child: widget,
       );
     }

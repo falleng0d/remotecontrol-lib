@@ -323,6 +323,10 @@ const Map<String, int> _keyToVK = {
   '_': VK_OEM_MINUS,
   '!': VK_1,
   '?': VK_OEM_2,
+  'MEDIA_PLAY': VK_MEDIA_PLAY_PAUSE,
+  'MEDIA_PREVIOUS': VK_MEDIA_PREV_TRACK,
+  'MEDIA_NEXT': VK_MEDIA_NEXT_TRACK,
+  'MEDIA_MUTE': VK_VOLUME_MUTE,
 };
 
 Map<int, String> _vKToKey = _keyToVK.map((k, v) => MapEntry(v, k));

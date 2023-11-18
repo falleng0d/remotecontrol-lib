@@ -131,7 +131,6 @@ class VirtualKeyboardXMLParser {
     }
 
     final Map<String, List<XmlNode>> presetsMap = {};
-    final presets = presetsRoot.findElements('preset');
 
     for (final preset in presetsRoot.childElements) {
       final presetName = preset.getAttribute('name');
@@ -156,7 +155,8 @@ class VirtualKeyboardXMLParser {
 
     while (presetInstances.isNotEmpty) {
       for (final instance in presetInstances) {
-        final presetName = instance.getAttribute('name');
+        final presetName = instance.getAttribute('name') ??
+            (instance.innerText.isNotEmpty ? instance.innerText : null);
 
         if (presetName == null || presetName.isEmpty) {
           logger.warning('Preset instance must have a name');
@@ -206,6 +206,7 @@ class VirtualKeyboardXMLParser {
   /// with the following format: ${variableName}
   void substituteVariables(List<XmlNode> nodes, Map<String, String> variables) {
     final List<VoidCallback> deferred = [];
+    // ignore: avoid_function_literals_in_foreach_calls
     processDeferred() => deferred.forEach((e) => e());
 
     for (var node in nodes) {
@@ -220,6 +221,7 @@ class VirtualKeyboardXMLParser {
 
             if (!variables.containsKey(variableName)) {
               logger.warning('Variable $variableName not found');
+              deferred.add(() => node.attributes.remove(attr));
               continue;
             }
 
@@ -283,6 +285,4 @@ class VirtualKeyboardXMLParser {
 
     processDeferred();
   }
-
-  void subistituteAttributeVariables(XmlElement node, Map<String, String> variables) {}
 }

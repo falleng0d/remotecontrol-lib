@@ -472,8 +472,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
   @required
   final BaseAction<BaseToggleActionContext>? action;
 
-  final bool? toggle;
-
   final String? shiftModifierLabel;
 
   /// If true and this toggle is toggled, it will be untoggled on a non-modifier key press
@@ -489,7 +487,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
   bool get isFilled {
     return super.isFilled &&
         switchId != null &&
-        toggle != null &&
         shiftModifierLabel != null &&
         untoggleOnNonModifierKeyPressed != null &&
         lockOnDoubleTap != null &&
@@ -502,7 +499,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
     Geometry? geometry,
     this.switchId,
     this.action,
-    this.toggle,
     this.shiftModifierLabel,
     this.untoggleOnNonModifierKeyPressed,
     this.lockOnDoubleTap,
@@ -515,7 +511,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
     Geometry geometry = const Geometry(),
     this.switchId,
     this.action,
-    this.toggle = false,
     this.shiftModifierLabel = '',
     this.untoggleOnNonModifierKeyPressed = false,
     this.lockOnDoubleTap = false,
@@ -529,7 +524,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
       geometry: Geometry.fromMap(props),
       switchId: props['switchId'],
       action: props['action'],
-      toggle: props['toggle'],
       shiftModifierLabel: props['shiftModifierLabel'],
       untoggleOnNonModifierKeyPressed: props['untoggleOnNonModifierKeyPressed'],
       lockOnDoubleTap: props['lockOnDoubleTap'],
@@ -544,7 +538,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
     Geometry? geometry,
     String? switchId,
     BaseAction<BaseToggleActionContext>? action,
-    bool? toggle,
     String? shiftModifierLabel,
     bool? untoggleOnNonModifierKeyPressed,
     bool? lockOnDoubleTap,
@@ -556,7 +549,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
       geometry: geometry ?? this.geometry,
       switchId: switchId ?? this.switchId,
       action: action ?? this.action,
-      toggle: toggle ?? this.toggle,
       shiftModifierLabel: shiftModifierLabel ?? this.shiftModifierLabel,
       untoggleOnNonModifierKeyPressed:
           untoggleOnNonModifierKeyPressed ?? this.untoggleOnNonModifierKeyPressed,
@@ -573,7 +565,6 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
       geometry: geometryFrom(other),
       switchId: other.switchId,
       action: other.action,
-      toggle: other.toggle,
       shiftModifierLabel: other.shiftModifierLabel,
       untoggleOnNonModifierKeyPressed: other.untoggleOnNonModifierKeyPressed,
       lockOnDoubleTap: other.lockOnDoubleTap,

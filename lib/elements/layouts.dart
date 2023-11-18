@@ -84,13 +84,17 @@ class FlexLayout extends BaseLayout {
       final firstChild = children.first;
       final lastChild = children.last;
 
-      if (firstChild.geometry.margin != null && firstChild.geometry.margin!.left > 0) {
+      if (firstChild.geometry.margin != null &&
+          firstChild.geometry.margin!.left != null &&
+          firstChild.geometry.margin!.left! > 0) {
         firstChild.geometry = firstChild.geometry.copyWith(
           margin: firstChild.geometry.margin!.copyWith(left: 0),
         );
       }
 
-      if (lastChild.geometry.margin != null && lastChild.geometry.margin!.right > 0) {
+      if (lastChild.geometry.margin != null &&
+          lastChild.geometry.margin!.right != null &&
+          lastChild.geometry.margin!.right! > 0) {
         lastChild.geometry = lastChild.geometry.copyWith(
           margin: lastChild.geometry.margin!.copyWith(right: 0),
         );

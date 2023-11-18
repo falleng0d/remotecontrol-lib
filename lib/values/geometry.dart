@@ -1,5 +1,70 @@
 import 'package:flutter/rendering.dart';
 
+class EdgeData {
+  final double? left;
+  final double? top;
+  final double? right;
+  final double? bottom;
+
+  const EdgeData({this.left, this.top, this.right, this.bottom});
+
+  bool isEmpty() {
+    return left == null && top == null && right == null && bottom == null;
+  }
+
+  factory EdgeData.fromMap(Map<String, dynamic> map) {
+    return EdgeData(
+        left: map['left'], top: map['top'], right: map['right'], bottom: map['bottom']);
+  }
+
+  factory EdgeData.only({double? left, double? top, double? right, double? bottom}) {
+    return EdgeData(left: left, top: top, right: right, bottom: bottom);
+  }
+
+  factory EdgeData.all(double value) {
+    return EdgeData(left: value, top: value, right: value, bottom: value);
+  }
+
+  factory EdgeData.symmetric({double? horizontal, double? vertical}) {
+    return EdgeData(left: horizontal, top: vertical, right: horizontal, bottom: vertical);
+  }
+
+  factory EdgeData.fromLTRB(double? left, double? top, double? right, double? bottom) {
+    return EdgeData(left: left, top: top, right: right, bottom: bottom);
+  }
+
+  factory EdgeData.zero() {
+    return const EdgeData(left: 0, top: 0, right: 0, bottom: 0);
+  }
+
+  EdgeData copyWith({double? left, double? top, double? right, double? bottom}) {
+    return EdgeData(
+      left: left ?? this.left,
+      top: top ?? this.top,
+      right: right ?? this.right,
+      bottom: bottom ?? this.bottom,
+    );
+  }
+
+  EdgeData copyFrom(EdgeData other) {
+    return EdgeData(
+      left: other.left ?? left,
+      top: other.top ?? top,
+      right: other.right ?? right,
+      bottom: other.bottom ?? bottom,
+    );
+  }
+
+  EdgeData copy() {
+    return EdgeData(left: left, top: top, right: right, bottom: bottom);
+  }
+
+  EdgeInsets toEdgeInsets() {
+    return EdgeInsets.only(
+        left: left ?? 0, top: top ?? 0, right: right ?? 0, bottom: bottom ?? 0);
+  }
+}
+
 class Geometry {
   final double? width;
   final double? height;
@@ -10,8 +75,8 @@ class Geometry {
 
   final bool? expand;
   final int? flex;
-  final EdgeInsets? padding;
-  final EdgeInsets? margin;
+  final EdgeData? padding;
+  final EdgeData? margin;
 
   /// border corner radius for each corner
   final BorderRadius? borderRadius;
@@ -25,16 +90,8 @@ class Geometry {
         maxHeight == null &&
         (includeExpand ? expand == null : true) &&
         (includeFlex ? flex == null : true) &&
-        (padding == null ||
-            (padding!.bottom == 0 &&
-                padding!.top == 0 &&
-                padding!.left == 0 &&
-                padding!.right == 0)) &&
-        (margin == null ||
-            (margin!.bottom == 0 &&
-                margin!.top == 0 &&
-                margin!.left == 0 &&
-                margin!.right == 0)) &&
+        (padding == null || padding!.isEmpty()) &&
+        (margin == null || margin!.isEmpty()) &&
         (borderRadius == null ||
             (borderRadius!.bottomLeft == Radius.zero &&
                 borderRadius!.bottomRight == Radius.zero &&
@@ -81,8 +138,8 @@ class Geometry {
     double? maxHeight,
     bool? expand,
     int? flex,
-    EdgeInsets? padding,
-    EdgeInsets? margin,
+    EdgeData? padding,
+    EdgeData? margin,
     BorderRadius? borderRadius,
   }) {
     assert(!(expand == false && flex != null));
@@ -111,8 +168,16 @@ class Geometry {
       maxHeight: other.maxHeight ?? maxHeight,
       expand: other.expand ?? expand,
       flex: other.flex ?? flex,
-      padding: other.padding ?? padding,
-      margin: other.margin ?? margin,
+      padding: padding != null
+          ? other.padding != null
+              ? padding!.copyFrom(other.padding!)
+              : padding
+          : null,
+      margin: margin != null
+          ? other.margin != null
+              ? margin!.copyFrom(other.margin!)
+              : margin
+          : null,
       borderRadius: other.borderRadius ?? borderRadius,
     );
   }
@@ -143,8 +208,8 @@ class Geometry {
     properties.add(DoubleProperty('maxHeight', maxHeight));
     properties.add(FlagProperty('expand', value: expand, ifTrue: 'expand'));
     properties.add(IntProperty('flex', flex));
-    properties.add(DiagnosticsProperty<EdgeInsets>('padding', padding));
-    properties.add(DiagnosticsProperty<EdgeInsets>('margin', margin));
+    properties.add(DiagnosticsProperty<EdgeData>('padding', padding));
+    properties.add(DiagnosticsProperty<EdgeData>('margin', margin));
     properties.add(DiagnosticsProperty<BorderRadius>('borderRadius', borderRadius));
   }
 }

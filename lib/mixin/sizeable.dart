@@ -2,17 +2,28 @@ import 'package:flutter/rendering.dart';
 
 import '../keyboard.dart';
 
+extension ToEdgeData on EdgeInsets {
+  EdgeData toEdgeData() {
+    return EdgeData.only(
+      left: left,
+      top: top,
+      right: right,
+      bottom: bottom,
+    );
+  }
+}
+
 mixin SizeableFactory {
   late Geometry _geometry;
 
   Geometry get geometry => _geometry.copy();
   set geometry(Geometry geometry) => _geometry = fillGeometryEmptyWithDefaults(geometry);
 
-  EdgeInsets get margin => _geometry.margin!;
-  set margin(EdgeInsets margin) => _geometry = _geometry.copyWith(margin: margin);
+  EdgeData get margin => _geometry.margin!;
+  set margin(EdgeData margin) => _geometry = _geometry.copyWith(margin: margin);
 
-  EdgeInsets get padding => _geometry.padding!;
-  set padding(EdgeInsets padding) => _geometry = _geometry.copyWith(padding: padding);
+  EdgeData get padding => _geometry.padding!;
+  set padding(EdgeData padding) => _geometry = _geometry.copyWith(padding: padding);
 
   double get width => _geometry.width!;
   set width(double width) => _geometry = _geometry.copyWith(width: width);
@@ -46,8 +57,8 @@ mixin SizeableFactory {
       maxHeight: geometry.maxHeight ?? double.infinity,
       expand: geometry.expand ?? false,
       flex: geometry.flex ?? 1,
-      padding: geometry.padding ?? EdgeInsets.zero,
-      margin: geometry.margin ?? EdgeInsets.zero,
+      padding: geometry.padding ?? const EdgeData(),
+      margin: geometry.margin ?? const EdgeData(),
     );
   }
 }

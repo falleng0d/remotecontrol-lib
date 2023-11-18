@@ -10,11 +10,24 @@ import '../keyboard.dart';
 extension GeometryXMLNodeDeserializer on Geometry {
   Geometry withAttributes(XmlElement node) {
     final double? p = node.getIfAttributeValue('p');
-    final double? m = node.getIfAttributeValue('m');
+
     final double? px = p ?? node.getIfAttributeValue('px');
     final double? py = p ?? node.getIfAttributeValue('py');
+
+    final pl = node.getAttributeValue('pl', px ?? padding?.left);
+    final pt = node.getAttributeValue('pt', py ?? padding?.top);
+    final pr = node.getAttributeValue('pr', px ?? padding?.right);
+    final pb = node.getAttributeValue('pb', py ?? padding?.bottom);
+
+    final double? m = node.getIfAttributeValue('m');
+
     final double? mx = m ?? node.getIfAttributeValue('mx');
     final double? my = m ?? node.getIfAttributeValue('my');
+
+    final ml = node.getAttributeValue('ml', mx ?? margin?.left);
+    final mt = node.getAttributeValue('mt', my ?? margin?.top);
+    final mr = node.getAttributeValue('mr', mx ?? margin?.right);
+    final mb = node.getAttributeValue('mb', my ?? margin?.bottom);
 
     // border radius
     final double? b0 = node.getIfAttributeValue('b');
@@ -39,6 +52,33 @@ extension GeometryXMLNodeDeserializer on Geometry {
     final Radius? bbl = bbl0 != null ? Radius.circular(bbl0) : null;
     final Radius? bbr = bbr0 != null ? Radius.circular(bbr0) : null;
 
+    final hasMargin = margin != null ||
+        m != null ||
+        mx != null ||
+        my != null ||
+        ml != null ||
+        mt != null ||
+        mr != null ||
+        mb != null;
+    final hasPadding = padding != null ||
+        p != null ||
+        px != null ||
+        py != null ||
+        pl != null ||
+        pt != null ||
+        pr != null ||
+        pb != null;
+    final hasBorderRadius = borderRadius != null ||
+        b != null ||
+        br != null ||
+        bl != null ||
+        bt != null ||
+        bb != null ||
+        btl != null ||
+        btr != null ||
+        bbl != null ||
+        bbr != null;
+
     return Geometry(
       width: node.getAttributeValue('width', width),
       height: node.getAttributeValue('height', height),
@@ -48,28 +88,20 @@ extension GeometryXMLNodeDeserializer on Geometry {
       maxHeight: node.getAttributeValue('maxHeight', maxHeight),
       expand: node.getAttributeValue('expand', expand),
       flex: node.getAttributeValue('flex', flex),
-      padding: EdgeInsets.fromLTRB(
-        node.getAttributeValue('pl', px ?? padding?.left) ?? 0,
-        node.getAttributeValue('pt', py ?? padding?.top) ?? 0,
-        node.getAttributeValue('pr', px ?? padding?.right) ?? 0,
-        node.getAttributeValue('pb', py ?? padding?.bottom) ?? 0,
-      ),
-      margin: EdgeInsets.fromLTRB(
-        node.getAttributeValue('ml', mx ?? margin?.left) ?? 0,
-        node.getAttributeValue('mt', my ?? margin?.top) ?? 0,
-        node.getAttributeValue('mr', mx ?? margin?.right) ?? 0,
-        node.getAttributeValue('mb', my ?? margin?.bottom) ?? 0,
-      ),
-      borderRadius: BorderRadius.only(
-        topLeft: node.getAttributeValue<Radius>(
-            'btl', btl ?? bt ?? bl ?? b ?? borderRadius?.topLeft ?? Radius.zero),
-        topRight: node.getAttributeValue<Radius>(
-            'btr', btr ?? bt ?? br ?? b ?? borderRadius?.topRight ?? Radius.zero),
-        bottomLeft: node.getAttributeValue<Radius>(
-            'bbl', bbl ?? bb ?? bl ?? b ?? borderRadius?.bottomLeft ?? Radius.zero),
-        bottomRight: node.getAttributeValue<Radius>(
-            'bbr', bbr ?? bb ?? br ?? b ?? borderRadius?.bottomRight ?? Radius.zero),
-      ),
+      padding: hasPadding ? EdgeData.fromLTRB(pl, pt, pr, pb) : null,
+      margin: hasMargin ? EdgeData.fromLTRB(ml, mt, mr, mb) : null,
+      borderRadius: hasBorderRadius
+          ? BorderRadius.only(
+              topLeft: node.getAttributeValue<Radius>(
+                  'btl', btl ?? bt ?? bl ?? b ?? borderRadius?.topLeft ?? Radius.zero),
+              topRight: node.getAttributeValue<Radius>(
+                  'btr', btr ?? bt ?? br ?? b ?? borderRadius?.topRight ?? Radius.zero),
+              bottomLeft: node.getAttributeValue<Radius>(
+                  'bbl', bbl ?? bb ?? bl ?? b ?? borderRadius?.bottomLeft ?? Radius.zero),
+              bottomRight: node.getAttributeValue<Radius>('bbr',
+                  bbr ?? bb ?? br ?? b ?? borderRadius?.bottomRight ?? Radius.zero),
+            )
+          : null,
     );
   }
 }

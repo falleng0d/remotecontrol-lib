@@ -102,7 +102,6 @@ class ToggleElementPropsFactory extends XmlNodeToObjectFactory<ToggleElementProp
           ? initial.geometry!.withAttributes(node)
           : GeometryPropsFactory().load(node),
       switchId: node.getIfAttributeValue('switchId'),
-      toggle: node.getIfAttributeValue('toggle'),
       shiftModifierLabel: node.getIfAttributeValue('shiftLabel'),
       untoggleOnNonModifierKeyPressed:
           node.getIfAttributeValue('untoggleOnNonModifierKeyPressed'),
