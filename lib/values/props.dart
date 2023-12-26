@@ -374,6 +374,8 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
 
   final String? shiftModifierLabel;
 
+  final bool? requireAuthentication;
+
   final KeyColor? color;
 
   @override
@@ -384,6 +386,7 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
         keyRep != null &&
         keyRepeatDelay != null &&
         shiftModifierLabel != null &&
+        requireAuthentication != null &&
         action != null;
   }
 
@@ -396,6 +399,7 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
     this.keyRep,
     this.keyRepeatDelay,
     this.shiftModifierLabel,
+    this.requireAuthentication,
     this.color,
   }) : super(label: label, geometry: geometry);
 
@@ -408,6 +412,7 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
     this.keyRep = 0.0,
     this.keyRepeatDelay = 0.0,
     this.shiftModifierLabel = '',
+    this.requireAuthentication = false,
     this.color,
   }) : super(label: label, geometry: geometry);
 
@@ -421,6 +426,7 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
       keyRep: props['keyRep'],
       keyRepeatDelay: props['keyRepeatDelay'],
       shiftModifierLabel: props['shiftModifierLabel'],
+      requireAuthentication: props['requireAuthentication'],
       color: props['color'],
     );
   }
@@ -435,6 +441,7 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
     double? keyRep,
     double? keyRepeatDelay,
     String? shiftModifierLabel,
+    bool? requireAuthentication,
     KeyColor? color,
   }) {
     return HotkeyElementProps(
@@ -446,6 +453,7 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
       keyRep: keyRep ?? this.keyRep,
       keyRepeatDelay: keyRepeatDelay ?? this.keyRepeatDelay,
       shiftModifierLabel: shiftModifierLabel ?? this.shiftModifierLabel,
+      requireAuthentication: requireAuthentication ?? this.requireAuthentication,
       color: color ?? this.color,
     );
   }
@@ -461,6 +469,7 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
       keyRep: other.keyRep,
       keyRepeatDelay: other.keyRepeatDelay,
       shiftModifierLabel: other.shiftModifierLabel,
+      requireAuthentication: other.requireAuthentication,
       color: other.color,
     );
   }

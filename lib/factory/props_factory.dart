@@ -87,6 +87,7 @@ class HotkeyElementPropsFactory extends XmlNodeToObjectFactory<HotkeyElementProp
       keyRep: node.getIfAttributeValue('keyRep'),
       keyRepeatDelay: node.getIfAttributeValue('keyRepeatDelay'),
       shiftModifierLabel: node.getIfAttributeValue('shiftLabel'),
+      requireAuthentication: node.getIfAttributeValue('protected'),
     );
   }
 }
