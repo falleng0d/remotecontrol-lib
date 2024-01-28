@@ -7,7 +7,7 @@ environment:
   sdk: '>=3.0.5 <4.0.0'
 
 dependencies:
-  uuid: ^4.3.3
+  uuid: ^3.0.6
   win32: ^5.2.0
   intl: ^0.18.0
   flutter:
