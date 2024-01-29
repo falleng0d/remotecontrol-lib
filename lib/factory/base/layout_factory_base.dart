@@ -7,7 +7,7 @@ import '../factory.dart';
 
 abstract class BaseLayoutFactory<E extends BaseElement, T extends BaseElementProps,
     F extends XmlNodeToObjectFactory<T>> extends BaseElementFactory<E, T, F> {
-  BaseLayoutFactory(props, propsLoader) : super(props, propsLoader);
+  BaseLayoutFactory(super.props, super.propsLoader);
 
   @override
 

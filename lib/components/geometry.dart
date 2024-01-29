@@ -153,27 +153,48 @@ class GeometricGestureDetector extends StatelessWidget {
   }
 
   GestureDetector _buildGestureDetector(widget) {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      excludeFromSemantics: true,
-      onTap: onTap,
-      onTapDown: onTapDown,
-      onTapUp: onTapUp,
-      onTapCancel: onTapCancel,
-      onDoubleTap: onDoubleTap,
-      onDoubleTapDown: onDoubleTapDown,
-      onDoubleTapCancel: onDoubleTapCancel,
-      onLongPress: onLongPress,
-      onLongPressUp: onLongPressUp,
-      onLongPressStart: onLongPressStart,
-      onLongPressEnd: onLongPressEnd,
-      onLongPressMoveUpdate: onLongPressMoveUpdate,
-      onSecondaryTapDown: onSecondaryTapDown,
-      onSecondaryTapUp: onSecondaryTapUp,
-      onSecondaryTapCancel: onSecondaryTapCancel,
-      onSecondaryTap: onSecondaryTap,
-      child: widget,
-    );
+    final hasLongPress = onLongPress != null ||
+        onLongPressUp != null ||
+        onLongPressDown != null ||
+        onLongPressStart != null ||
+        onLongPressEnd != null ||
+        onLongPressMoveUpdate != null;
+
+    final hasDoubleTap =
+        onDoubleTap != null || onDoubleTapDown != null || onDoubleTapCancel != null;
+
+    if (hasLongPress || hasDoubleTap) {
+      return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        excludeFromSemantics: true,
+        onTap: onTap,
+        onTapDown: onTapDown,
+        onTapUp: onTapUp,
+        onTapCancel: onTapCancel,
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          excludeFromSemantics: true,
+          onDoubleTap: onDoubleTap,
+          onDoubleTapDown: onDoubleTapDown,
+          onDoubleTapCancel: onDoubleTapCancel,
+          onLongPress: onLongPress,
+          onLongPressUp: onLongPressUp,
+          onLongPressStart: onLongPressStart,
+          onLongPressEnd: onLongPressEnd,
+          onLongPressMoveUpdate: onLongPressMoveUpdate,
+          child: widget,
+        ),
+      );
+    } else {
+      return GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          excludeFromSemantics: true,
+          onTap: onTap,
+          onTapDown: onTapDown,
+          onTapUp: onTapUp,
+          onTapCancel: onTapCancel,
+          child: widget);
+    }
   }
 
   Widget buildGeometry(BuildContext context, Geometry geometry) {

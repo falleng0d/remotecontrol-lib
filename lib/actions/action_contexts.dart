@@ -21,9 +21,8 @@ class BaseKeyActionContext extends BaseActionContext {
   final String? modifierId;
   bool get isModifier => modifierId?.isNotEmpty ?? false;
 
-  const BaseKeyActionContext(BaseElement target, this.actionType,
-      {String? description, this.options, this.modifierId})
-      : super(target, description: description);
+  const BaseKeyActionContext(super.target, this.actionType,
+      {super.description, this.options, this.modifierId});
 }
 
 /// [BaseTapActionContext] is the context in which a keyboard tap action is executed.
@@ -34,18 +33,15 @@ class BaseHotkeyActionContext extends BaseActionContext {
   final KeyActionType actionType;
   final HotkeyOptions? options;
 
-  const BaseHotkeyActionContext(BaseElement target, this.actionType,
-      {String? description, this.options})
-      : super(target, description: description);
+  const BaseHotkeyActionContext(super.target, this.actionType,
+      {super.description, this.options});
 }
 
 /// [BaseButtonActionContext] is the context in which a mouse button action is executed.
 class BaseButtonActionContext extends BaseActionContext {
   final ButtonActionType actionType;
 
-  const BaseButtonActionContext(BaseElement target, this.actionType,
-      {String? description})
-      : super(target, description: description);
+  const BaseButtonActionContext(super.target, this.actionType, {super.description});
 }
 
 /// [BaseMouseMoveActionContext] is the context in which a mouse move action is executed.
@@ -53,16 +49,13 @@ class BaseMouseMoveActionContext extends BaseActionContext {
   final double deltaX;
   final double deltaY;
 
-  const BaseMouseMoveActionContext(BaseElement target, this.deltaX, this.deltaY,
-      {String? description})
-      : super(target, description: description);
+  const BaseMouseMoveActionContext(super.target, this.deltaX, this.deltaY,
+      {super.description});
 }
 
 /// [BaseToggleActionContext] is the context in which a switch action is executed.
 class BaseToggleActionContext extends BaseActionContext {
   final bool state;
 
-  const BaseToggleActionContext(BaseElement target,
-      {String? description, required this.state})
-      : super(target, description: description);
+  const BaseToggleActionContext(super.target, {super.description, required this.state});
 }

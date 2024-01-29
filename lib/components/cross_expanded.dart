@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 class CrossExpanded extends StatelessWidget {
   final Widget child;
 
-  const CrossExpanded({Key? key, required this.child}) : super(key: key);
+  const CrossExpanded({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

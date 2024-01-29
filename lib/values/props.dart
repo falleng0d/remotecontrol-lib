@@ -75,8 +75,8 @@ class KeyElementProps extends BaseElementProps<KeyElementProps> {
   }
 
   const KeyElementProps({
-    String? label,
-    Geometry? geometry,
+    super.label,
+    super.geometry,
     this.action,
     this.toggle,
     this.keyRep,
@@ -92,7 +92,7 @@ class KeyElementProps extends BaseElementProps<KeyElementProps> {
     this.lockOnDoubleTap,
     this.lockOnHold,
     this.color,
-  }) : super(label: label, geometry: geometry);
+  });
 
   const KeyElementProps.filled({
     String label = '',
@@ -246,8 +246,8 @@ class TapElementProps extends BaseElementProps<TapElementProps> {
   }
 
   const TapElementProps({
-    String? label,
-    Geometry? geometry,
+    super.label,
+    super.geometry,
     this.action,
     this.toggle,
     this.doubleTapAction,
@@ -261,7 +261,7 @@ class TapElementProps extends BaseElementProps<TapElementProps> {
     this.lockOnDoubleTap,
     this.lockOnHold,
     this.color,
-  }) : super(label: label, geometry: geometry);
+  });
 
   const TapElementProps.filled({
     String label = '',
@@ -391,8 +391,8 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
   }
 
   const HotkeyElementProps({
-    String? label,
-    Geometry? geometry,
+    super.label,
+    super.geometry,
     this.action,
     this.actuationType,
     this.toggle,
@@ -401,7 +401,7 @@ class HotkeyElementProps extends BaseElementProps<HotkeyElementProps> {
     this.shiftModifierLabel,
     this.requireAuthentication,
     this.color,
-  }) : super(label: label, geometry: geometry);
+  });
 
   const HotkeyElementProps.filled({
     String label = '',
@@ -504,8 +504,8 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
   }
 
   const ToggleElementProps({
-    String? label,
-    Geometry? geometry,
+    super.label,
+    super.geometry,
     this.switchId,
     this.action,
     this.shiftModifierLabel,
@@ -513,7 +513,7 @@ class ToggleElementProps extends BaseElementProps<ToggleElementProps> {
     this.lockOnDoubleTap,
     this.lockOnHold,
     this.color,
-  }) : super(label: label, geometry: geometry);
+  });
 
   const ToggleElementProps.filled({
     String label = '',
@@ -588,8 +588,7 @@ class ButtonElementProps extends BaseElementProps<ButtonElementProps> {
 
   final KeyColor? color;
 
-  const ButtonElementProps({String? label, Geometry? geometry, this.action, this.color})
-      : super(label: label, geometry: geometry);
+  const ButtonElementProps({super.label, super.geometry, this.action, this.color});
 
   const ButtonElementProps.filled({
     String label = '',
@@ -634,8 +633,7 @@ class ButtonElementProps extends BaseElementProps<ButtonElementProps> {
 }
 
 class TextElementProps extends BaseElementProps<TextElementProps> {
-  const TextElementProps({String? label, Geometry? geometry})
-      : super(label: label, geometry: geometry);
+  const TextElementProps({super.label, super.geometry});
 
   const TextElementProps.filled({
     required String label,
@@ -688,14 +686,14 @@ class TouchpadElementProps extends BaseElementProps<TouchpadElementProps> {
   }
 
   const TouchpadElementProps({
-    String? label,
-    Geometry? geometry,
+    super.label,
+    super.geometry,
     this.actions,
     this.scrollbar,
     this.mouseButtons,
     this.tapToClick,
     this.doubleTapAndHold,
-  }) : super(label: label, geometry: geometry);
+  });
 
   const TouchpadElementProps.filled({
     String label = '',
@@ -774,15 +772,15 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
   }
 
   const FlexLayoutProps({
-    String? label,
-    Geometry? geometry,
+    super.label,
+    super.geometry,
     this.direction,
     this.columnGap,
     this.rowGap,
     this.expandChildren,
     this.mainAxisAlignment,
     this.crossAxisAlignment,
-  }) : super(label: label, geometry: geometry);
+  });
 
   const FlexLayoutProps.filled({
     String label = '',
@@ -862,13 +860,13 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
   }
 
   const RowLayoutProps({
-    String? label,
-    Geometry? geometry,
+    super.label,
+    super.geometry,
     this.columnGap,
     this.expandChildren,
     this.mainAxisAlignment,
     this.crossAxisAlignment,
-  }) : super(label: label, geometry: geometry);
+  });
 
   const RowLayoutProps.filled({
     String label = '',
@@ -938,13 +936,13 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
   }
 
   const ColumnLayoutProps({
-    String? label,
-    Geometry? geometry,
+    super.label,
+    super.geometry,
     this.rowGap,
     this.expandChildren,
     this.mainAxisAlignment,
     this.crossAxisAlignment,
-  }) : super(label: label, geometry: geometry);
+  });
 
   const ColumnLayoutProps.filled({
     String label = '',
@@ -999,8 +997,7 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
 }
 
 class HorizontalSpacerProps extends BaseElementProps<HorizontalSpacerProps> {
-  const HorizontalSpacerProps({String? label, Geometry? geometry})
-      : super(label: label, geometry: geometry);
+  const HorizontalSpacerProps({super.label, super.geometry});
 
   const HorizontalSpacerProps.filled({
     String label = '',
@@ -1035,8 +1032,7 @@ class HorizontalSpacerProps extends BaseElementProps<HorizontalSpacerProps> {
 }
 
 class VerticalSpacerProps extends BaseElementProps<VerticalSpacerProps> {
-  const VerticalSpacerProps({String? label, Geometry? geometry})
-      : super(label: label, geometry: geometry);
+  const VerticalSpacerProps({super.label, super.geometry});
 
   const VerticalSpacerProps.filled({
     String label = '',

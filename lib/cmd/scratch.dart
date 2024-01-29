@@ -1,8 +1,3 @@
-/// This is a scratch file for testing code snippets.
-
-/// Class hierarchy rules
-///
-
 abstract class LivingThing {
   const LivingThing();
 }
@@ -29,7 +24,7 @@ abstract class Plant extends LivingThing {
 }
 
 abstract class Tree extends Plant {
-  const Tree(String species) : super(species);
+  const Tree(super.species);
 }
 
 class Palm extends Tree {

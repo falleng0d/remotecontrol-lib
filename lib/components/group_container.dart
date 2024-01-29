@@ -8,12 +8,12 @@ class GroupContainer extends StatelessWidget {
   final Color? backgroundColor;
 
   const GroupContainer({
-    Key? key,
+    super.key,
     this.margin,
     this.backgroundColor,
     this.title,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

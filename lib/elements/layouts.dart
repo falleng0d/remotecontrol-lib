@@ -114,23 +114,14 @@ class FlexLayout extends BaseLayout {
 
 class RowLayout extends FlexLayout {
   RowLayout({
-    String label = '',
-    Geometry geometry = const Geometry(),
-    double columnGap = 0,
-    bool expandChildren = false,
-    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.spaceBetween,
-    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
-    required List<BaseElement> children,
-  }) : super(
-            label: label,
-            geometry: geometry,
-            direction: Direction.Row,
-            columnGap: columnGap,
-            rowGap: 0,
-            expandChildren: expandChildren,
-            mainAxisAlignment: mainAxisAlignment,
-            crossAxisAlignment: crossAxisAlignment,
-            children: children);
+    super.label = '',
+    super.geometry = const Geometry(),
+    super.columnGap = 0,
+    super.expandChildren = false,
+    super.mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    super.crossAxisAlignment = CrossAxisAlignment.center,
+    required super.children,
+  }) : super(direction: Direction.Row, rowGap: 0);
 
   RowLayout.fromProps(RowLayoutProps props, List<BaseElement> children)
       : this(
@@ -146,23 +137,14 @@ class RowLayout extends FlexLayout {
 
 class ColumnLayout extends FlexLayout {
   ColumnLayout({
-    String label = '',
-    Geometry geometry = const Geometry(),
-    double rowGap = 0,
-    bool expandChildren = false,
-    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.spaceBetween,
-    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
-    required List<BaseElement> children,
-  }) : super(
-            label: label,
-            geometry: geometry,
-            direction: Direction.Column,
-            columnGap: 0,
-            rowGap: rowGap,
-            expandChildren: expandChildren,
-            mainAxisAlignment: mainAxisAlignment,
-            crossAxisAlignment: crossAxisAlignment,
-            children: children);
+    super.label = '',
+    super.geometry = const Geometry(),
+    super.rowGap = 0,
+    super.expandChildren = false,
+    super.mainAxisAlignment = MainAxisAlignment.spaceBetween,
+    super.crossAxisAlignment = CrossAxisAlignment.center,
+    required super.children,
+  }) : super(direction: Direction.Column, columnGap: 0);
 
   ColumnLayout.fromProps(ColumnLayoutProps props, List<BaseElement> children)
       : this(
