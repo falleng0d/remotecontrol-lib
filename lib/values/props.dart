@@ -759,6 +759,7 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
   final bool? expandChildren;
   final MainAxisAlignment? mainAxisAlignment;
   final CrossAxisAlignment? crossAxisAlignment;
+  final bool? force;
 
   @override
   bool get isFilled {
@@ -780,6 +781,7 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
     this.expandChildren,
     this.mainAxisAlignment,
     this.crossAxisAlignment,
+    this.force,
   });
 
   const FlexLayoutProps.filled({
@@ -791,6 +793,7 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
     this.expandChildren = false,
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
     this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.force = false,
   }) : super(label: label, geometry: geometry);
 
   factory FlexLayoutProps.fromMap(Map<String, dynamic> props) {
@@ -803,6 +806,7 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
       expandChildren: props['expandChildren'],
       mainAxisAlignment: props['mainAxisAlignment'],
       crossAxisAlignment: props['crossAxisAlignment'],
+      force: props['force'],
     );
   }
 
@@ -816,6 +820,7 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
     bool? expandChildren,
     MainAxisAlignment? mainAxisAlignment,
     CrossAxisAlignment? crossAxisAlignment,
+    bool? force,
   }) {
     return FlexLayoutProps(
       label: label ?? this.label,
@@ -826,6 +831,7 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
       expandChildren: expandChildren ?? this.expandChildren,
       mainAxisAlignment: mainAxisAlignment ?? this.mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment ?? this.crossAxisAlignment,
+      force: force ?? this.force,
     );
   }
 
@@ -840,6 +846,7 @@ class FlexLayoutProps extends BaseElementProps<FlexLayoutProps> {
       expandChildren: other.expandChildren,
       mainAxisAlignment: other.mainAxisAlignment,
       crossAxisAlignment: other.crossAxisAlignment,
+      force: other.force,
     );
   }
 }
@@ -849,6 +856,7 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
   final bool? expandChildren;
   final MainAxisAlignment? mainAxisAlignment;
   final CrossAxisAlignment? crossAxisAlignment;
+  final bool? force;
 
   @override
   bool get isFilled {
@@ -866,6 +874,7 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
     this.expandChildren,
     this.mainAxisAlignment,
     this.crossAxisAlignment,
+    this.force,
   });
 
   const RowLayoutProps.filled({
@@ -875,6 +884,7 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
     this.expandChildren = false,
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
     this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.force = false,
   }) : super(label: label, geometry: geometry);
 
   factory RowLayoutProps.fromMap(Map<String, dynamic> props) {
@@ -885,6 +895,7 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
       expandChildren: props['expandChildren'],
       mainAxisAlignment: props['mainAxisAlignment'],
       crossAxisAlignment: props['crossAxisAlignment'],
+      force: props['force'],
     );
   }
 
@@ -896,6 +907,7 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
     bool? expandChildren,
     MainAxisAlignment? mainAxisAlignment,
     CrossAxisAlignment? crossAxisAlignment,
+    bool? force,
   }) {
     return RowLayoutProps(
       label: label ?? this.label,
@@ -904,6 +916,7 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
       expandChildren: expandChildren ?? this.expandChildren,
       mainAxisAlignment: mainAxisAlignment ?? this.mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment ?? this.crossAxisAlignment,
+      force: force ?? this.force,
     );
   }
 
@@ -916,6 +929,7 @@ class RowLayoutProps extends BaseElementProps<RowLayoutProps> {
       expandChildren: other.expandChildren,
       mainAxisAlignment: other.mainAxisAlignment,
       crossAxisAlignment: other.crossAxisAlignment,
+      force: other.force,
     );
   }
 }
@@ -925,6 +939,7 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
   final bool? expandChildren;
   final MainAxisAlignment? mainAxisAlignment;
   final CrossAxisAlignment? crossAxisAlignment;
+  final bool? force;
 
   @override
   bool get isFilled {
@@ -942,6 +957,7 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
     this.expandChildren,
     this.mainAxisAlignment,
     this.crossAxisAlignment,
+    this.force,
   });
 
   const ColumnLayoutProps.filled({
@@ -951,6 +967,7 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
     this.expandChildren = false,
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
     this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.force = false,
   }) : super(label: label, geometry: geometry);
 
   factory ColumnLayoutProps.fromMap(Map<String, dynamic> props) {
@@ -961,6 +978,7 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
       expandChildren: props['expandChildren'],
       mainAxisAlignment: props['mainAxisAlignment'],
       crossAxisAlignment: props['crossAxisAlignment'],
+      force: props['force'],
     );
   }
 
@@ -972,6 +990,7 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
     bool? expandChildren,
     MainAxisAlignment? mainAxisAlignment,
     CrossAxisAlignment? crossAxisAlignment,
+    bool? force,
   }) {
     return ColumnLayoutProps(
       label: label ?? this.label,
@@ -980,6 +999,7 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
       expandChildren: expandChildren ?? this.expandChildren,
       mainAxisAlignment: mainAxisAlignment ?? this.mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment ?? this.crossAxisAlignment,
+      force: force ?? this.force,
     );
   }
 
@@ -992,6 +1012,7 @@ class ColumnLayoutProps extends BaseElementProps<ColumnLayoutProps> {
       expandChildren: other.expandChildren,
       mainAxisAlignment: other.mainAxisAlignment,
       crossAxisAlignment: other.crossAxisAlignment,
+      force: other.force,
     );
   }
 }

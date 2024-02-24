@@ -11,6 +11,7 @@ class FlexLayout extends StatelessWidget {
   final String label;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
+  final bool force;
   final List<Widget> children;
 
   const FlexLayout({
@@ -20,6 +21,7 @@ class FlexLayout extends StatelessWidget {
     required this.direction,
     required this.mainAxisAlignment,
     required this.crossAxisAlignment,
+    required this.force,
     required this.children,
   });
 
@@ -27,7 +29,9 @@ class FlexLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget widget;
 
-    if (children.length == 1 && crossAxisAlignment == CrossAxisAlignment.center) {
+    if (!force &&
+        children.length == 1 &&
+        crossAxisAlignment == CrossAxisAlignment.center) {
       widget = children[0];
     } else if (direction == Direction.Row) {
       widget = Row(

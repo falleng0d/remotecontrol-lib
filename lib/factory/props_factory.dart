@@ -182,6 +182,7 @@ class FlexLayoutPropsFactory extends XmlNodeToObjectFactory<FlexLayoutProps> {
       expandChildren: node.getIfAttributeValue('expandChildren'),
       mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment,
+      force: node.getIfAttributeValue('force'),
     );
   }
 }
@@ -211,6 +212,7 @@ class RowLayoutPropsFactory extends XmlNodeToObjectFactory<RowLayoutProps> {
       expandChildren: node.getIfAttributeValue('expandChildren'),
       mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment,
+      force: node.getIfAttributeValue('force'),
     );
   }
 }
@@ -240,6 +242,7 @@ class ColumnLayoutPropsFactory extends XmlNodeToObjectFactory<ColumnLayoutProps>
       expandChildren: node.getIfAttributeValue('expandChildren'),
       mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment,
+      force: node.getIfAttributeValue('force'),
     );
   }
 }

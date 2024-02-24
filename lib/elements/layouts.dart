@@ -33,6 +33,7 @@ class FlexLayout extends BaseLayout {
   final CrossAxisAlignment crossAxisAlignment;
 
   final bool expandChildren;
+  final bool force;
 
   FlexLayout({
     this.label = '',
@@ -43,6 +44,7 @@ class FlexLayout extends BaseLayout {
     this.expandChildren = false,
     this.mainAxisAlignment = MainAxisAlignment.spaceBetween,
     this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.force = false,
     required this.children,
   });
 
@@ -56,6 +58,7 @@ class FlexLayout extends BaseLayout {
           expandChildren: props.expandChildren!,
           mainAxisAlignment: props.mainAxisAlignment!,
           crossAxisAlignment: props.crossAxisAlignment!,
+          force: props.force!,
           children: children,
         );
 
@@ -107,6 +110,7 @@ class FlexLayout extends BaseLayout {
       geometry: geometry,
       mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment,
+      force: force,
       children: assembledChildren,
     );
   }
@@ -120,6 +124,7 @@ class RowLayout extends FlexLayout {
     super.expandChildren = false,
     super.mainAxisAlignment = MainAxisAlignment.spaceBetween,
     super.crossAxisAlignment = CrossAxisAlignment.center,
+    super.force = false,
     required super.children,
   }) : super(direction: Direction.Row, rowGap: 0);
 
@@ -131,6 +136,7 @@ class RowLayout extends FlexLayout {
           expandChildren: props.expandChildren!,
           mainAxisAlignment: props.mainAxisAlignment!,
           crossAxisAlignment: props.crossAxisAlignment!,
+          force: props.force!,
           children: children,
         );
 }
@@ -143,6 +149,7 @@ class ColumnLayout extends FlexLayout {
     super.expandChildren = false,
     super.mainAxisAlignment = MainAxisAlignment.spaceBetween,
     super.crossAxisAlignment = CrossAxisAlignment.center,
+    super.force = false,
     required super.children,
   }) : super(direction: Direction.Column, columnGap: 0);
 
@@ -154,6 +161,7 @@ class ColumnLayout extends FlexLayout {
           expandChildren: props.expandChildren!,
           mainAxisAlignment: props.mainAxisAlignment!,
           crossAxisAlignment: props.crossAxisAlignment!,
+          force: props.force!,
           children: children,
         );
 }
