@@ -1,5 +1,4 @@
 // Virtual keys
-import 'package:flutter/foundation.dart';
 import 'package:remotecontrol_lib/proto/input.pbgrpc.dart' as pb;
 import 'package:win32/win32.dart';
 
@@ -148,7 +147,6 @@ ButtonActionType pbToButtonActionType(pb.MouseKey_KeyActionType state) {
   return _pbToButtonActionType[state]!;
 }
 
-@immutable
 class MouseButton {
   final MouseButtonType button;
   final int keyDown;
