@@ -1,7 +1,7 @@
 /// Support for doing something awesome.
 ///
 /// More dartdocs go here.
-library remotecontrol_lib;
+library;
 
 export 'logger/logger.dart';
 export 'proto/input.pb.dart';

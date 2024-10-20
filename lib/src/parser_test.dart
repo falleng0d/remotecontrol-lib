@@ -1,10 +1,10 @@
+// ignore: depend_on_referenced_packages
+import 'package:flutter_test/flutter_test.dart';
 import 'package:remotecontrol_lib/extension/geometry.dart';
 // import 'package:flutter/widgets.dart' show BuildContext, Container, Widget;
 // import 'package:get/get.dart';
 import 'package:remotecontrol_lib/extension/xml_element.dart';
 import 'package:remotecontrol_lib/values/geometry.dart';
-// ignore: depend_on_referenced_packages
-import 'package:test/test.dart';
 import 'package:xml/xml.dart';
 
 import 'parser.dart';

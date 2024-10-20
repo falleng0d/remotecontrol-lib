@@ -1,7 +1,7 @@
 /// Support for doing something awesome.
 ///
 /// More dartdocs go here.
-library logger;
+library;
 
 export 'logger/logger.dart';
 

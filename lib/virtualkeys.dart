@@ -1,3 +1,3 @@
-library virtualkeys;
+library;
 
 export 'src/virtualkeys.dart';

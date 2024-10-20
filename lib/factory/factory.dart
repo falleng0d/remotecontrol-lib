@@ -1,4 +1,4 @@
-library factory;
+library;
 
 export 'base/factory_base.dart';
 export 'color_factory.dart';

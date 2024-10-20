@@ -1,4 +1,4 @@
-library widgets;
+library;
 
 export 'components/cross_expanded.dart';
 export 'components/flex_layout.dart';

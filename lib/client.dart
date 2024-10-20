@@ -1,3 +1,3 @@
-library client;
+library;
 
 export 'proto/interface.dart';

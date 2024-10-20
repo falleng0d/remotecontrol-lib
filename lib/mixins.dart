@@ -1,3 +1,3 @@
-library mixins;
+library;
 
 export 'mixin/mixin.dart';

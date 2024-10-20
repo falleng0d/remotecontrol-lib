@@ -1,4 +1,4 @@
-library mixin;
+library;
 
 export 'displayable.dart';
 export 'sizeable.dart';

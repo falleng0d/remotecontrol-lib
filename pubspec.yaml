@@ -8,11 +8,11 @@ environment:
 
 dependencies:
   uuid: ^3.0.6
-  win32: ^5.2.0
-  intl: ^0.18.0
+  win32: ^5.7.0
+  intl: ^0.19.0
   flutter:
     sdk: flutter
-  fluent_ui: ^4.8.5
+  fluent_ui: ^4.9.1
   grpc:
   protobuf:
   xml: ^6.5.0
@@ -21,8 +21,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.1
-  test: ^1.24.2
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true

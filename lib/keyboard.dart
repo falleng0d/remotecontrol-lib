@@ -1,4 +1,4 @@
-library keyboard;
+library;
 
 export 'actions/action_base.dart';
 export 'actions/action_contexts.dart';
