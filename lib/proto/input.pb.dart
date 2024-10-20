@@ -1,10 +1,10 @@
 //
 //  Generated code. Do not modify.
-//  source: input.proto
+//  source: lib/proto/input.proto
 //
 // @dart = 2.12
 
-// ignore_for_file: annotate_overrides, camel_case_types
+// ignore_for_file: annotate_overrides, camel_case_types, comment_references
 // ignore_for_file: constant_identifier_names, library_prefixes
 // ignore_for_file: non_constant_identifier_names, prefer_final_fields
 // ignore_for_file: unnecessary_import, unnecessary_this, unused_import
@@ -18,7 +18,23 @@ import 'input.pbenum.dart';
 export 'input.pbenum.dart';
 
 class KeyOptions extends $pb.GeneratedMessage {
-  factory KeyOptions() => create();
+  factory KeyOptions({
+    $core.bool? noRepeat,
+    $core.bool? noModifiers,
+    $core.Iterable<$core.int>? modifiers,
+  }) {
+    final $result = create();
+    if (noRepeat != null) {
+      $result.noRepeat = noRepeat;
+    }
+    if (noModifiers != null) {
+      $result.noModifiers = noModifiers;
+    }
+    if (modifiers != null) {
+      $result.modifiers.addAll(modifiers);
+    }
+    return $result;
+  }
   KeyOptions._() : super();
   factory KeyOptions.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory KeyOptions.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -73,8 +89,25 @@ class KeyOptions extends $pb.GeneratedMessage {
   $core.List<$core.int> get modifiers => $_getList(2);
 }
 
+/// The key message containing a key code and a state
 class Key extends $pb.GeneratedMessage {
-  factory Key() => create();
+  factory Key({
+    $core.int? id,
+    KeyActionType? type,
+    KeyOptions? options,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (type != null) {
+      $result.type = type;
+    }
+    if (options != null) {
+      $result.options = options;
+    }
+    return $result;
+  }
   Key._() : super();
   factory Key.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Key.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -138,7 +171,19 @@ class Key extends $pb.GeneratedMessage {
 }
 
 class HotkeyOptions extends $pb.GeneratedMessage {
-  factory HotkeyOptions() => create();
+  factory HotkeyOptions({
+    $core.int? speed,
+    $core.bool? noModifiers,
+  }) {
+    final $result = create();
+    if (speed != null) {
+      $result.speed = speed;
+    }
+    if (noModifiers != null) {
+      $result.noModifiers = noModifiers;
+    }
+    return $result;
+  }
   HotkeyOptions._() : super();
   factory HotkeyOptions.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory HotkeyOptions.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -190,7 +235,23 @@ class HotkeyOptions extends $pb.GeneratedMessage {
 }
 
 class Hotkey extends $pb.GeneratedMessage {
-  factory Hotkey() => create();
+  factory Hotkey({
+    $core.String? hotkey,
+    KeyActionType? type,
+    HotkeyOptions? options,
+  }) {
+    final $result = create();
+    if (hotkey != null) {
+      $result.hotkey = hotkey;
+    }
+    if (type != null) {
+      $result.type = type;
+    }
+    if (options != null) {
+      $result.options = options;
+    }
+    return $result;
+  }
   Hotkey._() : super();
   factory Hotkey.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Hotkey.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -254,7 +315,19 @@ class Hotkey extends $pb.GeneratedMessage {
 }
 
 class MouseKey extends $pb.GeneratedMessage {
-  factory MouseKey() => create();
+  factory MouseKey({
+    $core.int? id,
+    MouseKey_KeyActionType? type,
+  }) {
+    final $result = create();
+    if (id != null) {
+      $result.id = id;
+    }
+    if (type != null) {
+      $result.type = type;
+    }
+    return $result;
+  }
   MouseKey._() : super();
   factory MouseKey.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory MouseKey.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -306,7 +379,23 @@ class MouseKey extends $pb.GeneratedMessage {
 }
 
 class MouseMove extends $pb.GeneratedMessage {
-  factory MouseMove() => create();
+  factory MouseMove({
+    $core.double? x,
+    $core.double? y,
+    $core.bool? relative,
+  }) {
+    final $result = create();
+    if (x != null) {
+      $result.x = x;
+    }
+    if (y != null) {
+      $result.y = y;
+    }
+    if (relative != null) {
+      $result.relative = relative;
+    }
+    return $result;
+  }
   MouseMove._() : super();
   factory MouseMove.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory MouseMove.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -368,7 +457,15 @@ class MouseMove extends $pb.GeneratedMessage {
 }
 
 class Response extends $pb.GeneratedMessage {
-  factory Response() => create();
+  factory Response({
+    $core.String? message,
+  }) {
+    final $result = create();
+    if (message != null) {
+      $result.message = message;
+    }
+    return $result;
+  }
   Response._() : super();
   factory Response.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Response.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
@@ -410,7 +507,19 @@ class Response extends $pb.GeneratedMessage {
 }
 
 class Config extends $pb.GeneratedMessage {
-  factory Config() => create();
+  factory Config({
+    $core.double? cursorSpeed,
+    $core.double? cursorAcceleration,
+  }) {
+    final $result = create();
+    if (cursorSpeed != null) {
+      $result.cursorSpeed = cursorSpeed;
+    }
+    if (cursorAcceleration != null) {
+      $result.cursorAcceleration = cursorAcceleration;
+    }
+    return $result;
+  }
   Config._() : super();
   factory Config.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Config.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
