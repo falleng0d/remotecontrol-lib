@@ -116,7 +116,7 @@ void main() {
 
       expect(defs.first.name.local, 'key');
 
-      final attr1 = defs.first.attributes[0];
+      final attr1 = defs.first.attributes[1];
       expect(attr1.name.local, 'minWidth');
     });
 
