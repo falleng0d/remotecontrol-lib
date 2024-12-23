@@ -1,6 +1,6 @@
 import '../elements/element_base.dart';
 import '../proto/interface.dart';
-import '../src/virtualkeys.dart';
+import '../virtualkeys.dart';
 
 /// [BaseActionContext] is the context in which an action is executed.
 /// It contains the controller that can be used to execute other actions.

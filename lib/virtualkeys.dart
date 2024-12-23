@@ -1,3 +1,4 @@
 library;
 
-export 'src/virtualkeys.dart';
+export 'virtualkeys/virtualkeys.dart';
+export 'virtualkeys/key_action.dart';
