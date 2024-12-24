@@ -1,101 +1,8 @@
-// Virtual keys
-import 'package:remotecontrol_lib/proto/input.pbgrpc.dart' as pb;
-import 'package:win32/win32.dart';
+import 'package:win32/win32.dart' show VIRTUAL_KEY;
 
-import 'key_action.dart';
+import 'exceptions.dart';
 
-const VK_0 = 48;
-const VK_1 = 49;
-const VK_2 = 50;
-const VK_3 = 51;
-const VK_4 = 52;
-const VK_5 = 53;
-const VK_6 = 54;
-const VK_7 = 55;
-const VK_8 = 56;
-const VK_9 = 57;
-const VK_A = 65;
-const VK_B = 66;
-const VK_C = 67;
-const VK_D = 68;
-const VK_E = 69;
-const VK_F = 70;
-const VK_G = 71;
-const VK_H = 72;
-const VK_I = 73;
-const VK_J = 74;
-const VK_K = 75;
-const VK_L = 76;
-const VK_M = 77;
-const VK_N = 78;
-const VK_O = 79;
-const VK_P = 80;
-const VK_Q = 81;
-const VK_R = 82;
-const VK_S = 83;
-const VK_T = 84;
-const VK_U = 85;
-const VK_V = 86;
-const VK_W = 87;
-const VK_X = 88;
-const VK_Y = 89;
-const VK_Z = 90;
-const VK_SHIFT = 160;
-
-class MouseButton {
-  final MouseButtonType button;
-  final int keyDown;
-  final int keyUp;
-
-  const MouseButton(this.button, this.keyDown, this.keyUp);
-
-  // construct from MouseButton
-  static MouseButton fromMouseButton(MouseButtonType button) {
-    switch (button) {
-      case MouseButtonType.LEFT:
-        return MouseButton(button, MOUSE_EVENT_FLAGS.MOUSEEVENTF_LEFTDOWN,
-            MOUSE_EVENT_FLAGS.MOUSEEVENTF_LEFTUP);
-      case MouseButtonType.RIGHT:
-        return MouseButton(button, MOUSE_EVENT_FLAGS.MOUSEEVENTF_RIGHTDOWN,
-            MOUSE_EVENT_FLAGS.MOUSEEVENTF_RIGHTUP);
-      case MouseButtonType.MIDDLE:
-        return MouseButton(button, MOUSE_EVENT_FLAGS.MOUSEEVENTF_MIDDLEDOWN,
-            MOUSE_EVENT_FLAGS.MOUSEEVENTF_MIDDLEUP);
-      case MouseButtonType.X1:
-        return MouseButton(button, MOUSE_EVENT_FLAGS.MOUSEEVENTF_XDOWN,
-            MOUSE_EVENT_FLAGS.MOUSEEVENTF_XUP);
-      case MouseButtonType.X2:
-        throw UnimplementedError('X2 button not implemented');
-    }
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MouseButton &&
-          runtimeType == other.runtimeType &&
-          keyDown == other.keyDown &&
-          keyUp == other.keyUp;
-
-  @override
-  int get hashCode => keyDown.hashCode ^ keyUp.hashCode;
-
-  @override
-  String toString() {
-    return button.toString();
-  }
-}
-
-const MB_LEFT = MouseButton(MouseButtonType.LEFT, MOUSE_EVENT_FLAGS.MOUSEEVENTF_LEFTDOWN,
-    MOUSE_EVENT_FLAGS.MOUSEEVENTF_LEFTUP);
-const MB_RIGHT = MouseButton(MouseButtonType.RIGHT,
-    MOUSE_EVENT_FLAGS.MOUSEEVENTF_RIGHTDOWN, MOUSE_EVENT_FLAGS.MOUSEEVENTF_RIGHTUP);
-const MB_MIDDLE = MouseButton(MouseButtonType.MIDDLE,
-    MOUSE_EVENT_FLAGS.MOUSEEVENTF_MIDDLEDOWN, MOUSE_EVENT_FLAGS.MOUSEEVENTF_MIDDLEUP);
-const MB_X = MouseButton(MouseButtonType.X1, MOUSE_EVENT_FLAGS.MOUSEEVENTF_XDOWN,
-    MOUSE_EVENT_FLAGS.MOUSEEVENTF_XUP);
-
-const Map<String, int> _keyToVK = {
+const Map<String, int> _stringToVk = {
   '0': VIRTUAL_KEY.VK_0,
   '1': VIRTUAL_KEY.VK_1,
   '2': VIRTUAL_KEY.VK_2,
@@ -206,21 +113,21 @@ const Map<String, int> _keyToVK = {
   'N9': VIRTUAL_KEY.VK_NUMPAD9,
   '*': VIRTUAL_KEY.VK_MULTIPLY,
   '+': VIRTUAL_KEY.VK_ADD,
-  ',': VIRTUAL_KEY.VK_OEM_COMMA,
-  '-': VIRTUAL_KEY.VK_OEM_MINUS,
-  '.': VIRTUAL_KEY.VK_OEM_PERIOD,
-  '/': VIRTUAL_KEY.VK_OEM_2,
-  ';': VIRTUAL_KEY.VK_OEM_1,
   '=': VIRTUAL_KEY.VK_OEM_PLUS,
-  '[': VIRTUAL_KEY.VK_OEM_4,
-  ']': VIRTUAL_KEY.VK_OEM_6,
-  '\\': VIRTUAL_KEY.VK_OEM_5,
-  '\'': VIRTUAL_KEY.VK_OEM_7,
-  '"': VIRTUAL_KEY.VK_OEM_7,
-  '`': VIRTUAL_KEY.VK_OEM_3,
+  ',': VIRTUAL_KEY.VK_OEM_COMMA,
+  '-': VIRTUAL_KEY.VK_OEM_MINUS, // Shift + -
   '_': VIRTUAL_KEY.VK_OEM_MINUS,
-  '!': VIRTUAL_KEY.VK_1,
-  '?': VIRTUAL_KEY.VK_OEM_2,
+  '.': VIRTUAL_KEY.VK_OEM_PERIOD,
+  ';': VIRTUAL_KEY.VK_OEM_1,
+  '/': VIRTUAL_KEY.VK_OEM_2,
+  '?': VIRTUAL_KEY.VK_OEM_2, // Shift + /
+  '`': VIRTUAL_KEY.VK_OEM_3,
+  '[': VIRTUAL_KEY.VK_OEM_4,
+  '\\': VIRTUAL_KEY.VK_OEM_5,
+  ']': VIRTUAL_KEY.VK_OEM_6,
+  '\'': VIRTUAL_KEY.VK_OEM_7,
+  '"': VIRTUAL_KEY.VK_OEM_7, // Shift + '
+  '!': VIRTUAL_KEY.VK_1, // Shift + 1
   'MEDIA_PLAY': VIRTUAL_KEY.VK_MEDIA_PLAY_PAUSE,
   'MEDIA_PREVIOUS': VIRTUAL_KEY.VK_MEDIA_PREV_TRACK,
   'MEDIA_NEXT': VIRTUAL_KEY.VK_MEDIA_NEXT_TRACK,
@@ -228,46 +135,22 @@ const Map<String, int> _keyToVK = {
   'MEDIA_VOLUME_UP': VIRTUAL_KEY.VK_VOLUME_UP,
   'MEDIA_VOLUME_DOWN': VIRTUAL_KEY.VK_VOLUME_DOWN,
   'MEDIA_STOP': VIRTUAL_KEY.VK_MEDIA_STOP,
-  'MEDIA_SELECT': VIRTUAL_KEY.VK_LAUNCH_MEDIA_SELECT,
-  'MEDIA_EMAIL': VIRTUAL_KEY.VK_LAUNCH_MAIL,
-  'MEDIA_CALCULATOR': VIRTUAL_KEY.VK_LAUNCH_APP1,
   'MEDIA_BACK': VIRTUAL_KEY.VK_BROWSER_BACK,
   'MEDIA_FORWARD': VIRTUAL_KEY.VK_BROWSER_FORWARD,
   'MEDIA_REFRESH': VIRTUAL_KEY.VK_BROWSER_REFRESH,
 };
 
-Map<int, String> _vKToKey = _keyToVK.map((k, v) => MapEntry(v, k));
-
-class InvalidKeyException implements Exception {
-  final String message;
-
-  InvalidKeyException(this.message);
-
-  @override
-  String toString() {
-    return 'InvalidKeyException: $message';
-  }
-}
-
-int keyToVK(String key) {
+int stringToVk(String key) {
   key = key.toUpperCase();
 
-  if (_keyToVK.containsKey(key)) {
-    return _keyToVK[key]!;
+  if (_stringToVk.containsKey(key)) {
+    return _stringToVk[key]!;
   }
 
-  throw InvalidKeyException('No VK for key: $key');
+  throw InvalidKeyException('No VK for String: $key');
 }
 
-String vkToKey(int vk) {
-  if (_vKToKey.containsKey(vk)) {
-    return _vKToKey[vk]!;
-  }
-
-  throw Exception('Invalid VK: $vk');
-}
-
-const List<int> _modifiers = [
+const List<int> _vkModifiers = [
   VIRTUAL_KEY.VK_SHIFT,
   VIRTUAL_KEY.VK_LSHIFT,
   VIRTUAL_KEY.VK_RSHIFT,
@@ -281,67 +164,6 @@ const List<int> _modifiers = [
   VIRTUAL_KEY.VK_RWIN,
 ];
 
-bool isModifierKey(int vk) => _modifiers.contains(vk);
+bool isModifierVk(int vk) => _vkModifiers.contains(vk);
 
-List<int> getModifiers() => _modifiers;
-
-/// Returns the shifted key name for a given virtual key name.
-/// This assumes an English International keyboard layout.
-String keyNameToShiftName(String keyName) {
-  switch (keyName) {
-    case '/':
-      return '?';
-    case '\\':
-      return '|';
-    case '[':
-      return '{';
-    case ']':
-      return '}';
-    case ';':
-      return ':';
-    case ',':
-      return '<';
-    case '.':
-      return '>';
-    case '\'':
-      return '"';
-    case '`':
-      return '~';
-    case '-':
-      return '_';
-    case '=':
-      return '+';
-    case '0':
-      return ')';
-    case '1':
-      return '!';
-    case '2':
-      return '@';
-    case '3':
-      return '#';
-    case '4':
-      return '\$';
-    case '5':
-      return '%';
-    case '6':
-      return '^';
-    case '7':
-      return '&';
-    case '8':
-      return '*';
-    case '9':
-      return '(';
-    case 'Space':
-      return 'Space';
-    case 'Tab':
-      return 'Tab';
-    case 'Home':
-      return 'Home';
-    case 'End':
-      return 'End';
-    case 'Esc':
-      return 'Esc';
-    default:
-      return keyName.toUpperCase();
-  }
-}
+List<int> getVkModifiers() => _vkModifiers;

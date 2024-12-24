@@ -45,17 +45,17 @@ List<HotkeyStep> stepsFromString(String string) {
       final wait = parts.length > 1 ? int.parse(parts[1]) : null;
       if (action == KeyActionType.PRESS) {
         steps.add(HotkeyStep(
-          keyCode: keyToVK(key),
+          keyCode: stringToVk(key),
           actionType: KeyActionType.DOWN,
         ));
         steps.add(HotkeyStep(
-          keyCode: keyToVK(key),
+          keyCode: stringToVk(key),
           actionType: KeyActionType.UP,
           wait: wait,
         ));
       } else {
         steps.add(HotkeyStep(
-          keyCode: keyToVK(key),
+          keyCode: stringToVk(key),
           actionType: action,
           wait: wait,
         ));
@@ -64,8 +64,8 @@ List<HotkeyStep> stepsFromString(String string) {
     },
     onNonMatch: (n) {
       for (final char in n.split('')) {
-        steps.add(HotkeyStep(keyCode: keyToVK(char), actionType: KeyActionType.DOWN));
-        steps.add(HotkeyStep(keyCode: keyToVK(char), actionType: KeyActionType.UP));
+        steps.add(HotkeyStep(keyCode: stringToVk(char), actionType: KeyActionType.DOWN));
+        steps.add(HotkeyStep(keyCode: stringToVk(char), actionType: KeyActionType.UP));
       }
       return '';
     },
