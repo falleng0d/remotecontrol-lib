@@ -9,4 +9,3 @@ export 'virtualkeys/keyboard.dart';
 export 'virtualkeys/exceptions.dart';
 export 'virtualkeys/win32/button.dart';
 export 'virtualkeys/win32/parse_button.dart';
-export 'virtualkeys/win32/key_constants.dart';
