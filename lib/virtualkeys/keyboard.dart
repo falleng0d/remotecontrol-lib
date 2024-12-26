@@ -4,17 +4,22 @@ import 'key.dart';
 /// [KeyboardLayoutMapper] is an abstract class that provides a mapping between
 /// strings and key codes.
 abstract base class KeyboardLayoutMapper {
-  static int stringToKey(String key) {
-    throw UnimplementedError();
-  }
+  static int stringToKey(String key) => throw UnimplementedError();
 
-  static String keyToString(int key) {
-    throw UnimplementedError();
-  }
+  static String keyToString(int key) => throw UnimplementedError();
+
+  static stringToShiftedString(String key) => throw UnimplementedError();
+
+  static bool isModifier(int key) => throw UnimplementedError();
+
+  static bool isModifierByName(String key) => throw UnimplementedError();
+
+  static List<int> getModifiers() => throw UnimplementedError();
 }
 
-/// [EnIntKbMapper] is a concrete implementation of [KeyboardLayoutMapper] that provides
-/// a mapping between strings and key codes for the English (International) layout.
+/// [EnIntKbMapper] is a concrete implementation of [KeyboardLayoutMapper]. It
+/// provides a mapping between strings and key codes for the English
+/// International (en-INTL) layout.
 final class EnIntKbMapper extends KeyboardLayoutMapper {
   static const Map<String, int> _stringToKey = {
     '0': Key.KEY_0,
@@ -154,6 +159,17 @@ final class EnIntKbMapper extends KeyboardLayoutMapper {
 
   static final Map<int, String> _keyToString = _stringToKey.map((k, v) => MapEntry(v, k));
 
+  static const List<int> _modifiers = [
+    Key.KEY_LSHIFT,
+    Key.KEY_RSHIFT,
+    Key.KEY_LCONTROL,
+    Key.KEY_RCONTROL,
+    Key.KEY_LMENU,
+    Key.KEY_RMENU,
+    Key.KEY_LSUPER,
+    Key.KEY_RSUPER,
+  ];
+
   static int stringToKey(String key) {
     key = key.toUpperCase();
 
@@ -230,4 +246,10 @@ final class EnIntKbMapper extends KeyboardLayoutMapper {
         return key.toUpperCase();
     }
   }
+
+  static bool isModifier(int key) => _modifiers.contains(key);
+
+  static bool isModifierByName(String key) => _modifiers.contains(stringToKey(key));
+
+  static List<int> getModifiers() => _modifiers;
 }
