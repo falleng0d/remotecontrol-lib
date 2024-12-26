@@ -1,3 +1,5 @@
+import 'package:remotecontrol_lib/utils/map.dart';
+
 import 'exceptions.dart';
 import 'key.dart';
 
@@ -12,11 +14,11 @@ abstract base class KeyStringMapper {
 
   stringToShiftedString(String key) => throw UnimplementedError();
 
-  bool isModifier(int key) => throw UnimplementedError();
+  bool isModifierKey(int key) => throw UnimplementedError();
 
-  bool isModifierByName(String key) => throw UnimplementedError();
+  bool isModifierKeyByName(String key) => throw UnimplementedError();
 
-  List<int> getModifiers() => throw UnimplementedError();
+  List<int> getModifierKeys() => throw UnimplementedError();
 }
 
 /// [EnIntlKeyStringMapper] is a concrete implementation of [KeyStringMapper]. It
@@ -83,6 +85,7 @@ final class EnIntlKeyStringMapper extends KeyStringMapper {
     'CTRL': Key.KEY_LCONTROL,
     'LCTRL': Key.KEY_LCONTROL,
     'RCTRL': Key.KEY_RCONTROL,
+    'ALT': Key.KEY_LMENU,
     'LALT': Key.KEY_LMENU,
     'RALT': Key.KEY_RMENU,
     'CAPITAL': Key.KEY_CAPITAL,
@@ -159,7 +162,7 @@ final class EnIntlKeyStringMapper extends KeyStringMapper {
     'MEDIA_REFRESH': Key.KEY_BROWSER_REFRESH,
   };
 
-  static final Map<int, String> _keyToString = _stringToKey.map((k, v) => MapEntry(v, k));
+  static final Map<int, String> _keyToString = _stringToKey.invertNoOverrideDuplicate();
 
   static const List<int> _modifiers = [
     Key.KEY_LSHIFT,
@@ -251,11 +254,11 @@ final class EnIntlKeyStringMapper extends KeyStringMapper {
     }
   }
 
-  @override bool isModifier(int key) => _modifiers.contains(key);
+  @override bool isModifierKey(int key) => _modifiers.contains(key);
 
-  @override bool isModifierByName(String key) => _modifiers.contains(stringToKey(key));
+  @override bool isModifierKeyByName(String key) => _modifiers.contains(stringToKey(key));
 
-  @override List<int> getModifiers() => _modifiers;
+  @override List<int> getModifierKeys() => _modifiers;
 }
 
 enum Locality {
@@ -282,4 +285,16 @@ String keyToString(int key, [Locality locality = DEFAULT_LOCALITY]) {
 
 int stringToKey(String key, [Locality locality = DEFAULT_LOCALITY]) {
   return getKeyMapper(locality).stringToKey(key);
+}
+
+String stringToShiftedKeyString(String key, [Locality locality = DEFAULT_LOCALITY]) {
+  return getKeyMapper(locality).stringToShiftedString(key);
+}
+
+bool isModifierKey(int key, [Locality locality = DEFAULT_LOCALITY]) {
+  return getKeyMapper(locality).isModifierKey(key);
+}
+
+bool isModifierKeyByName(String key, [Locality locality = DEFAULT_LOCALITY]) {
+  return getKeyMapper(locality).isModifierKeyByName(key);
 }

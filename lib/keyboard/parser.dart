@@ -220,7 +220,10 @@ class VirtualKeyboardXMLParser {
             final variableName = maybeExactVariable;
 
             if (!variables.containsKey(variableName)) {
-              logger.warning('Variable $variableName not found');
+              logger.warning('Variable ${attr.name.local}="\$$variableName" not set when '
+                  'rendering preset instance based on: $node');
+              // Attribute has no substitution value, remove it so it can inherit
+              // from the <defs/> node
               deferred.add(() => node.attributes.remove(attr));
               continue;
             }
@@ -245,7 +248,8 @@ class VirtualKeyboardXMLParser {
                 }
 
                 if (!variables.containsKey(variableName)) {
-                  logger.warning('Variable $variableName not found');
+                  logger.warning('Variable $variableName not set when '
+                      'rendering preset instance based on: $node');
                   return '';
                 }
 
@@ -268,7 +272,8 @@ class VirtualKeyboardXMLParser {
               }
 
               if (!variables.containsKey(variableName)) {
-                logger.warning('Variable $variableName not found');
+                logger.warning('Variable $variableName not set when '
+                    'rendering preset instance based on: $node');
                 return '';
               }
 

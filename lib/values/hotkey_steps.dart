@@ -30,7 +30,7 @@ class HotkeyStep {
   });
 }
 
-List<HotkeyStep> stepsFromString(String string) {
+List<HotkeyStep> stepsFromString(String string, int Function(String) stringToVk) {
   final steps = <HotkeyStep>[];
   final regex = RegExp(r'\{(.+?)\}');
   string.splitMapJoin(
