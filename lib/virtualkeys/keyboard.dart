@@ -1,26 +1,28 @@
 import 'exceptions.dart';
 import 'key.dart';
 
-/// [KeyboardLayoutMapper] is an abstract class that provides a mapping between
+/// [KeyStringMapper] is an abstract class that provides a mapping between
 /// strings and key codes.
-abstract base class KeyboardLayoutMapper {
-  static int stringToKey(String key) => throw UnimplementedError();
+abstract base class KeyStringMapper {
+  const KeyStringMapper();
 
-  static String keyToString(int key) => throw UnimplementedError();
+  int stringToKey(String key) => throw UnimplementedError();
 
-  static stringToShiftedString(String key) => throw UnimplementedError();
+  String keyToString(int key) => throw UnimplementedError();
 
-  static bool isModifier(int key) => throw UnimplementedError();
+  stringToShiftedString(String key) => throw UnimplementedError();
 
-  static bool isModifierByName(String key) => throw UnimplementedError();
+  bool isModifier(int key) => throw UnimplementedError();
 
-  static List<int> getModifiers() => throw UnimplementedError();
+  bool isModifierByName(String key) => throw UnimplementedError();
+
+  List<int> getModifiers() => throw UnimplementedError();
 }
 
-/// [EnIntKbMapper] is a concrete implementation of [KeyboardLayoutMapper]. It
+/// [EnIntlKeyStringMapper] is a concrete implementation of [KeyStringMapper]. It
 /// provides a mapping between strings and key codes for the English
 /// International (en-INTL) layout.
-final class EnIntKbMapper extends KeyboardLayoutMapper {
+final class EnIntlKeyStringMapper extends KeyStringMapper {
   static const Map<String, int> _stringToKey = {
     '0': Key.KEY_0,
     '1': Key.KEY_1,
@@ -170,7 +172,9 @@ final class EnIntKbMapper extends KeyboardLayoutMapper {
     Key.KEY_RSUPER,
   ];
 
-  static int stringToKey(String key) {
+  const EnIntlKeyStringMapper();
+
+  @override int stringToKey(String key) {
     key = key.toUpperCase();
 
     if (_stringToKey.containsKey(key)) {
@@ -180,7 +184,7 @@ final class EnIntKbMapper extends KeyboardLayoutMapper {
     throw InvalidKeyException('No String for key: $key');
   }
 
-  static String keyToString(int key) {
+  @override String keyToString(int key) {
     if (_keyToString.containsKey(key)) {
       return _keyToString[key]!;
     }
@@ -188,7 +192,7 @@ final class EnIntKbMapper extends KeyboardLayoutMapper {
     throw InvalidKeyException('No key for String: $key');
   }
 
-  static stringToShiftedString(String key) {
+  @override stringToShiftedString(String key) {
     switch (key) {
       case '/':
         return '?';
@@ -247,9 +251,35 @@ final class EnIntKbMapper extends KeyboardLayoutMapper {
     }
   }
 
-  static bool isModifier(int key) => _modifiers.contains(key);
+  @override bool isModifier(int key) => _modifiers.contains(key);
 
-  static bool isModifierByName(String key) => _modifiers.contains(stringToKey(key));
+  @override bool isModifierByName(String key) => _modifiers.contains(stringToKey(key));
 
-  static List<int> getModifiers() => _modifiers;
+  @override List<int> getModifiers() => _modifiers;
+}
+
+enum Locality {
+  enINTL,
+}
+
+const KeyMappers = <Locality, KeyStringMapper>{
+  Locality.enINTL: EnIntlKeyStringMapper(),
+};
+
+KeyStringMapper getKeyMapper<T extends KeyStringMapper>(Locality locality) {
+  if (KeyMappers.containsKey(locality)) {
+    return KeyMappers[locality]!;
+  }
+
+  throw InvalidKeyException('No key mapper for locality: $locality');
+}
+
+const DEFAULT_LOCALITY = Locality.enINTL;
+
+String keyToString(int key, [Locality locality = DEFAULT_LOCALITY]) {
+  return getKeyMapper(locality).keyToString(key);
+}
+
+int stringToKey(String key, [Locality locality = DEFAULT_LOCALITY]) {
+  return getKeyMapper(locality).stringToKey(key);
 }
