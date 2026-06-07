@@ -72,9 +72,11 @@ class FlexLayout extends BaseLayout {
 
   @override
   Widget build(BuildContext context) {
-    final visibleChildren = children.where((element) => element.isVisible == true);
-    final assembledChildren =
-        visibleChildren.map((e) => _addExpandToChildren(e.build(context))).toList();
+    final visibleChildren =
+        children.where((element) => element.isVisible == true);
+    final assembledChildren = visibleChildren
+        .map((e) => _addExpandToChildren(e.build(context)))
+        .toList();
 
     // Geometry geometry = this.geometry;
     // if (geometry.expand == true) {
@@ -251,7 +253,8 @@ class VisibilityElement extends BaseElement {
   }
 
   @override
-  Widget build(BuildContext context) => child.build(context);
+  Widget build(BuildContext context) =>
+      child.isVisible ? child.build(context) : const SizedBox.shrink();
 
   @override
   void dispose() => child.dispose();
