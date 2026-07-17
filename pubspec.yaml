@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
   fluent_ui: ^4.9.1
   grpc:
-  protobuf:
+  protobuf: ^3.1.0
   xml: ^6.5.0
   get: ^4.6.6
 dev_dependencies:
